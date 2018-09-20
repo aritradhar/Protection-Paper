@@ -3,7 +3,7 @@
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{overall.jpg}
-\caption{Overall Idea}
+\caption{Overall idea}
 \label{fig:overallIdea}
 \centering
 \end{figure}
@@ -22,13 +22,20 @@ The steps are the following:
 
 \begin{enumerate}
   \item The user provides input from her input device which is captured by the \device.
+  \item The \device sends the mouse traces to the host over \bluetooth interface.
+  \item The hosts system draws the frames and send it to the \device over HDMI interface.
+  \item The device
 \end{enumerate}
+
+\subsection{Analysis of host frames}
+
+Figure~\ref{fig:overallIdea} illustrates high level idea of the host system display frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate  of $60$ fps. The analysis works as the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device is : $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user user interactions otherwise it stops all the communications and shows an error on the display.
 
 
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{mouse_track.jpg}
-\caption{}
+\caption{Analysis of the frames in comparison with the mouse trace}
 \label{fig:overallIdea}
 \centering
 \end{figure}
