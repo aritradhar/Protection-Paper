@@ -30,11 +30,6 @@ The steps are the following:
   \item The device analyzes (Section~\ref{sec:idea:analysis}) the frames passed from the host system. Then it sends the frames to the display over HDMI.
 \end{enumerate}
 
-\subsection{Analysis of host frames}
-\label{sec:idea:analysis}
-
-Figure~\ref{fig:overallIdea} illustrates the high-level idea of the host system display frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on the display.
-
 
 \begin{figure}
 \centering
@@ -43,4 +38,24 @@ Figure~\ref{fig:overallIdea} illustrates the high-level idea of the host system 
 \label{fig:overallIdea}
 \centering
 \end{figure}
+
+
+\subsection{Analysis of host frames}
+\label{sec:idea:analysis}
+
+Figure~\ref{fig:overallIdea} illustrates the high-level idea of the host system display frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on the display.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{ui_detect.jpg}
+\caption{Detection of UI elements}
+\label{fig:uiDetect}
+\centering
+\end{figure}
+
+\subsection{Detecting UI elements}
+
+Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
+
 
