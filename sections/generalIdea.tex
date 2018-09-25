@@ -21,10 +21,11 @@
 Figure~\ref{fig:systemDesign} provides the overall system design of \name. The components of the systems are the following:
 
 \begin{enumerate}
+  \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
   \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over \usb interface and connected to the host and the display over HDMI.
   \item \textbf{Input device.}
   \item \textbf{Display.}
-  \item \textbf{Host system.}
+  
 \end{enumerate}
 
 \myparagraph{Initialization} The \device initializes the mouse by instructing the host system to move the mouse pointer to top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
@@ -37,6 +38,20 @@ The steps are the following:
   \item The host system draws the frames and send it to the \device over HDMI interface.
   \item The device analyzes (Section~\ref{sec:idea:analysis}) the frames passed from the host system. Then it sends the frames to the display over HDMI.
 \end{enumerate}
+
+
+
+
+
+\begin{figure}
+\centering
+\includegraphics[trim={0 5.8cm 13cm 0}, clip, width=\linewidth]{flow.pdf}
+\caption{Protocol}
+\label{fig:protocol}
+\centering
+\end{figure}
+
+
 
 
 \begin{figure}
@@ -78,6 +93,6 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 
 \subsection{Detecting UI elements}
 
-Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
+Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an examle of detecting the Ui element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
 
 
