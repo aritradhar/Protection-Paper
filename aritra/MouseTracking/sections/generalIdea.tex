@@ -2,13 +2,13 @@
 \label{sec:idea}
 
 
-\begin{figure*}
+\begin{figure}
 \centering
-\includegraphics[trim={0 5.8cm 8cm 0}, clip, width=0.8\linewidth]{systemDesign.pdf}
+\includegraphics[trim={0 6cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
 \caption{System Design}
 \label{fig:systemDesign}
 \centering
-\end{figure*}
+\end{figure}
 
 % \begin{figure}
 % \centering
@@ -30,13 +30,19 @@ Figure~\ref{fig:systemDesign} provides the overall system design of \name. The c
 
 \myparagraph{Initialization} The \device initializes the mouse by instructing the host system to move the mouse pointer to top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
 
-The steps are the following:
+The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The steps are the following:
+
 
 \begin{enumerate}
-  \item The user provides input from her input device which is captured by the \device.
-  \item The \device sends the mouse traces to the host over the \bluetooth interface.
-  \item The host system draws the frames and send it to the \device over HDMI interface.
-  \item The device analyzes (Section~\ref{sec:idea:analysis}) the frames passed from the host system. Then it sends the frames to the display over HDMI.
+  \item[\one] The user provides input from her input device which is captured by the \device.
+  \item[\two] The \device sends the mouse traces to the host over the \bluetooth interface.
+  \item[\three] The host system draws the frames.
+  \item[\four] The host sends the drawn frames to the \device over HDMI interface.
+  \item[\five] The host sends the \http request to the remote server that contains user input. 
+  \item[\six] The remote serve sends the UI information to the \device over the dedicated \tls channel between the \device and the remote server. The packet includes information such as the type of the UI, text that are expected on the UI etc.
+  \item[\seven] The \device analyzes the frames (from step \four) from the host using the UI information (step \six) received from the server. The analysis step is discussed in details in Section~\ref{sec:idea:analysis}.
+  \item[\eight] The \device sends the frames and the overlay derived from the analysis step to the display device.
+
 \end{enumerate}
 
 
@@ -94,5 +100,20 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 \subsection{Detecting UI elements}
 
 Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an examle of detecting the Ui element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
+
+
+\begin{figure}
+\centering
+\includegraphics[trim={0 11cm 17cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
+\caption{Input privacy}
+\label{fig:inputPrivacy}
+\centering
+\end{figure}
+
+\subsection{Input privacy}
+
+\name provides input privacy from the malicious host. The input privacy feature keeps the malicious host from knowing the sensitive input from the user to the remote server. The outline of the protocol is illustrated in Figure~\ref{fig:inputPrivacy}. The flow of the protocol is as the following:
+
+
 
 
