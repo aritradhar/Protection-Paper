@@ -2,7 +2,7 @@
 \label{sec:systemDesign}
 
 
-\begin{figure}
+\begin{figure}[t]
 \centering
 \includegraphics[trim={0 6cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
 \caption{System Design}
@@ -47,7 +47,7 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
 
 
 
-\begin{figure}
+\begin{figure}[t]
 \centering
 \includegraphics[trim={0 5.8cm 13cm 0}, clip, width=\linewidth]{flow.pdf}
 \caption{Protocol}
@@ -60,7 +60,7 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
 
 
 
-\begin{figure}
+\begin{figure}[t]
 \centering
 \includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
 \caption{Analysis of the frames in comparison with the mouse trace}
@@ -81,7 +81,7 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
 
 Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system display frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on the display.
 
-\begin{figure}
+\begin{figure}[t]
 \centering
 \includegraphics[trim={0 12cm 17cm 0}, clip, width=0.8\linewidth]{uiDetect.pdf}
 \caption{Detection of the UI elements upon mouse click event in the incoming frame.}
@@ -103,9 +103,9 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an examle of detecting the Ui element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
 
 
-\begin{figure}
+\begin{figure}[h]
 \centering
-\includegraphics[trim={0 11cm 17cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
+\includegraphics[trim={0 11cm 16.5cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
 \caption{Input privacy}
 \label{fig:inputPrivacy}
 \centering
@@ -117,11 +117,35 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \name provides input privacy from the malicious host. The input privacy feature keeps the malicious host from knowing the sensitive input from the user to the remote server. The outline of the protocol is illustrated in Figure~\ref{fig:inputPrivacy}. The flow of the protocol is as the following:
 
 \begin{enumerate}
+  \item[\one] User input from the keyboard to the \device.
+  \item[\two] The \device encrypts the data and sends to the host.
+  \item[\three] The host renders the frame and send it to the \device.
+  \item[\four] The \device overlays the plain text information on the frame and sends it to the display device.
+\end{enumerate}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[trim={0 11cm 19cm 0}, clip, width=\linewidth]{outputPrivacy.pdf}
+\caption{Output privacy}
+\label{fig:outputPrivacy}
+\centering
+\end{figure}
+
+\subsection{Output Privacy}
+\label{sec:systemDesign:outputPrivacy}
+
+\name provide output privacy and integrity protection. The overall flow of the system is illustrated in Figure~\ref{fig:outputPrivacy}. The steps are the following:
+
+\begin{enumerate}
   \item[\one]
   \item[\two]
   \item[\three]
   \item[\four]
 \end{enumerate}
+
+
+
 
 
 
