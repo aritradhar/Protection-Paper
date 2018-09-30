@@ -2,10 +2,11 @@
 \label{sec:systemDesign}
 
 
+
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 6cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
-\caption{System Design}
+\caption{High level flow of \name}
 \label{fig:systemDesign}
 \centering
 \end{figure}
@@ -28,7 +29,14 @@ Figure~\ref{fig:systemDesign} provides the overall system design of \name. The c
   
 \end{enumerate}
 
-\myparagraph{Initialization} The \device initializes the mouse by instructing the host system to move the mouse pointer to top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
+\myparagraph{Initialization} 
+There are two steps of initialization process:
+
+\begin{enumerate}
+  \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
+  
+  \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt. effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
+\end{enumerate}
 
 The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The steps are the following:
 
@@ -135,13 +143,13 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \subsection{Output Privacy}
 \label{sec:systemDesign:outputPrivacy}
 
-\name provide output privacy and integrity protection. The overall flow of the system is illustrated in Figure~\ref{fig:outputPrivacy}. The steps are the following:
+\name provide output privacy and integrity protection of the output. One can think of this property as the ability to retrieve information from the remote server and display it to the user where the host system remains oblivious to the sensitive information. The overall flow of the system is illustrated in Figure~\ref{fig:outputPrivacy}. The steps are the following:
 
 \begin{enumerate}
-  \item[\one]
-  \item[\two]
-  \item[\three]
-  \item[\four]
+  \item[\one] The server sends the webpage and the encrypted data to the host over the \http connection between the browser and the remote server.
+  \item[\two] The host generates the display frames and the encrypted data from the server and send them to the \device over the HDMI.
+  \item[\three] The \device decrypts the encrypted data and overlay them on the frames that are received from the host.
+  \item[\four] The \device sends the frames and corresponding overlays to the display device where the user sees them.
 \end{enumerate}
 
 
