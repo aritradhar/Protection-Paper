@@ -2,7 +2,6 @@
 \label{sec:systemDesign}
 
 
-
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 6cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
@@ -33,7 +32,7 @@ Figure~\ref{fig:systemDesign} provides the overall system design of \name. The c
 There are two steps of initialization process:
 
 \begin{enumerate}
-  \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
+  \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to the top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
   
   \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt. effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
 \end{enumerate}
@@ -47,7 +46,7 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
   \item[\three] The host system draws the frames.
   \item[\four] The host sends the drawn frames to the \device over HDMI interface.
   \item[\five] The host sends the \http request to the remote server that contains user input. 
-  \item[\six] The remote serve sends the UI information to the \device over the dedicated \tls channel between the \device and the remote server. The packet includes information such as the type of the UI, text that are expected on the UI etc.
+  \item[\six] The remote server sends the UI information to the \device over the dedicated \tls channel between the \device and the remote server. The packet includes information such as the type of the UI, text that is expected on the UI etc.
   \item[\seven] The \device analyzes the frames (from step \four) from the host using the UI information (step \six) received from the server. The analysis step is discussed in details in Section~\ref{sec:systemnDesign:analysis}.
   \item[\eight] The \device sends the frames and the overlay derived from the analysis step to the display device.
 
@@ -108,7 +107,7 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 \subsection{Detecting UI elements}
 \label{sec:systemnDesign:uiElements}
 
-Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an examle of detecting the Ui element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
+Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an example of detecting the UI element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
 
 
 \begin{figure}[h]
@@ -143,7 +142,7 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \subsection{Output Privacy}
 \label{sec:systemDesign:outputPrivacy}
 
-\name provide output privacy and integrity protection of the output. One can think of this property as the ability to retrieve information from the remote server and display it to the user where the host system remains oblivious to the sensitive information. The overall flow of the system is illustrated in Figure~\ref{fig:outputPrivacy}. The steps are the following:
+\name provides output privacy and integrity protection of the output. One can think of this property as the ability to retrieve information from the remote server and display it to the user where the host system remains oblivious to the sensitive information. The overall flow of the system is illustrated in Figure~\ref{fig:outputPrivacy}. The steps are the following:
 
 \begin{enumerate}
   \item[\one] The server sends the webpage and the encrypted data to the host over the \http connection between the browser and the remote server.
