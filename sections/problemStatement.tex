@@ -8,6 +8,11 @@ The problem that we try to solve is the following
   \item Installation of a single device, no change in any of the existing system/software or human interactions.
 \end{enumerate}
 
+\subsection{Attacker Model}
+
+We assume the highly adversarial scenario where the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:approachOverview} depicts the attacker model.
+
+We only assume that the monitor, keyboard, mouse and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
 \myparagraph{Advantages}
 
