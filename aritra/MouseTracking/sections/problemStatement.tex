@@ -11,12 +11,12 @@
 
 
 \subsection{Motivation and Problem Statement}
-Input integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems and all the installed applications. Such attacker model allows it not only to steal the sensitive information from the user but also manipulate them. Figure~\ref{fig:motivation} providers four such cases where the secrecy and the integrity of the input and output data is crucial. Based on these example we list 6 security properties that are provided by \name. We now discuss these security peroperties and corresponds them with the motivating example.
+Input integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems and all the installed applications. Such attacker model allows it not only to steal the sensitive information from the user but also manipulate them. Figure~\ref{fig:motivation} providers four such cases where the secrecy and the integrity of the input and output data is crucial. Based on these example we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
 
 \begin{enumerate}
-  \item \textbf{Input integrity.}
-  \item \textbf{Input privacy.}
-  \item \textbf{Output integrity.}
+  \item \textbf{Input integrity.} In case where the user provides input to a remote safety-critical system, input integrity is a crucial property that ensure that the command from the user reaches to the remote end-point without any modification by the malicious host system. Case 1 in Figure~\ref{fig:motivation} is a concrete example where input integrity is critical for the application to be work properly.
+  \item \textbf{Input privacy.}  Input privacy is required if the malicious host wants to steal the sensitive information from the user. This involves the credentials for various web-service, financial information such as the credit card number, choice of vote in the e-voting system. Cases 2,3,4 in Figure~\ref{fig:motivation} are the example where input privacy is needed.
+  \item \textbf{Output integrity.} Output integrity is a critical component to ensure a secure display.
   \item \textbf{Output privacy.}
   \item \textbf{Activity integrity.}
   \item \textbf{Activity privacy.}
