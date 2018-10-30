@@ -139,6 +139,12 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \centering
 \end{figure}
 
+
+\subsection{Privacy of the Pointer}
+\label{sec:systemnDesign:mousePrivacy}
+
+The host system can be made fully oblivious of the mouse pointer for a very small portion of the browser that handles sensitive data or operations.
+
 \subsection{Output Privacy}
 \label{sec:systemDesign:outputPrivacy}
 
@@ -150,9 +156,6 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
   \item[\three] The \device decrypts the encrypted data and overlay them on the frames that are received from the host.
   \item[\four] The \device sends the frames and corresponding overlays to the display device where the user sees them.
 \end{enumerate}
-
-
-
 
 
 
