@@ -139,11 +139,62 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \centering
 \end{figure}
 
+\lstset{language=HTML, frame=tb, caption=\textbf{Partially encrypted HTML page.} , label = snippet:encryptedHTML, firstnumber =1}
+\begin{figure}[t]
+\small
+\begin{lstlisting}[mathescape=true]
+<!DOCTYPE html>
+<html>
+<body>
+<form action="/some_action">
+  First name:<br>
+  <input type="text" name="First name">
+  <br> Last name:<br>
+  <input type="text" name="name">
+  <br><br>
+  <encrypted>
+  [encrypted data]
+  </encrypted>
+  <input type="submit" value="Submit">
+</form> 
+</body>
+</html>
+\end{lstlisting} 
+\end{figure}
 
-\subsection{Privacy of the Pointer}
+
+\lstset{language=HTML, frame=tb, caption=\textbf{Equivalent decrypted HTML page of Figure~\ref{snippet:encryptedHTML}.} , label = snippet:decryptedHTML, firstnumber =1}
+\begin{figure}[t]
+\small
+\begin{lstlisting}[mathescape=true]
+<!DOCTYPE html>
+<html>
+<body>
+<form action="/some_action">
+  First name:<br>
+  <input type="text" name="First name">
+  <br> Last name:<br>
+  <input type="text" name="name">
+  <br><br>
+  <input type="radio" name="candidate1"> Candidate 1
+  <input type="radio" name="candidate2"> Candidate 2
+  <input type="submit" value="Submit">
+</form> 
+</body>
+</html>
+\end{lstlisting} 
+\end{figure}
+
+
+\subsection{Activity Privacy}
 \label{sec:systemnDesign:mousePrivacy}
 
-The host system can be made fully oblivious of the mouse pointer for a very small portion of the browser that handles sensitive data or operations.
+The host system can be made fully oblivious of the mouse pointer for a very small portion of the browser that handles sensitive data or operations. The flow of the system is as the following:
+
+\begin{enumerate}
+  \item 
+\end{enumerate}
+
 
 \subsection{Output Privacy}
 \label{sec:systemDesign:outputPrivacy}
