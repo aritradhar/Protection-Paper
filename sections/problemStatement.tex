@@ -35,14 +35,17 @@ We assume the highly adversarial scenario where the attacker compromises the hos
 
 We only assume that the monitor, keyboard, mouse and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
+\iffalse
 \myparagraph{Advantages}
 
 \begin{enumerate}
   \item The \device does not need to know the formatting/template of the page. As the \device only looks to the current mouse position, the structure of the page is somewhat irrelevant (?).
 \end{enumerate}
+\fi
 
 \subsection{Limitations of the Known Solutions}
 
-Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character-based input. We inspired from Fidelius to extend it even further to generic IO operations for a wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
+Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character-based input. We inspired from Fidelius to extend it even further to generic IO operations for a wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Without proper analysis of each and every frame that the host system produces, it is not possible to track user intention. In our knowledge, \name is the first to provide such security properties including the activity privacy.
+Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
 
 
