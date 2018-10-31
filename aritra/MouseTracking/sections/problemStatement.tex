@@ -11,15 +11,14 @@
 
 
 \subsection{Motivation and Problem Statement}
-Input integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems and all the installed applications. Such attacker model allows it not only to steal the sensitive information from the user but also manipulate them. Figure~\ref{fig:motivation} providers four such cases where the secrecy and the integrity of the input and output data is crucial. Based on these example we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
+Input integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also manipulate them. Figure~\ref{fig:motivation} providers four such cases where the secrecy and the integrity of the input and output data are crucial. Based on these examples we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
 
 \begin{enumerate}
-  \item \textbf{Input integrity.} In case where the user provides input to a remote safety-critical system, input integrity is a crucial property that ensure that the command from the user reaches to the remote end-point without any modification by the malicious host system. Case 1 in Figure~\ref{fig:motivation} is a concrete example where input integrity is critical for the application to be work properly.
-  \item \textbf{Input privacy.}  Input privacy is required if the malicious host wants to steal the sensitive information from the user. This involves the credentials for various web-service, financial information such as the credit card number, choice of vote in the e-voting system. Cases 2,3,4 in Figure~\ref{fig:motivation} are the example where input privacy is needed.
-  \item \textbf{Output integrity.} Output integrity is a critical component to ensure a secure display.
-  \item \textbf{Output privacy.}
-  \item \textbf{Activity integrity.}
-  \item \textbf{Activity privacy.}
+  \item \textbf{Input integrity.} In a case where the user provides input to a remote safety-critical system, input integrity is a crucial property that ensures that the command from the user reaches to the remote end-point without any modification by the malicious host system. Case 1 in Figure~\ref{fig:motivation} is a concrete example where input integrity is critical for the application to be work properly.
+  \item \textbf{Input privacy.}  Input privacy is required if the malicious host wants to steal the sensitive information from the user. This involves the credentials for various web-service, financial information such as the credit card number, choice of the vote in the e-voting system. Cases 2,3,and 4 in Figure~\ref{fig:motivation} are the example where input privacy is needed.
+  \item \textbf{Output integrity.} Output integrity is a critical component to ensure a secure display. This involves data coming from remote safety-critical devices, medical implants, financial data such as the bitcoin address, candidate list in the e-voting portal etc. Cases 1,2, and 3 in Figure~\ref{fig:motivation} are the potential scenarios where output integrity property is desirable.
+  \item \textbf{Output privacy.} In many application scenarios, output privacy is required where the data sent from the remote end-point is privacy sensitive. Such includes the web credentials, candidate preference data in the e-voting, the private key of the bitcoin wallet etc. Example scenarios 2,3 and 4 in Figure~\ref{fig:motivation} require output privacy.
+  \item \textbf{Activity privacy.} We define activity analogously to the user intention which is privacy sensitive in many application scenarios. One such concrete example is e-voting where voting privacy is of uttermost importance. Even if there is a system in place that provides input privacy, merely the fact that the user may hover her mouse over some candidates may reveal her candidate preference. Activity privacy is application specific and in most of the case, it dynamically preserves a part of the scene where the user activity is oblivious to the compromised host. 
 \end{enumerate}
 
 
@@ -44,8 +43,6 @@ We only assume that the monitor, keyboard, mouse and the \device are trusted. Wh
 
 \subsection{Limitations of the Known Solutions}
 
-Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character based input. We inspired from Fidelius to extend it even further to generic IO operations for wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
-
-
+Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character-based input. We inspired from Fidelius to extend it even further to generic IO operations for a wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
 
 
