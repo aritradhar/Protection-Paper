@@ -144,21 +144,17 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \small
 \begin{lstlisting}[mathescape=true]
 <!DOCTYPE html>
-<html>
-<body>
+<html> <body>
 <form action="/some_action">
   First name:<br>
   <input type="text" name="First name">
   <br> Last name:<br>
   <input type="text" name="name">
-  <br><br>
   <encrypted>
   [encrypted data]
   </encrypted>
   <input type="submit" value="Submit">
-</form> 
-</body>
-</html>
+</form> </body> </html>
 \end{lstlisting} 
 \end{figure}
 
@@ -168,28 +164,37 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \small
 \begin{lstlisting}[mathescape=true]
 <!DOCTYPE html>
-<html>
-<body>
+<html> <body>
 <form action="/some_action">
   First name:<br>
   <input type="text" name="First name">
   <br> Last name:<br>
   <input type="text" name="name">
-  <br><br>
   <input type="radio" name="candidate1"> Candidate 1
   <input type="radio" name="candidate2"> Candidate 2
   <input type="submit" value="Submit">
-</form> 
-</body>
-</html>
+</form> </body> </html>
 \end{lstlisting} 
+\end{figure}
+
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[trim={0 7cm 20cm 0}, clip, width=0.65\linewidth]{activityPrivacyRender.pdf}
+\caption{Activity privacy}
+\label{fig:activityPrivacy}
+\centering
 \end{figure}
 
 
 \subsection{Activity Privacy}
 \label{sec:systemnDesign:mousePrivacy}
 
-The host system can be made fully oblivious of the mouse pointer for a very small portion of the browser that handles sensitive data or operations. The flow of the system is as the following:
+The host system can be made fully oblivious of the mouse pointer, user activity and UI for a small portion of the browser that handles sensitive data or operations. We call this part of the display \emph{Oblivious Window} (OW). We opted out from the device rendering the HTML element inside the OW. Figure~\ref{fig:activityPrivacy} shows the overall construct of this idea. The server stores pre-rendered images corresponding to the OW and send the encrypted image along with the HTML page to the host system. The host renders the webpage along with an empty OW as the content of the window is encrypted with the \tls key that is shared between the device and the remote server.
+
+The flow of the system is as the following:
 
 \begin{enumerate}
   \item 
