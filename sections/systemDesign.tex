@@ -192,12 +192,16 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \subsection{Activity Privacy}
 \label{sec:systemnDesign:mousePrivacy}
 
-The host system can be made fully oblivious of the mouse pointer, user activity and UI for a small portion of the browser that handles sensitive data or operations. We call this part of the display \emph{Oblivious Window} (OW). We opted out from the device rendering the HTML element inside the OW. Figure~\ref{fig:activityPrivacy} shows the overall construct of this idea. The server stores pre-rendered images corresponding to the OW and send the encrypted image along with the HTML page to the host system. The host renders the webpage along with an empty OW as the content of the window is encrypted with the \tls key that is shared between the device and the remote server.
+The host system can be made fully oblivious of the mouse pointer, user activity and UI for a small portion of the browser that handles sensitive data or operations. We call this part of the display \emph{Oblivious Window} (OW). We opted out from the device rendering the HTML element inside the OW. Figure~\ref{fig:activityPrivacy} shows the overall construct of this idea. The server stores pre-rendered images corresponding to the OW and send the encrypted image along with the HTML page to the host system. The host renders the webpage along with an encrypted OW encoded as a QR code. The content of the QR code is encrypted with the \tls key that is shared between the device and the remote server.
 
-The flow of the system is as the following:
+The flow of the system can be divided into three parts: initialization, operation and update.
 
+\myparagraph{Initialization.} The initialization phase establishes a secure channel between the device and the remote server over the HTTP channel between the host and the remote host. The \js snippet that is served by the remote server handles the handshake between the device and remote server that is required to establish the secure channel. The flow of the system is the following: 
 \begin{enumerate}
-  \item 
+  \item The user initiates a fresh session by pressing a button on the device. This makes the device ready for a initialization phased with a remote server.
+  \item When the user loads the web page from the remote server for the first time, the remote server sends its public certificate signed by a CA encoded in a QR code. 
+  \item The device reads the QR and sends keyboard events that encode the signed public certificate of the device's public key in base64 encoded format. The \js served by the remote serve gets the key strokes and generates a \texttt{XMLHttpRequest}.
+  \item After exchanging the signed public certificates, the device and the remote server generates a shared secret that is used to encrypt and authenticate communications between the device and the remote server.
 \end{enumerate}
 
 
