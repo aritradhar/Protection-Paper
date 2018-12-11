@@ -57,7 +57,9 @@ Moreover, TEE requires trust assumption on the processors and additional code ba
 
 \subsection{Goals}
 
-The goals of the \name are the following
+In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes \name different from them is the specific settings that it targets. \name does not assume trust on the OS, specific drivers, TEEs, hypervisors, etc. As all of these techniques as mentioned earlier requires trust on a large code base. Instead, \name solves the problem of building an efficient, trusted path using an off-the-shelf microcontroller and single board computers that requires bare-minimum trust assumption. The most distinguishing factor is the type of IOs \name targets to protect, namely mouse/touch inputs and sophisticated user interfaces. Existing research works primarily targets character-based input devices such as keyboards, and the methods cannot be trivially applied to mouse/touch-based inputs or complex UI elements. 
+
+The goals of \name are the following
 
 \begin{enumerate}
   \item \textbf{Easy deployment and integration.} \name focuses on deploying it to existing system without any major changes. This also ensures minimal or no changes to the user interaction with the systems.
