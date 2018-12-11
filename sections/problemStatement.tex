@@ -4,7 +4,7 @@
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
-\caption{\textbf{\name motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web appications that provide an option for the user to reveal credentials.}
+\caption{\textbf{\name motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
 \label{fig:motivation}
 \centering
 \end{figure}
@@ -15,7 +15,7 @@ Input integrity and privacy is a crucial problem when one assumes the attacker m
 
 Modern user interfaces are extremely complex to analyze, and such allows many possible ways to provide input. This makes the protection of IO integrity, and privacy is a particularly challenging task. For example, given a command from the user, it is necessary to understand the user intention that corresponds to the mouse movements. Given the screen space, there exist unbounded ways for the user to move a mouse a place it on a specific UI element that fires a command to the remote end system. To provide an end-to-end protection to this entire activity one needs to 1) precisely track the cursor position, 2) correspond the cursor location to the given movement data from the mouse, 3) understand the semantics of the UI element the fires the command and 4) generate an efficient and comprehensive proof that server can use to understand the user's real intention.  
 
-The attacker can easily change system configurations (i.e.., install root certificates), alter user's transaction, or manipulate the user by showing false information on the screen. Figure~\ref{fig:motivation} provides four such cases where the secrecy and the integrity of the input and output data are crucial. Based on these examples we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
+The attacker can easily change system configurations (i.e., install root certificates), alter user's transaction, or manipulate the user by showing false information on the screen. Figure~\ref{fig:motivation} provides four such cases where the secrecy and the integrity of the input and output data are crucial. Based on these examples we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
 
 \begin{enumerate}
   \item \textbf{Input integrity.} In a case where the user provides input to a remote safety-critical system, input integrity is a crucial property that ensures that the command from the user reaches to the remote end-point without any modification by the malicious host system. Case 1 in Figure~\ref{fig:motivation} is a concrete example where input integrity is critical for the application to be work properly.
@@ -39,6 +39,18 @@ We only assume that the monitor, keyboard, mouse and the \device are trusted. Wh
   \item The \device does not need to know the formatting/template of the page. As the \device only looks to the current mouse position, the structure of the page is somewhat irrelevant (?).
 \end{enumerate}
 \fi
+
+
+\subsection{Potential Solution}
+
+Given the attacker's model, there exist several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models:
+
+\myparagraph{Strawman solution: trusted OS.} Trusted OS could be seen as a straightforward solution as traditionally OS handles all the IO drives, computation, and network communications. Assuming a trusted OS significantly reduces the complexity of the solution but the security assumption suffers. Trusted OS introduces a large trusted code base and a multitude of vulnerabilities. 
+
+\myparagraph{Trusted Execution Environment.} TEEs are another ways to implement a trusted path between the IO devices and the users. Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT etc. can be used to achieve such functionality. Several research works such as Intel SGX and trusted hypervisor based SGXIO~\cite{weiser2017sgxio}, Intel SGX based ProximiTEE~\cite{dhar2018proximitee}, TPM and TXT based trusted path~\cite{filyanov2011uni} and ARM TrustZone based trusted path~\cite{filyanov2011uni,sun2015trustotp} are the example of trusted path construction based on TEEs. All of these solutions require specialized platforms with processors that support such infrastructure. In \name, we concentrate on the non-specialized hardware platform where compatible TEE technologies may not be available.
+Moreover, TEE requires trust assumption on the processors and additional code bases. One such example is INtel SGX where the trust model includes the physical processor package, SGX SDK, quoting enclave, launch enclave and Intel attestation service. \name avoids such extensive trust assumptions and assumes that the entire platform is in control of the attacker.
+
+\myparagraph{Hypervisor, hardware-based solutions.} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. (\textcolor{red}{copied from SGXIO paper})Work done by Zhou et al.~\cite{zhou2012building} builds a generic trusted path on $x86$ systems in a pure hypervisor-based design. They show the first comprehensive approach to x86 systems, protecting a trusted path all the way from the application level down to the device level.  They consider PCI device misconfiguration, DMA attacks as well as interrupt spoofing attacks.  However, pure hypervisor-based designs come at a price.  They strictly separate the untrusted stack from the trusted one.  Hence, the hypervisor is in charge of managing all secure applications and all associated resources itself.  This includes secure process and memory management with scheduling, verified launch, and attestation.  Also, communication between both security domains might be non-trivial due to synchronization issues or potentially mismatching Application Binary Interfaces (ABI).
 
 \subsection{Limitations of the Known Solutions}
 
