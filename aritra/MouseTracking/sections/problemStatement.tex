@@ -41,7 +41,7 @@ We only assume that the monitor, keyboard, mouse and the \device are trusted. Wh
 \fi
 
 
-\subsection{Potential Solution}
+\subsection{Potential Solutions and their drawbacks}
 
 Given the attacker's model, there exist several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models:
 
@@ -52,10 +52,7 @@ Moreover, TEE requires trust assumption on the processors and additional code ba
 
 \myparagraph{Hypervisor, hardware-based solutions.} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. (\textcolor{red}{copied from SGXIO paper})Work done by Zhou et al.~\cite{zhou2012building} builds a generic trusted path on $x86$ systems in a pure hypervisor-based design. They show the first comprehensive approach to x86 systems, protecting a trusted path all the way from the application level down to the device level.  They consider PCI device misconfiguration, DMA attacks as well as interrupt spoofing attacks.  However, pure hypervisor-based designs come at a price.  They strictly separate the untrusted stack from the trusted one.  Hence, the hypervisor is in charge of managing all secure applications and all associated resources itself.  This includes secure process and memory management with scheduling, verified launch, and attestation.  Also, communication between both security domains might be non-trivial due to synchronization issues or potentially mismatching Application Binary Interfaces (ABI).
 
-\subsection{Limitations of the Known Solutions}
-
-Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character-based input. We inspired from Fidelius to extend it even further to generic IO operations for a wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Without proper analysis of each and every frame that the host system produces, it is not possible to track user intention. In our knowledge, \name is the first to provide such security properties including the activity privacy.
-Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
+\myparagraph{Dedicated hardware based solution.} Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character-based input. We inspired from Fidelius to extend it even further to generic IO operations for a wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Without proper analysis of each and every frame that the host system produces, it is not possible to track user intention. In our knowledge, \name is the first to provide such security properties including the activity privacy. Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
 
 
 \subsection{Goals}
