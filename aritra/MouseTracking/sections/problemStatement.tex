@@ -11,7 +11,11 @@
 
 
 \subsection{Motivation and Problem Statement}
-Input integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also alter them. Furthermore, the user is completely unprotected, she  cannot verify that her inputs are transfered to the server securely, or even have the guarantee that she is communicating with the legitimate server. The attacker can easily change system configurations (i.e.., install root certificates), alter user's transaction, or manipulate the user by showing false information on the screen. Figure~\ref{fig:motivation} provides four such cases where the secrecy and the integrity of the input and output data are crucial. Based on these examples we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
+Input integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also alter them. Furthermore, the user is completely unprotected, she  cannot verify that her inputs are transferred to the server securely, or even have the guarantee that she is communicating with the legitimate server. 
+
+Modern user interfaces are extremely complex to analyze, and such allows many possible ways to provide input. This makes the protection of IO integrity, and privacy is a particularly challenging task. For example, given a command from the user, it is necessary to understand the user intention that corresponds to the mouse movements. Given the screen space, there exist unbounded ways for the user to move a mouse a place it on a specific UI element that fires a command to the remote end system. To provide an end-to-end protection to this entire activity one needs to 1) precisely track the cursor position, 2) correspond the cursor location to the given movement data from the mouse, 3) understand the semantics of the UI element the fires the command and 4) generate an efficient and comprehensive proof that server can use to understand the user's real intention.  
+
+The attacker can easily change system configurations (i.e.., install root certificates), alter user's transaction, or manipulate the user by showing false information on the screen. Figure~\ref{fig:motivation} provides four such cases where the secrecy and the integrity of the input and output data are crucial. Based on these examples we list 6 security properties that are provided by \name. We now discuss these security properties and corresponds them with the motivating example.
 
 \begin{enumerate}
   \item \textbf{Input integrity.} In a case where the user provides input to a remote safety-critical system, input integrity is a crucial property that ensures that the command from the user reaches to the remote end-point without any modification by the malicious host system. Case 1 in Figure~\ref{fig:motivation} is a concrete example where input integrity is critical for the application to be work properly.
@@ -22,16 +26,9 @@ Input integrity and privacy is a crucial problem when one assumes the attacker m
 \end{enumerate}
 
 
-The problem that we try to solve is the following
-
-\begin{enumerate}
-  \item Integrity of the input device data (keyboard, mouse\ldots) and corresponds it to the frame data (of the display device) in the presence of an attacker-controlled host system.
-  \item Installation of a single device, no change in any of the existing system/software or human interactions.
-\end{enumerate}
-
 \subsection{Attacker Model}
 
-We assume the highly adversarial scenario where the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:approachOverview} depicts the attacker model.
+We assume the highly adversarial scenario where the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:approachOverview} depicts the attacker model projected on the \name{}s approach overview.
 
 We only assume that the monitor, keyboard, mouse and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
@@ -47,5 +44,15 @@ We only assume that the monitor, keyboard, mouse and the \device are trusted. Wh
 
 Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so Fidelius provides secure input and secure display for character-based input. We inspired from Fidelius to extend it even further to generic IO operations for a wider range of UI elements. Note that extending input devices, such as from a keyboard to a mouse is not a trivial task. Without proper analysis of each and every frame that the host system produces, it is not possible to track user intention. In our knowledge, \name is the first to provide such security properties including the activity privacy.
 Moreover, \name achieves this in the absence of any TEE as the trust model of \name is significantly different. 
+
+
+\subsection{Goals}
+
+The goals of the \name are the following
+
+\begin{enumerate}
+  \item \textbf{Easy deployment and integration.} \name focuses on deploying it to existing system without any major changes. This also ensures minimal or no changes to the user interaction with the systems.
+  \item \textbf{Security.} \name provides IO and activity integrity and privacy to protect user provided data. This means that while deployed, the device always protects the integrity of user input and in specific application scenarios, it provides IO privacy and integrity.
+\end{enumerate}
 
 
