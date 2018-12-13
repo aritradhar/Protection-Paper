@@ -64,8 +64,28 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
 \end{figure}
 
 
-\subsection{Protocol}
+\subsection{Protocols}
 
+\subsubsection{Key Exchange}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{KE3.png}
+\caption{Key exchange}
+\label{fig:keyExchange}
+\centering
+\end{figure}
+
+
+An instance of the key exchange mechanism of \name is illustrate in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
+
+\begin{enumerate}
+  \item The web page shows a QR code that encodes the signed public key of the remote server. 
+  \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
+  \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encode its own public certificate to hexadecimal and send it as keystroke to the host.
+  \item The JavaScript snippet looks for the keystrokes and as soon as it gets a sting of specific length, it sends the key strokes to the remote server.  
+\end{enumerate}
 
 
 \begin{figure}[t]
