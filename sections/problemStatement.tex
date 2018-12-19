@@ -10,9 +10,13 @@
 \end{figure}
 
 
+
+
+
+
 \subsection{Motivation and Problem Statement}
 
-Input and output integrity and privacy is a crucial problem when one assumes the attacker model where the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also alter them. Furthermore, the user is completely unprotected, she cannot verify that her inputs are transferred to the server securely, or even have the guarantee that she is communicating with the legitimate server. 
+Integrity and privacy of IO data between the user and a sensitive service is a crucial problem when one assumes that the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also alter them. Furthermore, the user is completely unprotected, she cannot verify that her inputs are transferred to the server securely, or even have the guarantee that she is communicating with the legitimate server. 
 
 \emph{Trusted path} is the property that provides the security properties (privacy and integrity) to the IO data between the users and the end systems. In principle trusted path solves the problem of the security of the IO data. But practically establishing a trusted path in general IO devices is a nontrivial problem specifically if one considers the plethora of complex UI objects and input methods. 
 
@@ -27,6 +31,13 @@ Based on these examples we list six security properties that we want to provide 
   \item \textbf{Activity privacy.} We define activity analogously to the user intention which is privacy sensitive in many application scenarios. One such concrete example is e-voting where voting privacy is of uttermost importance. Even if there is a system in place that provides input privacy, merely the fact that the user may hover her mouse over some candidates may reveal her candidate preference. Activity privacy is application specific, and in most of the case, it dynamically preserves a part of the scene where the user activity is oblivious to the compromised host. 
 \end{enumerate}
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
+\caption{\textbf{Trusted path system model.} The figures shows the system and the attacker model of the trusted path.}
+\label{fig:systemModel}
+\centering
+\end{figure}
 
 \iffalse
 \myparagraph{Advantages}
@@ -35,6 +46,28 @@ Based on these examples we list six security properties that we want to provide 
   \item The \device does not need to know the formatting/template of the page. As the \device only looks to the current mouse position, the structure of the page is somewhat irrelevant (?).
 \end{enumerate}
 \fi
+
+
+\begin{table*}[t]
+\normalsize
+\centering
+  \begin{tabular}{ | l | c | c |}
+    \hline
+     & TEE & no TEE \\ \hline
+    \multirow{6}{*}{Hypervisor based} & SGX IO~\cite{weiser2017sgxio} & Overshadow~\cite{Overshadow} \\ 
+    & & Virtual ghost~\cite{criswell2014virtual}\\ 
+    & & Inktag~\cite{hofmann2013inktag}\\ 
+    & & TrustVisor~\cite{mccune2010trustvisor} \\ 
+    & & Splitting interfaces~\cite{ta2006splitting}\\ 
+    & & $SP^3$~\cite{yang2008using}\\ \hline
+    Isolated APIs/Drivers & BASTION-SGX~\cite{BASTION-SGX} & \\ \hline
+    \multirow{3}{*}{External trusted hardware based} & Fidelius~\cite{Fidelius} & IntegriKey~\cite{IntegriKey} \\
+    &  & FPGA-based~\cite{brandon2017trusted} \\
+    &  & \textcolor{OliveGreen}{Our Solution (I + O + Activity)} \\
+    \hline
+  \end{tabular}
+  \caption{Summarization of existing trusted path solutions}
+\end{table*}
 
 
 \subsection{Potential Solutions and their drawbacks}
