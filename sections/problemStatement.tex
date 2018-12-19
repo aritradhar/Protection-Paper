@@ -60,7 +60,8 @@ Based on these examples we list six security properties that we want to provide 
     & & TrustVisor~\cite{mccune2010trustvisor} \\ 
     & & Splitting interfaces~\cite{ta2006splitting}\\ 
     & & $SP^3$~\cite{yang2008using}\\ \hline
-    Isolated APIs/Drivers & BASTION-SGX~\cite{BASTION-SGX} & \\ \hline
+   \multirow{2}{*}{Isolated execution of APIs/Drivers} & BASTION-SGX~\cite{BASTION-SGX} & Slice~\cite{azab2011sice}\\ 
+    & TrustOTP~\cite{sun2015trustotp} & CARMA~\cite{vasudevan2012carma} \\ \hline
     \multirow{3}{*}{External trusted hardware based} & Fidelius~\cite{Fidelius} & IntegriKey~\cite{IntegriKey} \\
     &  & FPGA-based~\cite{brandon2017trusted} \\
     &  & \textcolor{OliveGreen}{Our Solution (I + O + Activity)} \\
