@@ -10,7 +10,7 @@
 \graphicspath{{images/}}
 
 \begin{document}
-\title{\name: Integrity and Privacy Protected Trusted on Path Generic IO Devices using Auxiliary Devices}
+\title{\Large \bf \name: Integrity and Privacy Protected Trusted on Path Generic IO Devices using Auxiliary Devices}
 
 \iffalse
 \author{\IEEEauthorblockN{Aritra Dhar}
@@ -19,15 +19,11 @@ aritra.dhar@inf.ethz.ch}
 }
 \fi
 \maketitle
-\begin{abstract}
+\subsection*{Abstract}
 
 Recent exploitations, hardware-based malwares and privacy breaches shows that the concept of powerful adversary who can completely compromise a host system (hardware, operating system and installed applications) is not far fetched. Security, privacy and safety critical applications such as e-voting, financial transitions, various industrial control systems, medical devices and home automation systems relies user interaction that are typically transmitted through web applications. A compromised host can either manipulate or steal these data by doing so it can cause catastrophic failure in the safety-critical systems, theft of identity and/or financial information, thus making this problem an uniquely challenging one.
 
 In this paper, we propose \name, a system that introduces three security properties concerning input, output, and activity using a low-TCB trusted embedded auxiliary device. \name provides these security propertied that can be fined tuned based on the application requirements such as input privacy/integrity, output privacy/integrity and activity integrity. All of these security properties are ensured under the attacker model that compromises the host system entirely. The auxiliary device acts as a bridge between all the IO devices and the compromised host. The devices taps the HDMI channels, analyses frame by frame to corresponds user's executed command with the intent. 
-
-\end{abstract}
-
-\IEEEpeerreviewmaketitle
 
 \input{sections/intro}
 \input{sections/problemStatement}
@@ -37,7 +33,8 @@ In this paper, we propose \name, a system that introduces three security propert
 \input{sections/usecase}
 
 
-\bibliographystyle{IEEEtran}  
+{\normalsize \bibliographystyle{acm} 
 \bibliography{references}
+}
 
 \end{document}
