@@ -19,6 +19,9 @@
 % \centering
 % \end{figure}
 
+\subsection{System Components}
+
+
 Figure~\ref{fig:systemDesign} provides the overall system design of \name. The components of the systems are the following:
 
 \begin{enumerate}
@@ -29,7 +32,8 @@ Figure~\ref{fig:systemDesign} provides the overall system design of \name. The c
   
 \end{enumerate}
 
-\myparagraph{Initialization} 
+\subsection{Initialization} 
+
 There are two steps of initialization process:
 
 \begin{enumerate}
@@ -37,31 +41,6 @@ There are two steps of initialization process:
   
   \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt. effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
 \end{enumerate}
-
-The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The steps are the following:
-
-
-\begin{enumerate}
-  \item[\one] The user provides input from her input device which is captured by the \device.
-  \item[\two] The \device sends the mouse traces to the host over the \bluetooth interface.
-  \item[\three] The host system draws the frames.
-  \item[\four] The host sends the drawn frames to the \device over HDMI interface.
-  \item[\five] The host sends the \http request to the remote server that contains user input. 
-  \item[\six] The remote server sends the UI information to the \device over the dedicated \tls channel between the \device and the remote server. The packet includes information such as the type of the UI, text that is expected on the UI etc.
-  \item[\seven] The \device analyzes the frames (from step \four) from the host using the UI information (step \six) received from the server. The analysis step is discussed in details in Section~\ref{sec:systemnDesign:analysis}.
-  \item[\eight] The \device sends the frames and the overlay derived from the analysis step to the display device.
-
-\end{enumerate}
-
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 5.8cm 13cm 0}, clip, width=\linewidth]{flow.pdf}
-\caption{Protocol}
-\label{fig:protocol}
-\centering
-\end{figure}
 
 
 \subsection{Key Establishment Protocol}
@@ -103,6 +82,33 @@ After this both the device and the remote server have each others public certifi
 % \label{fig:mouseAnalysis}
 % \centering
 % \end{figure}
+
+\subsection{Main Protocol}
+
+The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The steps are the following:
+
+
+\begin{enumerate}
+  \item[\one] The user provides input from her input device which is captured by the \device.
+  \item[\two] The \device sends the mouse traces to the host over the \bluetooth interface.
+  \item[\three] The host system draws the frames.
+  \item[\four] The host sends the drawn frames to the \device over HDMI interface.
+  \item[\five] The host sends the \http request to the remote server that contains user input. 
+  \item[\six] The remote server sends the UI information to the \device over the dedicated \tls channel between the \device and the remote server. The packet includes information such as the type of the UI, text that is expected on the UI etc.
+  \item[\seven] The \device analyzes the frames (from step \four) from the host using the UI information (step \six) received from the server. The analysis step is discussed in details in Section~\ref{sec:systemnDesign:analysis}.
+  \item[\eight] The \device sends the frames and the overlay derived from the analysis step to the display device.
+
+\end{enumerate}
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 5.8cm 13cm 0}, clip, width=\linewidth]{flow.pdf}
+\caption{Protocol}
+\label{fig:protocol}
+\centering
+\end{figure}
 
 \subsection{Analysis of host frames}
 \label{sec:systemnDesign:analysis}
