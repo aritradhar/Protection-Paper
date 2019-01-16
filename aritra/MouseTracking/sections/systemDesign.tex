@@ -67,6 +67,22 @@ An instance of the key exchange mechanism of \name is illustrate in Figure~\ref{
 After this both the device and the remote server have each others public certificates. Using these certificates, they can then establishes a shared secret by executing an authenticated Diffie-Hellman key exchange protocol.
 
 
+
+\begin{figure*}[t]
+\centering
+\includegraphics[trim={0 7cm 0 0}, clip, width=0.75\linewidth]{formTransform.pdf}
+\caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code that is decrypted and overplayed on the HDMI stream by the device.}
+\label{fig:protocol}
+\end{figure*}
+
+\subsection{Transformation of UI Elements for Proof-of-Action}
+\label{sec:systemDesign:transformation}
+
+After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires preotection 
+
+
+
+
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
@@ -75,13 +91,6 @@ After this both the device and the remote server have each others public certifi
 \centering
 \end{figure}
 
-% \begin{figure}
-% \centering
-% \includegraphics[width=\linewidth]{mouse_track.jpg}
-% \caption{Analysis of the frames in comparison with the mouse trace}
-% \label{fig:mouseAnalysis}
-% \centering
-% \end{figure}
 
 \subsection{Main Protocol}
 
@@ -107,7 +116,6 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
 \includegraphics[trim={0 5.8cm 13cm 0}, clip, width=\linewidth]{flow.pdf}
 \caption{Protocol}
 \label{fig:protocol}
-\centering
 \end{figure}
 
 \subsection{Analysis of host frames}
@@ -131,9 +139,6 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 % \centering
 % \end{figure}
 
-
-\subsection{Transformation of UI Elements for Proof-of-Action}
-\label{sec:systemDesign:transformation}
 
 
 
