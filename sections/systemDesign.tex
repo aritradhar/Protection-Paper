@@ -83,7 +83,7 @@ After the establishment of the secure channel between the device and the remote 
 \myparagraph{Transformation} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that requires integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device.
 
 
-\lstset{language=JSON, frame=tb, caption=\textbf{Protected UI specification language.} , label = snippet:UISpecification, firstnumber =1}
+\lstset{language=JSON, frame=tb, caption=\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}. , label = snippet:UISpecification, firstnumber =1}
 \begin{figure}[t]
 \begin{lstlisting}[mathescape=true]
 { "formId": "form1",
