@@ -71,17 +71,39 @@ After this both the device and the remote server have each others public certifi
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4cm 0 0}, clip, width=0.75\linewidth]{formTransform.pdf}
-\caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code (\two) that is decrypted and overplayed (\three) on the HDMI stream by the device. Upon user's action on the overlayed UI elements, the device signs all the input data and send them to the remote server. Note that the intermediate QR code transformation (\two) is not visible by tthe user as it is decoded instantaneously by the device.}
+\caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code (\two) that is decrypted and overplayed (\three) on the HDMI stream by the \device. Upon user's action on the overlayed UI elements, the device signs all the input data and send them to the remote server. Note that the intermediate QR code transformation (\two) is not visible by tthe user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
 
 \subsection{Transformation of UI Elements for Proof-of-Action}
 \label{sec:systemDesign:transformation}
 
-After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation} 
+After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: transformation, overlay, and data transfer.
+
+\myparagraph{Transformation} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that requires integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device.
 
 
-
+\lstset{language=JSON, frame=tb, caption=\textbf{Protected UI specification language.} , label = snippet:UISpecification, firstnumber =1}
+\begin{figure}[t]
+\begin{lstlisting}[mathescape=true]
+{ "formId": "form1",
+  "formName": "form1",
+  "ui": [{ "id":"textbox\_1",
+     "type":"textbox",
+     "label":"Sensitive field 1",
+     "text":"secret data 1"},
+   { "id":"textbox_2",
+     "type":"textbox",
+     "label":"Sensitive field2 ",
+     "text":"secret data 2"},
+   {"id":"OK\_button",
+     "type":"button",
+     "label":"OK"},	
+   {"id":"Cancel_button",
+     "type":"button",
+     "label":"Cancel"}]}
+\end{lstlisting}
+\end{figure}
 
 \begin{figure}[t]
 \centering
