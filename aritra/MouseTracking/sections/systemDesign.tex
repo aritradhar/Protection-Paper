@@ -78,9 +78,9 @@ After this both the device and the remote server have each others public certifi
 \subsection{Transformation of UI Elements for Proof-of-Action}
 \label{sec:systemDesign:transformation}
 
-After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: transformation, overlay, and data transfer.
+After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: \emph{transformation}, \emph{overlay}, and \emph{data transfer}.
 
-\myparagraph{Transformation} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that requires integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device.
+\myparagraph{Transformation} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that requires integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}.
 
 
 \lstset{language=JSON, frame=tb, caption=\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}. , label = snippet:UISpecification, firstnumber =1}
@@ -94,9 +94,9 @@ After the establishment of the secure channel between the device and the remote 
      "text":"secret data 1"},
    { "id":"textbox_2",
      "type":"textbox",
-     "label":"Sensitive field2 ",
+     "label":"Sensitive field 2",
      "text":"secret data 2"},
-   {"id":"OK\_button",
+   {"id":"OK_button",
      "type":"button",
      "label":"OK"},	
    {"id":"Cancel_button",
@@ -105,13 +105,32 @@ After the establishment of the secure channel between the device and the remote 
 \end{lstlisting}
 \end{figure}
 
+
+
+\myparagraph{Overlay} The next phase is overlay where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that convert the UI specifications to bitmaps that are then overlaid on the HDMI stream. 
+
+\myparagraph{Data transfer} After the UI elements are correctly overlaid on the the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the  intercepted keyboard and mouse events, signs them and send them to the remote server.  
+
+
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
-\caption{Analysis of the frames in comparison with the mouse trace}
+\caption{\textbf{Proof-of-pointer.} The figure shows the high-level procedure of proof-of-pointer. The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
 \label{fig:mouseAnalysis}
 \centering
 \end{figure}
+
+\subsection{Analysis of HDMI Frames for Proof-of-pointer}
+\label{sec:systemnDesign:analysis}
+
+The crucial property that \name provides is the user input integrity that combines both keyboard and mouse input. Integrity of the mouser input is non trivial as one needs to know what the user sees on the screen. \name achieves this by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the frame to extract the cursor context. We call this property as the \emph{proof-of-pointer} where the \device generates the proof of the traces of the pointer. 
+
+Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on the display.
+
+
+
+\subsection{Committing User Input}
+\label{sec:systemnDesign:commit}
 
 
 \subsection{Main Protocol}
@@ -140,11 +159,10 @@ The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The s
 \label{fig:protocol}
 \end{figure}
 
-\subsection{Analysis of host frames}
-\label{sec:systemnDesign:analysis}
 
-Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system display frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on the display.
 
+
+\iffalse
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 12cm 17cm 0}, clip, width=0.8\linewidth]{uiDetect.pdf}
@@ -152,7 +170,7 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 \label{fig:uiDetect}
 \centering
 \end{figure}
-
+\fi
 % \begin{figure}
 % \centering
 % \includegraphics[width=\linewidth]{ui_detect.jpg}
@@ -163,12 +181,12 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 
 
 
-
+\iffalse
 \subsection{Detecting UI elements}
 \label{sec:systemnDesign:uiElements}
 
 Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ sq. pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an example of detecting the UI element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
-
+\fi
 
 \begin{figure}[h]
 \centering
