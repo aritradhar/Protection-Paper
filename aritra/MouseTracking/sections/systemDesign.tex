@@ -48,8 +48,8 @@ There are two steps of initialization process:
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.7\linewidth]{KE3.png}
-\caption{A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds, hence the page is practically invisible to the user.}
+\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.75\linewidth]{keyExchange.pdf}
+\caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds, hence the page is practically invisible to the user.}
 \label{fig:keyExchange}
 \centering
 \end{figure}
@@ -98,9 +98,11 @@ After the establishment of the secure channel between the device and the remote 
      "text":"secret data 2"},
    {"id":"OK_button",
      "type":"button",
+     "trigger":"true",
      "label":"OK"},	
    {"id":"Cancel_button",
      "type":"button",
+     "trigger":"false",
      "label":"Cancel"}]}
 \end{lstlisting}
 \end{figure}
@@ -131,6 +133,10 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 
 \subsection{Committing User Input}
 \label{sec:systemnDesign:commit}
+
+When the user finishes providing her input over the input device (mouse and keyboard), the \device commits these values to the remote server. The commitment is executed by providing the signed input values to the remote server. The commitment procedure is illustrated in Figure~\ref{fig:transformation}. The commitment has two phases: \emph{recording} and \emph{trigger}.
+
+\myparagraph{Recording} When user provides any information on the rendered overlay UI elements (such as textbox, button, slider, radio button, etc.), the \device records that in a (key, value) pair where the key is the identifier of the UI element (\texttt{id} in Specification~\ref{snippet:UISpecification}) and the value is the user provided value. The \texttt{type} of the UI elements determine what information to record. For example, the \device records all the keystrokes when a textbox is selected, the value corresponding to the position of the slider is recorded when the user interacts with a slider, etc.
 
 
 \subsection{Main Protocol}
