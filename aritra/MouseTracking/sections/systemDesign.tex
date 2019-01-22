@@ -19,13 +19,13 @@ Figure~\ref{fig:systemDesign} provides the overall system design of \name. The c
 \begin{enumerate}
   \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
   \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI.
-  \item \textbf{Input device.}
-  \item \textbf{Display.}
+  \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over \usb interface.
+  \item \textbf{Display.} The display device is connected to the \device over HDMI interface.
   
 \end{enumerate}
 
 \subsection{Initialization} 
-\label{sec''systemDesign:init}
+\label{sec:systemDesign:init}
 
 There are two steps of initialization process: 
 
@@ -34,6 +34,14 @@ There are two steps of initialization process:
   
   \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt, effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
 \end{enumerate}
+
+
+\subsection{Communication Channel}
+\label{sec:systemDesign:communicationChannel}
+
+The communication channel between the \device and the remote server is constructed without employing any and separate hardware/software. The downstream channel, i.e., the data channel from the remote server and the \device relies in the HDMI channel. The remote server encodes the information in the webpage in QR code that is intercepted by the \device from the HDMI channel and decoded. 
+
+The upstream channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmits encoded data to the \name JavaScript snippet that is sent to the remove server via \texttt{XMLHttpRequest} call.
 
 
 \subsection{Key Establishment Protocol}
@@ -47,14 +55,16 @@ There are two steps of initialization process:
 \centering
 \end{figure}
 
+When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also the key exchange phase is crucial as the remote server also access if the user is in possession of a \device. 
 
 An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
 \begin{enumerate}
-  \item The web page shows a QR code that encodes the signed public key of the remote server. 
+  \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server. This page has a $5$ seconds time out.
   \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
   \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its public certificate to hexadecimal and send it as a keystroke to the host.
-  \item The JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server.  
+  \item The\name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server and the \name JavaScripts loads the webpage.
+  \item In case the user is not in possession of a \device, the aforementioned step does not take place within the $5$ seconds timeout period. In that case \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involves \device fro their operation.
 \end{enumerate}
 
 After this, both the device and the remote server have each other's public certificates. Using these certificates, they can then establish a shared secret by executing an authenticated Diffie-Hellman key exchange protocol.
@@ -71,6 +81,17 @@ After this, both the device and the remote server have each other's public certi
 \subsection{Transformation of UI Elements for Proof-of-Action}
 \label{sec:systemDesign:transformation}
 
+
+\begin{figure}[h]
+\centering
+\includegraphics[trim={0 12cm 17cm 0}, clip, width=0.8\linewidth]{uiDetect.pdf}
+\caption{\textbf{Potential solution to understand the context of an UI element}. The earlier version of the \name solution employs image analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the Ui element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
+\label{fig:uiDetect}
+\centering
+\end{figure}
+
+\myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to 
+
 After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: \emph{transformation}, \emph{overlay}, and \emph{data transfer}.
 
 \myparagraph{Transformation} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that require integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}.
@@ -81,7 +102,7 @@ After the establishment of the secure channel between the device and the remote 
 \begin{lstlisting}[mathescape=true]
 { "formId": "form1",
   "formName": "form1",
-  "ui": [{ "id":"textbox\_1",
+  "ui": [{ "id":"textbox_1",
      "type":"textbox",
      "label":"Sensitive field 1",
      "text":"secret data 1"},
