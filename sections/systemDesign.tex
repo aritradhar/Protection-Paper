@@ -55,9 +55,7 @@ The upstream channel, i.e., the data from the \device to the remote server is tr
 \centering
 \end{figure}
 
-When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also the key exchange phase is crucial as the remote server also access if the user is in possession of a \device. 
-
-An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
+When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also the key exchange phase is crucial as the remote server also access if the user is in possession of a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
 \begin{enumerate}
   \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server. This page has a $5$ seconds time out.
@@ -82,7 +80,7 @@ After this, both the device and the remote server have each other's public certi
 \label{sec:systemDesign:transformation}
 
 
-\begin{figure}[h]
+\begin{figure}[!htpb]
 \centering
 \includegraphics[trim={0 12cm 17cm 0}, clip, width=0.8\linewidth]{uiDetect.pdf}
 \caption{\textbf{Potential solution to understand the context of an UI element}. The earlier version of the \name solution employs image analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the Ui element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
@@ -90,9 +88,9 @@ After this, both the device and the remote server have each other's public certi
 \centering
 \end{figure}
 
-\myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to 
+\myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to use image and text analysis to understand the semantics of the Ui elements. In Figure~\ref{fig:uiDetect} we illustrate on example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to classify that the user clicks on a button. The \device also uses character recognition technique to extract the label of the button. Our prototype implementation shows that this technique lacks robustness in the real life as most of the time the \device fails to either recognize the UI elements or extract the label from the UI elements properly. Moreover the image/text analysis is CPU intensive and causes low number of frame output by the \device. Such drawbacks of this techniques leds us to more robust solution.  
 
-After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: \emph{transformation}, \emph{overlay}, and \emph{data transfer}.
+\myparagraph{UI transformation based approach} After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: \emph{transformation}, \emph{overlay}, and \emph{data transfer}.
 
 \myparagraph{Transformation} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that require integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}.
 
