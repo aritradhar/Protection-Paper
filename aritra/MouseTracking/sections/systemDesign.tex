@@ -144,6 +144,11 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 
 
 
+\subsection{Secure Attention Sequence}
+\label{sec:systemDesign:SAS}
+
+Secure Attention Sequence (SAS) is a sequence of actions (such as keystrokes \texttt{Ctrl+Alt+Del}) executed by the user that is completely trust worthy. \name provides a mechanism for SAS where the user forces the \device to highlight the overlaid UI and the mouse pointer location to eliminate any possibility that the attacker either i) create fake UI elsewhere in the screen that may trick the user into submitting sensitive information, or ii) spawn a fake mouse pointer to trick the user into clicking into different location.
+
 \subsection{Committing User Input}
 \label{sec:systemDesign:commit}
 
