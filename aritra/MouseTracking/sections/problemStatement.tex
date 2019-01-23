@@ -23,10 +23,11 @@ In the above, we discussed several solutions and research works that solve the p
 The goals are the following:
 
 \begin{enumerate}
-  \item  \textbf{Full support for pointer-based input devices.} Existing trusted path solutions primarily focus on keyboard beds input. Note that keyboard based input only considers text boxes, thus completely ignores other types of UI elements. Extending the protection mechanisms from keyboard to pointer is non-trivial as the same mechanism does not apply. The pointer interacts with many complex UI elements. As the attacker can manipulate with such UI elements, spawn or changes the location of the pointer, manipulate with the speed and acceleration of the pointer, etc., protecting the integrity and the privacy of the pointer data is a challenging task.  
+  \item  \textbf{Pinter-based input devices.} Existing trusted path solutions primarily focus on keyboard beds input. Note that keyboard based input only considers text boxes, thus completely ignores other types of UI elements. Extending the protection mechanisms from keyboard to pointer is non-trivial as the same mechanism does not apply. The pointer interacts with many complex UI elements. As the attacker can manipulate with such UI elements, spawn or changes the location of the pointer, manipulate with the speed and acceleration of the pointer, etc., protecting the integrity and the privacy of the pointer data is a challenging task. The primary gal of this paper is to ensure the security of the pointer in a trusted path.
   
    
-   \item \textbf{Security.} Our proposed solution provides IO security and sandboxed activity to protect user-provided data. Such implies that while deployed, the device always protects the integrity of user input and in specific application scenarios, it provides IO privacy and integrity.
+   \item \textbf{Security.} Our proposed solution provides IO security and sandboxed activity to protect user IO data. Such implies that while deployed, the device always protects the integrity of user input and in specific application scenarios, it provides IO privacy and integrity. Additionally, a goal of the system is to also protect the integrity of the UI elements on the screen so that the compromised OS can not modify it.
+   
   \item \textbf{Easy deployment and integration.} Our proposed solution focuses on deploying it to an existing system without any major changes. This also ensures minimal or no changes to the user interaction with the systems.
 
 \end{enumerate}

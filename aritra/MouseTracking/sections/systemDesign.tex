@@ -65,14 +65,14 @@ When the user opens up a webpage that supports \name mechanism, key exchange is 
   \item In case the user is not in possession of a \device, the aforementioned step does not take place within the $5$ seconds timeout period. In that case \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involves \device fro their operation.
 \end{enumerate}
 
-After this, both the device and the remote server have each other's public certificates. Using these certificates, they can then establish a shared secret by executing an authenticated Diffie-Hellman key exchange protocol.
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret.}.
 
 
 
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4cm 0 0}, clip, width=0.75\linewidth]{formTransform.pdf}
-\caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code (\two) that is decrypted and overplayed (\three) on the HDMI stream by the \device. Upon user's action on the overlayed UI elements, the device signs all the input data and send them to the remote server. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
+\caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code (\two) that is decrypted and overplayed (\three) on the HDMI stream by the \device. Upon user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the Ui elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
 
@@ -123,8 +123,9 @@ After this, both the device and the remote server have each other's public certi
 
 \myparagraph{Overlay} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. 
 
-\myparagraph{Data transfer} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server.  
+\myparagraph{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server.  
 
+\myparagraph{Proof-of-UI} As the specification sent by the server is signed, the generated UI also ensures proof-of-UI. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on the display. As the UI is generated as per the specification sent from the remote server, the \device ensures the UI integrity.
 
 \begin{figure}[t]
 \centering
