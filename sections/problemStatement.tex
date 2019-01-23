@@ -1,6 +1,11 @@
 \section{Problem Statement}
 \label{sec:problemStatement}
 
+Security properties such as integrity and privacy protect user's data from an adversary who wants to either make arbitrary changes to the data or see the sensitive data. Trusted execution environments (TEEs) such as Intel SGX supports isolation execution environments that protect the sensitive application from a malicious application. Privacy of the application data is achieved through memory encryption that hides the sensitive user/application data from the operating system. Remote attestation ensures that the target platform runs the proper version of an enclave. There also exists other TEEs that provides a similar set of features. Technologies such as Intel SGX brings trust into the processor, effectively eliminating the need to trust more significant code base (motherboard, memory modules, OS and other applications). But the problem of isolating user's input and output remains as the operating system handles the IO drivers and data. There exists some solution of building a trusted path between the user and the protected applications (enclaves in the SGX terminology), none of the existing methods providers a robust and generic solution that requires very few changes into the current and legacy system.
+
+In this paper, we tackle the problem of securing generic user IO data from arbitrary IO devices. In other words, in this paper, we focus on a new way to build systems that bring a user's trust into IO devices and data - keeping in mind that the solution works by almost no or little changes to the existing systems.      
+
+
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
@@ -11,7 +16,7 @@
 
 
 
-\subsection{Motivation and Problem Statement}
+\subsection{Security Properties}
 
 Integrity and privacy of IO data between the user and a sensitive service is a crucial problem when one assumes that the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also alter them. Furthermore, the user is completely unprotected, she cannot verify that her inputs are transferred to the server securely, or even have the guarantee that she is communicating with the legitimate server. 
 
