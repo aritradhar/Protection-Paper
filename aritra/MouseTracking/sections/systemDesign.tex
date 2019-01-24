@@ -147,7 +147,9 @@ Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host syste
 \subsection{Secure Attention Sequence}
 \label{sec:systemDesign:SAS}
 
-Secure Attention Sequence (SAS) is a sequence of actions (such as keystrokes \texttt{Ctrl+Alt+Del}) executed by the user that is completely trust worthy. \name provides a mechanism for SAS where the user forces the \device to highlight the overlaid UI and the mouse pointer location to eliminate any possibility that the attacker either i) create fake UI elsewhere in the screen that may trick the user into submitting sensitive information, or ii) spawn a fake mouse pointer to trick the user into clicking into different location.
+Secure Attention Sequence (SAS) is a sequence of actions~\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential} executed by the user that is completely trust worthy. \name provides a mechanism for SAS where the user forces the \device to highlight the overlaid UI and the mouse pointer location to eliminate any possibility that the attacker either i) create fake UI elsewhere in the screen that may trick the user into submitting sensitive information, or ii) spawn a fake mouse pointer to trick the user into clicking into different location. To protect against such scenarios, \device also provides SAS using which the user can highlight the overlaid UIs and the mouse pointer on the display. As the \device overlays on the HDMI frames, the attacker can not manipulate any overwriting by rendering anything on top of them. When the user presses a button on the \device, the \device dims the rest of the part of the display except the legitimate mouse pointer and the overlaid UIs.
+By doing so, the user can easily discriminate the secure UIs and the legitimate mouse pointer.
+
 
 \subsection{Committing User Input}
 \label{sec:systemDesign:commit}
