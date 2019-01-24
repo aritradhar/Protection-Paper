@@ -2,13 +2,7 @@
 \label{sec:systemDesign}
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 6cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
-\caption{High level flow of \name}
-\label{fig:systemDesign}
-\centering
-\end{figure}
+
 
 In this section, we provide the technical details of \name that provides 
 \subsection{System Components}
@@ -16,7 +10,7 @@ In this section, we provide the technical details of \name that provides
 
 Figure~\ref{fig:systemDesign} provides the overall system design of \name. The components of the systems are the following:
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
   \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
   \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI.
   \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over \usb interface.
@@ -29,7 +23,7 @@ Figure~\ref{fig:systemDesign} provides the overall system design of \name. The c
 
 There are two steps of initialization process: 
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
   \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to the top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
   
   \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt, effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
@@ -49,7 +43,7 @@ The upstream channel, i.e., the data from the \device to the remote server is tr
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.75\linewidth]{keyExchange.pdf}
+\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
 \caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds, hence the page is practically invisible to the user.}
 \label{fig:keyExchange}
 \centering
@@ -57,7 +51,7 @@ The upstream channel, i.e., the data from the \device to the remote server is tr
 
 When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also the key exchange phase is crucial as the remote server also access if the user is in possession of a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
   \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server. This page has a $5$ seconds time out.
   \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
   \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its public certificate to hexadecimal and send it as a keystroke to the host.
@@ -71,7 +65,7 @@ After this, both the device and the remote server have each other's public certi
 
 \begin{figure*}[t]
 \centering
-\includegraphics[trim={0 4cm 0 0}, clip, width=0.75\linewidth]{formTransform.pdf}
+\includegraphics[trim={0 4cm 0 0}, clip, width=0.85\linewidth]{formTransform.pdf}
 \caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code (\two) that is decrypted and overplayed (\three) on the HDMI stream by the \device. Upon user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the Ui elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
@@ -160,25 +154,30 @@ When the user finishes providing her input over the input device (mouse and keyb
 
 \myparagraph{Commit} In the commitment phase, the \device waits for the user to operate on a UI element which has a \texttt{trigger} capability. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute can take either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value that denotes that the the button can submit the values that are provided by the user or abort the form altogether.  
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 6.5cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
+\caption{\textbf{High level flow of \name}}
+\label{fig:systemDesign}
+\centering
+\end{figure}
 
 \subsection{Main Protocol}
 \label{sec:systemDesign:mainProtocol}
 
-In Sections~\ref{sec:systemDesign:keyEstablishment}, \ref{sec:systemDesign:transformation}, \ref{sec:systemDesign:commit}, we explain the basic components of \name. Now in this Section, we provide the overall protocol/
-
-The outline of the system is illustrated in Figure~\ref{fig:systemDesign}. The steps are the following:
+In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or write on the browser link field which web application to open. The steps are the following:
 
 
-\begin{enumerate}
-  \item[\one] The user, provides input from her input device which is captured by the \device.
-  \item[\two] The \device sends the mouse traces to the host over the \bluetooth interface.
-  \item[\three] The host system draws the frames.
-  \item[\four], The host, sends the drawn frames to the \device over HDMI interface.
-  \item[\five] The host sends the \http request to the remote server that contains user input. 
-  \item[\six] The remote server sends the UI information to the \device over the dedicated \tls channel between the \device and the remote server. The packet includes information such as the type of the UI, text that is expected on the UI, etc.
-  \item[\seven] The \device analyzes the frames (from step \four) from the host using the UI information (step \six) received from the server. The analysis step is discussed in details in Section~\ref{sec:systemDesign:analysis}.
-  \item[\eight] The \device sends the frames and the overlay derived from the analysis step to the display device.
-
+\begin{enumerate}[leftmargin=*]
+  \item[\one] The browser on the host system receives the response from the remote server. The browser renders the webpage. Note, that the webpage contains the protected UI fields that are transformed by the \name JavaScript snippet to a QR code (detailed description in Section~\ref{sec:systemDesign:transformation}). The QR code contains a UI specification that can be decoded by the \device.
+  \item[\two] The graphics driver sends the rendered frame to the \device over the HDMI channel.
+  \item[\three] The \device intercepts the HDMI signal and decode the QR code to retrieve the UI specification. After the decoding of the QR code, the \device renders the bitmap corresponding to the specification.
+  \item[\four] The \device send the HDMI frame with the UI overlay to the display device.
+  \item[\five] After observing the HDMI frame and the overlaid UI, the user passes her input to the \device via the keyboard/mouse that is connected to the \device over the \usb interface.
+  \item[\six] In this step, the \device forwards mouse traces (i.e., the $(x,y)$-coordinates) to the host system. This is achieved as the \device enumerate itself as a composite HID (that includes both keyboard and mouse) to the host. Moreover, the \device also draw an overlay of the mouse pointer on its overlaid UI as the \device draws over the HDMI frames that are generated by the host. This provides a seamless user experience.
+  \item[\seven] After the user input is complete; the host submits the data to the remote server.
+  \item[\eight] The \name JavaScript snippet also acts as a upstream channel from the \device to the remote server (refer to Section~\ref{sec:systemDesign:communicationChannel}). Via this channel, the \device sends the signed user action to the remote server. This signed user action can be seen as the second factor for the integrity of the user input data.
+  \item [\nine] The server verifies the data from the two channels that are submitted by the host and the \device. 
 \end{enumerate}
 
 
