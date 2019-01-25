@@ -74,6 +74,8 @@ After this, both the device and the remote server have each other's public certi
 \label{sec:systemDesign:transformation}
 
 
+In this section, we describe the most crucial part of the \name solution: transformation of the user interface (UI) elements. This transformation provides two security property i) proof-of-action that ensures integrity of the user input, and ii) proof-of-UI that ensures secure display. Before describing the transformation, we first provide a strawman solution that is based in text/image analysis that we opted not no use due to several drawbacks.   
+
 \begin{figure}[!htpb]
 \centering
 \includegraphics[trim={0 12cm 17cm 0}, clip, width=0.8\linewidth]{uiDetect.pdf}
@@ -82,7 +84,12 @@ After this, both the device and the remote server have each other's public certi
 \centering
 \end{figure}
 
-\myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to use image and text analysis to understand the semantics of the Ui elements. In Figure~\ref{fig:uiDetect} we illustrate on example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to classify that the user clicks on a button. The \device also uses character recognition technique to extract the label of the button. Our prototype implementation shows that this technique lacks robustness in the real life as most of the time the \device fails to either recognize the UI elements or extract the label from the UI elements properly. Moreover the image/text analysis is CPU intensive and causes low number of frame output by the \device. Such drawbacks of this techniques leds us to more robust solution.  
+\myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to use image and text analysis to understand the semantics of the Ui elements. In Figure~\ref{fig:uiDetect} we illustrate on example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to classify that the user clicks on a button. The \device also uses character recognition technique to extract the label of the button. Further investigation and prototype implementation shows two primary drawbacks of this solution:
+\begin{enumerate}[leftmargin=*]
+  \item Research works such as~\cite{lukaSpoof,Chen:2010:DVS:1754393.1754394} propose detection of phishing attack by visually analyzing the web interface of the mobile application. All of such proposed method fail to achieve 100\% accuracy in the real world scenarios. Our prototype implementation alo confirm that the method lacks robustness in the real life as most of the time the \device fails to either recognize the UI elements or extract the label from the UI elements properly despoite of using state-of-the-art image/text analysis tools.
+  \item The image/text analysis is CPU intensive and causes low number of frame output by the \device. Popular image analysis framework such as OpenCV~\cite{opencv} is CPU intensive and hard to achieve 24 fps after operation on the \device that is implemented on a Raspberry Pi.
+\end{enumerate}
+
 
 \myparagraph{UI transformation based approach} After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: \emph{transformation}, \emph{overlay}, and \emph{data transfer}.
 
