@@ -63,12 +63,29 @@ After this, both the device and the remote server have each other's public certi
 
 
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
+\caption{\textbf{Proof-of-pointer.} The figure shows the high-level procedure of proof-of-pointer. The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
+\label{fig:mouseAnalysis}
+\centering
+\end{figure}
+
+\subsection{Analysis of HDMI Frames for Proof-of-pointer}
+\label{sec:systemDesign:analysis}
+
+The crucial property that \name provides is the user input integrity that combines both keyboard and mouse input. The integrity of the mouser input is nontrivial as one needs to know what the user sees on the screen. \name achieves this by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the frame to extract the cursor context. We call this property as the \emph{proof-of-pointer} where the \device generates the proof of the traces of the pointer. 
+
+Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on display.
+
+
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4cm 0 0}, clip, width=0.85\linewidth]{formTransform.pdf}
 \caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \texttt{HTML} source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed to a QR code (\two) that is decrypted and overplayed (\three) on the HDMI stream by the \device. Upon user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the Ui elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
+
 
 \subsection{Transformation of UI Elements for Proof-of-Action and Proof-of-UI}
 \label{sec:systemDesign:transformation}
@@ -127,22 +144,6 @@ In this section, we describe the most crucial part of the \name solution: transf
 \myparagraph{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server.  
 
 \myparagraph{Proof-of-UI} As the specification sent by the server is signed, the generated UI also ensures proof-of-UI. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on the display. As the UI is generated as per the specification sent from the remote server, the \device ensures the UI integrity.
-
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
-\caption{\textbf{Proof-of-pointer.} The figure shows the high-level procedure of proof-of-pointer. The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
-\label{fig:mouseAnalysis}
-\centering
-\end{figure}
-
-\subsection{Analysis of HDMI Frames for Proof-of-pointer}
-\label{sec:systemDesign:analysis}
-
-The crucial property that \name provides is the user input integrity that combines both keyboard and mouse input. The integrity of the mouser input is nontrivial as one needs to know what the user sees on the screen. \name achieves this by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the frame to extract the cursor context. We call this property as the \emph{proof-of-pointer} where the \device generates the proof of the traces of the pointer. 
-
-Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. The analysis works like the following. We define mouse movement as the time series $(x,y)$ co-ordinates $\{(x_1,y_1), (x_2, y_2), \ldots, (x_n,y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$. In time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (enough to cover a mouse cursor). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions otherwise it stops all the communications and shows an error on display.
-
 
 
 \subsection{Secure Attention Sequence}
