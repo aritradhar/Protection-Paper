@@ -9,7 +9,7 @@ In this section, we provide the technical details of \name integrity protection 
 
 Figure~\ref{fig:approachOverview} provides the highlevel approach overview of \name. The components of \name are the following:
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
   \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI.
   \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over \usb interface.
@@ -23,7 +23,7 @@ Figure~\ref{fig:approachOverview} provides the highlevel approach overview of \n
 
 There are two steps of initialization process: 
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to the top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
   
   \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt, effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
@@ -51,7 +51,7 @@ The \emph{upstream} channel, i.e., the data from the \device to the remote serve
 
 When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also the key exchange phase is crucial as the remote server also access if the user is in possession of a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server. This page has a $5$ seconds time out.
   \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
   \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its public certificate to hexadecimal and send it as a keystroke to the host.
@@ -102,7 +102,7 @@ In this section, we describe the most crucial part of the \name solution: transf
 \end{figure}
 
 \myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to use image and text analysis to understand the semantics of the Ui elements. In Figure~\ref{fig:uiDetect} we illustrate on example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to classify that the user clicks on a button. The \device also uses character recognition technique to extract the label of the button. Further investigation and prototype implementation shows two primary drawbacks of this solution:
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item Research works such as~\cite{lukaSpoof,Chen:2010:DVS:1754393.1754394} propose detection of phishing attack by visually analyzing the web interface of the mobile application. All of such proposed method fail to achieve 100\% accuracy in the real world scenarios. Our prototype implementation alo confirm that the method lacks robustness in the real life as most of the time the \device fails to either recognize the UI elements or extract the label from the UI elements properly despoite of using state-of-the-art image/text analysis tools.
   \item The image/text analysis is CPU intensive and causes low number of frame output by the \device. Popular image analysis framework such as OpenCV~\cite{opencv} is CPU intensive and hard to achieve 24 fps after operation on the \device that is implemented on a Raspberry Pi.
 \end{enumerate}
@@ -176,7 +176,7 @@ When the user finishes providing her input over the input device (mouse and keyb
 In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or write on the browser link field which web application to open. The steps are the following:
 
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item[\one] The browser on the host system receives the response from the remote server. The browser renders the webpage. Note, that the webpage contains the protected UI fields that are transformed by the \name JavaScript snippet to a QR code (detailed description in Section~\ref{sec:systemDesign:transformation}). The QR code contains a UI specification that can be decoded by the \device.
   \item[\two] The graphics driver sends the rendered frame to the \device over the HDMI channel.
   \item[\three] The \device intercepts the HDMI signal and decode the QR code to retrieve the UI specification. After the decoding of the QR code, the \device renders the bitmap corresponding to the specification.
