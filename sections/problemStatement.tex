@@ -1,9 +1,10 @@
 \section{Problem Statement}
 \label{sec:problemStatement}
 
+\iffalse
 % note: the problem in the current infrastructure: the computer has access to raw data from the server, and the user
-A user communicates with a remote server through a computer interface which gives %The user typically sends inputs to the server through a keyboard or a mouse and takes responses on a screen. 
-the computer access to the plaintext data that goes from the user to the server and vice-versa. Thus, a compromised computer can always steal or modify the information going on both directions. An adversary that compromises user's computer is able to alter user intentions, i.e., it can perform arbitrary actions on behalf of the user. Such an adversary is very powerful and difficult to be prevented by a remote server. The consequences of such attacks are critical depending on the importance of the target application. The attacker can redirect user's payments to a malicious account, read all sensitive communication of the user, or even threaten individuals lives by misconfiguring a medical device. 
+A user communicates with a remote server through a host interface which gives %The user typically sends inputs to the server through a keyboard or a mouse and takes responses on a screen. 
+the computer access to the plaintext data that goes from the user to the server and vice-versa. Thus, a compromised host can always steal or modify the information going on both directions. An adversary that compromises user's host is able to alter user intentions, i.e., it can perform arbitrary actions on behalf of the user. Such an adversary is very powerful and difficult to be prevented by a remote server. The consequences of such attacks are critical depending on the importance of the target application. The attacker can redirect user's payments to a malicious account, read all sensitive communication of the user, or even threaten individuals lives by misconfiguring a medical device. 
 
 % note: full compromise is possible in many ways, so we need trusted channels
 The complexity of nowadays computer systems does not restrict such attackers, but on the contrary it opens up new possibilities. The adversary can jeopardize user inputs or outputs by attacking the user's computer directly, e.g., Man-in-The-Browser (MiTB) attacks, keyloggers, or malwares that can escalate their privileges to gain root access on the system. Furthermore, many sensitive applications offer their services via a native application or a website that usually imports third-party libraries. An adversary can craft a malicious piece of code and add it on a popular open source library to attack user inputs on specific applications, known as software supply chain attacks. This kind of attack is already seen on the past for websites managing cryptocurrencies wallets~\cite{softSupplyChainAttack, jsSupplyChainAttack}. Therefore, the necessity of a trusted channel between the remote server and the user is critical in any sensitive application.
@@ -18,7 +19,15 @@ The existing systems do not provide any interface to the remote server to learn 
 %In this paper, we tackle the problem of securing sensitive user IO data from arbitrary IO devices. We assume that the attacker compromises host systems that include the hardware, the operating systems, and all the installed applications. Such an attacker model allows it not only to steal the sensitive information from the user but also alter them. Additionally, as the attacker is in full control of the host system, he can alter the UI elements on the screen, change the location of the pointer, modify the speed and the acceleration of the pointer, etc. Such a capability of the attacker makes the problem of protecting the integrity of the mouse pointer a challenging one. Even though the problem of preserving the integrity/privacy of the keyboard input is addressed in the recent literature, integrity/privacy for mouse pointer is still an unsolved problem. Furthermore, the user is completely unprotected, she cannot verify that her inputs are transferred to the server securely, or even have the guarantee that she is communicating with the legitimate server. 
 
 %In other words, in this paper, we focus on a new way to build systems that bring a user's trust into IO devices and data - keeping in mind that the solution works by almost no or little changes to the existing systems. Additionally, we also assume that the user's platform may nor support any TEEs. Such assumption reduces the trusted code base to bare minimal and making the problem of protecting user IO data under strong adversary model a challenging task.      
+\fi
 
+
+In this section, we motivate our work, explain the security properties, describe exiting literature lacks proper solution and explain the goals of our work.
+
+\subsection{Motivation: Trusted Path}
+
+
+A user communicates with a remote server through a computer interface, we call it as the host system, that which gives the host access to the plaintext data that goes from the user to the server and vice-versa. Thus, a compromised host can always steal or modify the information going on both directions. An adversary that compromises user's host is able to alter user intentions, i.e., it can perform arbitrary actions on behalf of the user. Such an adversary is very powerful and difficult to be prevented by a remote server. The consequences of such attacks are critical depending on the importance of the target application. The attacker can redirect user's payments to a malicious account, read all sensitive communication of the user, or even threaten individuals lives by misconfiguring a medical device. 
 
 \begin{figure}[t]
 \centering
@@ -28,22 +37,6 @@ The existing systems do not provide any interface to the remote server to learn 
 \centering
 \end{figure}
 
-\subsection{Goals}
-
-In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes our solution different from them is the specific settings that it targets. We do not assume trust in the OS, particular drivers, TEEs, hypervisors, etc. As all of these techniques as mentioned earlier requires trust on a large code base. Instead, our proposed solution solves the problem of building an efficient, trusted path using an off-the-shelf microcontroller and single board computers that require a bare-minimum trust assumption. The most distinguishing factor is the type of IOs our proposed system targets to protect, namely mouse/touch inputs and sophisticated user interfaces. Existing research works primarily targets character-based input devices such as keyboards, and the methods cannot be trivially applied to mouse/touch-based inputs or complex UI elements. 
-
-The goals are the following:
-
-\begin{enumerate}[leftmargin=*]
-  \item  \textbf{Pinter-based input devices.} Existing trusted path solutions primarily focus on keyboard beds input. Note that keyboard based input only considers text boxes, thus completely ignores other types of UI elements. Extending the protection mechanisms from keyboard to pointer is non-trivial as the same mechanism does not apply. The pointer interacts with many complex UI elements. As the attacker can manipulate with such UI elements, spawn or changes the location of the pointer, manipulate with the speed and acceleration of the pointer, etc., protecting the integrity and the privacy of the pointer data is a challenging task. The primary goal of this paper is to ensure the security of the pointer in a trusted path.
-  
-   
-   \item \textbf{Security.} Our proposed solution provides IO security and sandboxed activity to protect user IO data. Such implies that while deployed, the device always protects the integrity of user input and in specific application scenarios, it provides IO privacy and integrity. Additionally, a goal of the system is to also protect the integrity of the UI elements on the screen so that the compromised OS cannot modify it.
-   
-  \item \textbf{Easy deployment and integration.} Our proposed solution focuses on deploying it to an existing system without any significant changes. This also ensures minimal or no changes to the user interaction with the systems.
-
-\end{enumerate}
-
 \subsection{Security Properties}
 
 
@@ -51,10 +44,11 @@ The goals are the following:
 
 We list the security properties that we want to provide in our proposed solution. We now discuss these security properties and corresponds them with the motivating example.
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
   \item \textbf{Input integrity and privacy.} These properties define that any input that is coming from the user input devices are fully protected in two ways: i) the inputs are that issued by the user reaches to the remote end-point as it was meant to be - \emph{integrity}, and ii) in specific application scenarios, the attacker-controlled host is entirely oblivious about the input from the user - \emph{privacy}. We can further fine grain the user input to the granularity of user-issued \emph{commands} and user-issued \emph{activities}. Both of which are generated by the input devices from the user. User-issued commands are the specific actions that are executed by the user. Commands are transmitted to the remote end-system, e.g., filling a text-box with a parameter and clicking the \emph{submit} button issues a \texttt{HTTP} request to the remote server. The user-issued activities are actions that are given to the host system which are not directly transmitted to the remote end-system but causes user-issued commands, e.g., mouse movement from one point to a button that user intends to click.  
   
-  \item \textbf{Output integrity and privacy.} Similar to the input integrity, output integrity ensures that information that is sent by the remote endpoint reaches to the user as the way it was meant to be. an attacker-controlled host cannot modify the information that is shown to the user. On the other hand, output privacy is defied as the property where the attacker-control host is completely oblivious about the output which is shown to the user. 
+  \item \textbf{Output integrity and privacy.} Similar to the input integrity, output integrity ensures that information that is sent by the remote endpoint reaches to the user as the way it was meant to be. We further fine-grain output integrity and privacy by dividing it into two parts: \emph{data} and \emph{UI}. Data denotes the information that is passed from a remote entity to the host and UI denotes to the user interface structure that is presented to the user.
+  
   \end{enumerate}
 
 \begin{figure}[t]
@@ -90,7 +84,7 @@ We list the security properties that we want to provide in our proposed solution
     & TrustOTP~\cite{sun2015trustotp} & CARMA~\cite{vasudevan2012carma} \\ \hline
     \multirow{3}{*}{External trusted hardware based} & Fidelius~\cite{Fidelius} & IntegriKey~\cite{IntegriKey} \\
     &  & FPGA-based~\cite{brandon2017trusted} \\
-    &  & \textcolor{OliveGreen}{Our Solution (I + O + Activity)} \\
+    &  & \textcolor{blue}{Our Solution (I + O + Activity)} \\
     \hline
   \end{tabular}
   \caption{Summarization of existing trusted path solutions. Note that in the table, switching systems from left to right or top to bottom, reduces the trust assumption. For example, TEE based solutions, such as SGX-based trusted path solution requires trust on the physical processor packages, SGX APIs, quoting and launch enclaves and Intel attestation service.}
@@ -101,7 +95,7 @@ We list the security properties that we want to provide in our proposed solution
 
 Given the attacker's model, there exist several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models:
 
-\subsubsection{Strawman solution: trusted OS} Trusted OS could be seen as a straightforward solution as traditionally OS handles all the IO drives, computation, and network communications. Assuming a trusted OS significantly reduces the complexity of the solution but the security assumption suffers. Trusted OS introduces a large trusted code base and a multitude of vulnerabilities. 
+%\subsubsection{Strawman solution: trusted OS} Trusted OS could be seen as a straightforward solution as traditionally OS handles all the IO drives, computation, and network communications. Assuming a trusted OS significantly reduces the complexity of the solution but the security assumption suffers. Trusted OS introduces a large trusted code base and a multitude of vulnerabilities. 
 
 \subsubsection{Hypervisor-based solutions} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Examples of other hypervisor-based works can be found in systems such as Overshadow~\cite{Overshadow}, Virtual ghost~\cite{criswell2014virtual}, Inktag~\cite{hofmann2013inktag}, TrustVisor~\cite{mccune2010trustvisor}, Splitting interfaces~\cite{ta2006splitting}, $SP^3$~\cite{yang2008using}, etc.
 
@@ -112,3 +106,23 @@ Moreover, TEE requires trust assumption on the processors and additional code ba
 \subsubsection{Dedicated hardware-based solution} Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. In their work, Brandon et al. ~\cite{brandon2017trusted} demonstrate screen overlay on Android devices using FPGAs.
 
 Note that majority of the previous works achieve some form of trusted path specifically for keyboard-based input. However supporting mouse and touch-based input, complex and generic user interfaces and protected user activity in a privacy-sensitive application is not a trivial task. Without proper analysis of every frame that the host system produces, it is not possible to track user intention. In our knowledge, our proposed solution is the first to provide such security properties including the activity privacy. Moreover, we want to achieve this in the absence of any TEE as the trust model of our scenario is significantly different. 
+
+
+
+\subsection{Goals}
+
+In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes our solution different from them is the specific settings that it targets. We do not assume trust in the OS, particular drivers, TEEs, hypervisors, etc. As all of these techniques as mentioned earlier requires trust on a large code base. Instead, our proposed solution solves the problem of building an efficient, trusted path using an off-the-shelf microcontroller and single board computers that require a bare-minimum trust assumption. The most distinguishing factor is the type of IOs our proposed system targets to protect, namely mouse/touch inputs and sophisticated user interfaces. Existing research works primarily targets character-based input devices such as keyboards, and the methods cannot be trivially applied to mouse/touch-based inputs or complex UI elements. 
+
+The goals are the following:
+
+\begin{enumerate}
+  \item  \textbf{Pinter-based input devices.} Existing trusted path solutions primarily focus on keyboard beds input. Note that keyboard based input only considers text boxes, thus completely ignores other types of UI elements. Extending the protection mechanisms from keyboard to pointer is non-trivial as the same mechanism does not apply. The pointer interacts with many complex UI elements. As the attacker can manipulate with such UI elements, spawn or changes the location of the pointer, manipulate with the speed and acceleration of the pointer, etc., protecting the integrity and the privacy of the pointer data is a challenging task. The primary goal of this paper is to ensure the security of the pointer in a trusted path.
+  
+   
+  % \item \textbf{Security.} Our proposed solution provides IO security and sandboxed activity to protect user IO data. Such implies that while deployed, the device always protects the integrity of user input and in specific application scenarios, it provides IO privacy and integrity. Additionally, a goal of the system is to also protect the integrity of the UI elements on the screen so that the compromised OS cannot modify it.
+   
+  \item \textbf{Easy deployment and integration.} Our proposed solution focuses on deploying it to an existing system without any significant changes. This also ensures minimal or no changes to the user interaction with the systems.
+
+\end{enumerate}
+
+

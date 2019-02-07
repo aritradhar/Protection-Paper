@@ -1,36 +1,34 @@
-\documentclass[letterpaper,twocolumn,10pt]{article}
-\usepackage{usenix2019,epsfig,endnotes}
+%%%%%%%%%%%%%%%%%%%%%%
+%usenix
+%\documentclass[letterpaper,twocolumn,10pt]{article}
+%\usepackage{usenix2019,epsfig,endnotes}
+%%%%%%%%%%%%%%%%%%%%%%
+%CCS
+\documentclass[sigconf, anonymous]{acmart}
+
+% remove reference format for submission
+\settopmatter{printacmref=false}
+
+% remove copyright box for submission
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
+% control headers 
+\fancyhf{} 
+\fancyhead[C]{Anonymous submission \#9999 to ACM CCS 2019} % TODO: replace 9999 with your paper number
+\fancyfoot[C]{\thepage}
+
+\setcopyright{none} % No copyright notice required for submissions
+\acmConference[Anonymous Submission to ACM CCS 2019]{ACM Conference on Computer and Communications Security}{Due 5 February 2019}{London, UK}
+%\acmYear{2019}
+
+%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\ifdraft
 %\drafttrue
 
-%\usepackage{appendix}
-\usepackage{enumitem}
+\usepackage{xcolor}
 \usepackage{graphicx,pifont}
 \usepackage{adjustbox}
-\usepackage{amsmath,amsthm,amssymb}
-\usepackage{mathtools}
-\usepackage{mathrsfs}
-\usepackage{xspace}
-\usepackage{url}
-%\usepackage[compact]{titlesec}
-%\usepackage{tikz}
-%\usepackage{float}
-%\usepackage{subfig}
-\usepackage{listings}
-\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
-%\usepackage{mathtools}
-%\usepackage{array}
-%\usepackage{booktabs}
-\usepackage{multirow, bigdelim}
-\usepackage{cite}
-\usepackage{hyphenat}
-\usepackage[dvipsnames]{xcolor}
-%\usepackage[graphicx]{realboxes}
-%\usepackage{rotating}
-
-
-
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{mathtools}
@@ -39,18 +37,28 @@
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{pifont}
+\usepackage{listings}
+\usepackage{multirow}
+\usetikzlibrary{positioning, trees, arrows}
+
+%\usepackage[font={small}]{caption}
 %\usepackage{enumitem}
-\usepackage{cite}
+%\usepackage{cite}
+%\usepackage{flushend}
+%\usepackage{hyperref}
+%\usepackage{caption}
+
+
 
 %% Compacting 
 %%
-\usepackage[
-all=normal,floats=tight
-,paragraphs=tight
-,wordspacing=tight
+%\usepackage[
+%all=normal,floats=tight
+%,paragraphs=tight
+%,wordspacing=tight
 %,mathspacing=tight
 %,mathdisplays=tight
-]{savetrees}
+%]{savetrees}
 %\usepackage[compact]{titlesec}
 
 
