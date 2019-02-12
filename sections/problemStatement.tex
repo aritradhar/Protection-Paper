@@ -130,17 +130,16 @@ We list the fine-grained security properties that we want to provide in our prop
     CARMA~\cite{vasudevan2012carma}			    & \no 		& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\ \hline
 	\normalsize \textbf{\name}	    			& \no 		& \no  & \no 		& \yes 	& \yes & \yes 	& \yes 		& \yes\\
     \hline
+    \multicolumn{9}{c}{\normalsize \yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
   \end{tabular}
+  \caption{Summarization of existing trusted path solutions by their trust assumptions and security features. Note that lower trust assumption and high number of security features are desired from a generic trusted path solution.}
   \label{tab:relatedWorks}
-  \caption{Summarization of existing trusted path solutions.}
 \end{table*}
-
-
 
 
 \subsection{Potential Solutions and their drawbacks}
 
-Given the attacker's model, there exist several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models:
+Given the attacker's model, there exist several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models. Table~\ref{tab:relatedWorks} presents a summarization of such works.
 
 %\subsubsection{Strawman solution: trusted OS} Trusted OS could be seen as a straightforward solution as traditionally OS handles all the IO drives, computation, and network communications. Assuming a trusted OS significantly reduces the complexity of the solution but the security assumption suffers. Trusted OS introduces a large trusted code base and a multitude of vulnerabilities. 
 
