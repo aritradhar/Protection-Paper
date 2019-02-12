@@ -103,31 +103,35 @@ We list the fine-grained security properties that we want to provide in our prop
 \end{table}
 \fi
 
-
+\bgroup
+\def\arraystretch{1.2}
 \begin{table*}[t]
 \small
 \centering
+%\bgroup
+%\def\arraystretch{1.2}
   \begin{tabular}{ l || c | c | c | c || c | c | c | c}   
-   & \multicolumn{4}{c||}{Trust Assumption} & \multicolumn{4}{c}{Features}\\  \hline
+   & \multicolumn{4}{c||}{Trust Assumption} & \multicolumn{4}{c}{Integrity \& privacy features}\\  \hline
    & Requires TEE & Hypervisor & Isolated API/Drivers & External trusted HW & Keyboard & Pointer & Display & Activity \\
     \hline
-    SGX IO~\cite{weiser2017sgxio} 				& \yes 	& \yes & \yesNope & \no & \yes & \no & \no & \no\\
-    Overshadow~\cite{Overshadow} 				& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
-    Virtual ghost~\cite{criswell2014virtual} 	& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
-    TrustVisor~\cite{mccune2010trustvisor} 		& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
-    Inktag~\cite{hofmann2013inktag} & \no 	& \yes & \no & \no & \yes & \no & \no & \no\\\
-    Splitting interfaces~\cite{ta2006splitting} & \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
-    $SP^3$~\cite{yang2008using} 				& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
-    BASTION-SGX~\cite{BASTION-SGX}			    & \yes 	& \no & \no & \no & \yes & \no & \no & \no\\
-    Slice~\cite{azab2011sice}				    & \no 	& \no & \no & \no & \yes & \no & \no & \no\\
-    TrustOTP~\cite{sun2015trustotp}			    & \yes 	& \no & \no & \no & \yes & \no & \no & \no\\
-    Fidelius~\cite{Fidelius}			   	    & \yes 	& \no & \yes & \yes & \yes & \no & \yesNope & \no\\
-    FPGA-based~\cite{brandon2017trusted}		& \yes 	& \no & \yes & \yes & \yes & \no & \yesNope & \no\\
-    IntegriKey~\cite{IntegriKey}				& \yes 	& \no & \yes & \yes & \yes & \no & \yesNope & \no\\
-    CARMA~\cite{vasudevan2012carma}			    & \no 	& \no & \no & \no & \yes & \no & \no & \no\\ \hline
-	\textbf{\name}	    		& \no 	& \no  & \no & \yes & \yes & \yes & \yes & \yes\\
+    SGX IO~\cite{weiser2017sgxio} 				& \yes 	& \yes & \yesNope 	& \no	& \yes & \no 	& \no 		& \no\\
+    Overshadow~\cite{Overshadow} 				& \no 	& \yes & \no 	  	& \no 	& \yes & \no 	& \no 		& \no\\
+    Virtual ghost~\cite{criswell2014virtual} 	& \no 	& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    TrustVisor~\cite{mccune2010trustvisor} 		& \no 	& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    Inktag~\cite{hofmann2013inktag} 			& \no 	& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\\
+    Splitting interfaces~\cite{ta2006splitting} & \no 	& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    $SP^3$~\cite{yang2008using} 				& \no 	& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    BASTION-SGX~\cite{BASTION-SGX}			    & \yes 	& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    Slice~\cite{azab2011sice}				    & \no 	& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    TrustOTP~\cite{sun2015trustotp}			    & \yes 	& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    Fidelius~\cite{Fidelius}			   	    & \yes 	& \no  & \yes 		& \yes 	& \yes & \no 	& \yesNope 	& \no\\
+    FPGA-based~\cite{brandon2017trusted}		& \yes 	& \no  & \yes 		& \yes 	& \yes & \no 	& \yesNope 	& \no\\
+    IntegriKey~\cite{IntegriKey}				& \no 	& \no  & \yesNope 	& \yes 	& \yes & \no 	& \no 		& \no\\
+    CARMA~\cite{vasudevan2012carma}			    & \no 	& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\ \hline
+	\normalsize \textbf{\name}	    			& \no 	& \no  & \no 		& \yes 	& \yes & \yes 	& \yes 		& \yes\\
     \hline
   \end{tabular}
+  \label{tab:relatedWorks}
   \caption{Summarization of existing trusted path solutions.}
 \end{table*}
 
