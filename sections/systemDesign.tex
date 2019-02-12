@@ -9,25 +9,25 @@ In this section, we provide the technical details of \name integrity protection 
 
 Figure~\ref{fig:approachOverview} provides the highlevel approach overview of \name. The components of \name are the following:
 
-\begin{enumerate}
+\begin{mylist}
   \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
   \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI.
   \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over \usb interface.
   \item \textbf{Display.} The display device is connected to the \device over HDMI interface.
   \item \textbf{Remote server.} The remote server is a trusted entity that serves the web application to the host system over \http. The remote server also creates a secure channel with the \device using the host as an untrusted transport. 
   
-\end{enumerate}
+\end{mylist}
 
 \subsection{Initialization} 
 \label{sec:systemDesign:init}
 
 There are two steps of initialization process: 
 
-\begin{enumerate}
+\begin{mylist}
   \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to the top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
   
   \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt, effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
-\end{enumerate}
+\end{mylist}
 
 
 \subsection{Communication Channel}
@@ -51,13 +51,13 @@ The \emph{upstream} channel, i.e., the data from the \device to the remote serve
 
 When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also the key exchange phase is crucial as the remote server also access if the user is in possession of a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
-\begin{enumerate}
+\begin{mylist}
   \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server. This page has a $5$ seconds time out.
   \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
   \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its public certificate to hexadecimal and send it as a keystroke to the host.
   \item The\name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server and the \name JavaScripts loads the webpage.
   \item In case the user is not in possession of a \device, the aforementioned step does not take place within the $5$ seconds timeout period. In that case \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involves \device fro their operation.
-\end{enumerate}
+\end{mylist}
 
 After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret.}.
 
@@ -102,10 +102,12 @@ In this section, we describe the most crucial part of the \name solution: transf
 \end{figure}
 
 \myparagraph{Potential solution and its drawback} One of the potential solution that we thought of is to use image and text analysis to understand the semantics of the Ui elements. In Figure~\ref{fig:uiDetect} we illustrate on example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to classify that the user clicks on a button. The \device also uses character recognition technique to extract the label of the button. Further investigation and prototype implementation shows two primary drawbacks of this solution:
-\begin{enumerate}
+
+
+\begin{mylist}
   \item Research works such as~\cite{lukaSpoof,Chen:2010:DVS:1754393.1754394} propose detection of phishing attack by visually analyzing the web interface of the mobile application. All of such proposed method fail to achieve 100\% accuracy in the real world scenarios. Our prototype implementation alo confirm that the method lacks robustness in the real life as most of the time the \device fails to either recognize the UI elements or extract the label from the UI elements properly despoite of using state-of-the-art image/text analysis tools.
   \item The image/text analysis is CPU intensive and causes low number of frame output by the \device. Popular image analysis framework such as OpenCV~\cite{opencv} is CPU intensive and hard to achieve 24 fps after operation on the \device that is implemented on a Raspberry Pi.
-\end{enumerate}
+\end{mylist}
 
 
 \myparagraph{UI transformation based approach} After the establishment of the secure channel between the device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has three phases: \emph{transformation}, \emph{overlay}, and \emph{data transfer}.
@@ -141,9 +143,10 @@ In this section, we describe the most crucial part of the \name solution: transf
 
 \myparagraph{Overlay} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. 
 
+\myparagraph{Proof-of-UI} \emph{proof-of-UI} is the property that ensures the integrity of the UI elements that are sent by the remote server. As the specification sent by the server is signed, the \device generates the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display. As the UI is generated as per the specification sent from the remote server, the \device ensures UI integrity.
+
 \myparagraph{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server.  
 
-\myparagraph{Proof-of-UI} As the specification sent by the server is signed, the generated UI also ensures proof-of-UI. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on the display. As the UI is generated as per the specification sent from the remote server, the \device ensures the UI integrity.
 
 
 \subsection{Secure Attention Sequence}
