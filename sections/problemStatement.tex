@@ -90,7 +90,7 @@ We list the fine-grained security properties that we want to provide in our prop
     & & Splitting interfaces~\cite{ta2006splitting}\\ 
     & & $SP^3$~\cite{yang2008using}\\ \hline
    Isolated execution & BASTION-SGX~\cite{BASTION-SGX} & Slice~\cite{azab2011sice}\\ 
-   od APIs/Drivers & TrustOTP~\cite{sun2015trustotp} & CARMA~\cite{vasudevan2012carma} \\ \hline
+   of APIs/Drivers & TrustOTP~\cite{sun2015trustotp} & CARMA~\cite{vasudevan2012carma} \\ \hline
    External trusted  &  \multirow{2}{*}{Fidelius~\cite{Fidelius}} & IntegriKey~\cite{IntegriKey} \\
    hardware based &  & FPGA-based~\cite{brandon2017trusted} \\
     %&  & \textcolor{blue}{Our Solution (I + O + Activity)} \\
@@ -115,6 +115,7 @@ We list the fine-grained security properties that we want to provide in our prop
     Overshadow~\cite{Overshadow} 				& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
     Virtual ghost~\cite{criswell2014virtual} 	& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
     TrustVisor~\cite{mccune2010trustvisor} 		& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
+    Inktag~\cite{hofmann2013inktag} & \no 	& \yes & \no & \no & \yes & \no & \no & \no\\\
     Splitting interfaces~\cite{ta2006splitting} & \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
     $SP^3$~\cite{yang2008using} 				& \no 	& \yes & \no & \no & \yes & \no & \no & \no\\
     BASTION-SGX~\cite{BASTION-SGX}			    & \yes 	& \no & \no & \no & \yes & \no & \no & \no\\
@@ -122,6 +123,7 @@ We list the fine-grained security properties that we want to provide in our prop
     TrustOTP~\cite{sun2015trustotp}			    & \yes 	& \no & \no & \no & \yes & \no & \no & \no\\
     Fidelius~\cite{Fidelius}			   	    & \yes 	& \no & \yes & \yes & \yes & \no & \yesNope & \no\\
     FPGA-based~\cite{brandon2017trusted}		& \yes 	& \no & \yes & \yes & \yes & \no & \yesNope & \no\\
+    IntegriKey~\cite{IntegriKey}				& \yes 	& \no & \yes & \yes & \yes & \no & \yesNope & \no\\
     CARMA~\cite{vasudevan2012carma}			    & \no 	& \no & \no & \no & \yes & \no & \no & \no\\ \hline
 	\textbf{\name}	    		& \no 	& \no  & \no & \yes & \yes & \yes & \yes & \yes\\
     \hline
