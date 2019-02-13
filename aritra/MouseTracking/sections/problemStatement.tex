@@ -40,36 +40,49 @@ In this section, we motivate our work, explain the security properties, describe
 %\bgroup
 %\def\arraystretch{1.2}
   \begin{tabular}{ l | c  c  c  c | c  c  c  c}  
-   & \multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c}{Security features}\\  \hline
-   & Requires TEE & Hypervisor & Isolated API/Drivers & External trusted HW & Keyboard & Pointer & Display & Activity \\
+  
+   & \multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c}{IO Protection}\\  \cline{2-9}
+   & \multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c}{Output} \\  \cline{2-9}
+   %\rowcolor{Gray}
+   \cellcolor{white} & Requires TEE & \multicolumn{1}{c|}{External trusted HW} & Isolated API/Drivers & Hypervisor & Keyboard & Pointer & \multicolumn{1}{c|}{Activity} & Display \\
    \hline
-    SGX IO~\cite{weiser2017sgxio} 				& \yes 		& \yes & \yesNope 	& \no	& \yes & \no 	& \no 		& \no\\
+    SGX IO~\cite{weiser2017sgxio}  				 & \yes 	& \no 	& \yes 	& \yes	& \yes 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    Overshadow~\cite{Overshadow} 				& \no 		& \yes & \no 	  	& \no 	& \yes & \no 	& \no 		& \no\\
-    Virtual ghost~\cite{criswell2014virtual} 	& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    Overshadow~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \yes 			& \no 	& \no 		& \no\\
+    Virtual ghost~\cite{criswell2014virtual} 	 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    TrustVisor~\cite{mccune2010trustvisor} 		& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
-    Inktag~\cite{hofmann2013inktag} 			& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    TrustVisor~\cite{mccune2010trustvisor} 		 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no\\
+    Inktag~\cite{hofmann2013inktag} 			 & \no 		& \no 	& \no 		& \yes 	& \yes			 & \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    Splitting interfaces~\cite{ta2006splitting} & \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
-    $SP^3$~\cite{yang2008using} 				& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    Splitting interfaces~\cite{ta2006splitting}  & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no\\
+    $SP^3$~\cite{yang2008using} 				 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    BASTION-SGX~\cite{BASTION-SGX}			    & \yes 		& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
-    Slice~\cite{azab2011sice}				    & \yesNope 	& \no  & \no 		& \no 	& \no & \no 	& \no 		& \no\\
+    BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	& \no  	& \no 		& \no 	& \yes 			& \no 	& \no 		& \no\\
+    Slice~\cite{azab2011sice}				     & \yesNope & \no  	& \no 		& \no 	& \no 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    TrustOTP~\cite{sun2015trustotp}			    & \yes 		& \no  & \no 		& \yes 	& \yes & \no 	& \yesNope 	& \no\\
-    Fidelius~\cite{Fidelius}			   	    & \yes 		& \no  & \yes 		& \yes 	& \yes & \no 	& \yesNope 	& \no\\
+    TrustOTP~\cite{sun2015trustotp}			     & \yes 	& \no  	& \no 		& \no 	& \yes		 	& \no 	& \no 		& \yesNope\\
+    Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope\\
     \rowcolor{Gray}
-    FPGA-based~\cite{brandon2017trusted}		& \no 		& \no  & \no 		& \yes 	& \yes & \no 	& \yes 		& \no\\
-    IntegriKey~\cite{IntegriKey}				& \no 		& \no  & \yesNope 	& \yes 	& \yes & \no 	& \no 		& \no\\
+    FPGA-based~\cite{brandon2017trusted}		 & \no 		& \yes  & \no 		& \no 	& \yes 			& \no 	& \no 		& \yes\\
+    IntegriKey~\cite{IntegriKey}				 & \no 		& \yes  & \yesNope 	& \no 	& \yesNope 		& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    Browser-based~\cite{ye2005trusted}			& \no 		& \no  & \yes 		& \no 	& \no & \no 	& \yesNope 	& \no\\
-    CARMA~\cite{vasudevan2012carma}			    & \yes 		& \no  & \no 		& \yes 	& \no & \no 	& \no 		& \no\\
+    Browser-based~\cite{ye2005trusted}			 & \no 		& \no  	& \yes 		& \no 	& \no 			& \no 	& \no 		& \yesNope\\
+    CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	& \no 		& \no 	& \no 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    \textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \no  & \yesNope 	& \yes 	& \yes & \no 	& \no 		& \no\\ 
-    Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no & \no 	& \no 		& \no\\ %\hline
+    \textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	& \no 	& \yes 			& \no 	& \no 		& \no\\ 
+    Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\   
+    \rowcolor{Gray}
+    VeriUI~\cite{liu2014veriui}				     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\
+	Adattester~\cite{li2015adattester}			 & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\
+	\rowcolor{Gray}
+	TruZ-Droid~\cite{ying2018truz}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\
+	TrustUI~\cite{li2014building}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\
+	\rowcolor{Gray}
+	VButton~\cite{li2018vbutton}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\
+	SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\
+	
 	\rowcolor{HGray}
-	\normalsize \textbf{\name}	    			& \no 		& \no  & \no 		& \yes 	& \yes & \yes 	& \yes 		& \yes\\
+	\normalsize \textbf{\name}	    			& \no 		& \no  & \no 		& \yes 	& \yes 			& \yes 	& \yes 		& \yes\\
     \hline
     \multicolumn{9}{c}{\normalsize \yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
   \end{tabular}
