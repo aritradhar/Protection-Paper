@@ -103,31 +103,40 @@ We list the fine-grained security properties that we want to provide in our prop
 \end{table}
 \fi
 
-\bgroup
-\def\arraystretch{1.2}
+%\bgroup
+%\def\arraystretch{1.2}
 \begin{table*}[t]
 \small
 \centering
 %\bgroup
 %\def\arraystretch{1.2}
-  \begin{tabular}{ l || c | c | c | c || c | c | c | c}   
+  \begin{tabular}{ l || c | c | c | c || c | c | c | c}  
    & \multicolumn{4}{c||}{Trust Assumption} & \multicolumn{4}{c}{Security features}\\  \hline
    & Requires TEE & Hypervisor & Isolated API/Drivers & External trusted HW & Keyboard & Pointer & Display & Activity \\
     \hline
     SGX IO~\cite{weiser2017sgxio} 				& \yes 		& \yes & \yesNope 	& \no	& \yes & \no 	& \no 		& \no\\
+    \rowcolor{Gray}
     Overshadow~\cite{Overshadow} 				& \no 		& \yes & \no 	  	& \no 	& \yes & \no 	& \no 		& \no\\
     Virtual ghost~\cite{criswell2014virtual} 	& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    \rowcolor{Gray}
     TrustVisor~\cite{mccune2010trustvisor} 		& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
-    Inktag~\cite{hofmann2013inktag} 			& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\\
+    Inktag~\cite{hofmann2013inktag} 			& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    \rowcolor{Gray}
     Splitting interfaces~\cite{ta2006splitting} & \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
     $SP^3$~\cite{yang2008using} 				& \no 		& \yes & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
+    \rowcolor{Gray}
     BASTION-SGX~\cite{BASTION-SGX}			    & \yes 		& \no  & \no 		& \no 	& \yes & \no 	& \no 		& \no\\
     Slice~\cite{azab2011sice}				    & \yesNope 	& \no  & \no 		& \no 	& \no & \no 	& \no 		& \no\\
+    \rowcolor{Gray}
     TrustOTP~\cite{sun2015trustotp}			    & \yes 		& \no  & \no 		& \yes 	& \yes & \no 	& \yesNope 	& \no\\
     Fidelius~\cite{Fidelius}			   	    & \yes 		& \no  & \yes 		& \yes 	& \yes & \no 	& \yesNope 	& \no\\
-    FPGA-based~\cite{brandon2017trusted}		& \no 		& \no  & \no 		& \yes 	& \yes & \no 	& \yes 	& \no\\
+    \rowcolor{Gray}
+    FPGA-based~\cite{brandon2017trusted}		& \no 		& \no  & \no 		& \yes 	& \yes & \no 	& \yes 		& \no\\
     IntegriKey~\cite{IntegriKey}				& \no 		& \no  & \yesNope 	& \yes 	& \yes & \no 	& \no 		& \no\\
-    CARMA~\cite{vasudevan2012carma}			    & \yes 		& \no  & \no 		& \yes 	& \no & \no 	& \no 		& \no\\ \hline
+    \rowcolor{Gray}
+    Browser-based~\cite{ye2005trusted}			& \no 		& \no  & \yesNope 	& \yes 	& \yes & \no 	& \yesNope 	& \no\\
+    CARMA~\cite{vasudevan2012carma}			    & \yes 		& \no  & \no 		& \yes 	& \no & \no 	& \no 		& \no\\ %\hline
+	\rowcolor{HGray}
 	\normalsize \textbf{\name}	    			& \no 		& \no  & \no 		& \yes 	& \yes & \yes 	& \yes 		& \yes\\
     \hline
     \multicolumn{9}{c}{\normalsize \yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
