@@ -141,7 +141,7 @@ In this section, we describe the most crucial part of the \name solution: transf
 
 
 
-\subsubsection{Overlay} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. 
+\subsubsection{Overlay} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. 
 
 \subsubsection{Proof-of-UI} \emph{proof-of-UI} is the property that ensures the integrity of the UI elements that are sent by the remote server. As the specification sent by the server is signed, the \device generates the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display. As the UI is generated as per the specification sent from the remote server, the \device ensures UI integrity.
 
@@ -164,8 +164,10 @@ There are to SAS mechanisms that \name employs. One is intrinsic to the user act
 When the user finishes providing her input over the input device (mouse and keyboard), the \device commits these values to the remote server. The commitment is executed by providing the signed input values to the remote server. The commitment procedure is illustrated in Figure~\ref{fig:transformation}. The commitment has two phases: \emph{record} and \emph{commit}.
 
 \myparagraph{Record} When user provides any information on the rendered overlay UI elements (such as textbox, button, slider, radio button, etc.), the \device records that in a (key, value) pair where the key is the identifier of the UI element (\texttt{id} in Specification~\ref{snippet:UISpecification}) and the value is the user provided value. The \texttt{type} of the UI elements determine what information to record. For example, the \device records all the keystrokes when a textbox is selected, the value corresponding to the position of the slider is recorded when the user interacts with a slider, etc. One example of the recording of the input data corresponding to the UI illustrated in Figure~\ref{fig:transformation} and Specification~\ref{snippet:UISpecification} is: 
-[(key = textbox\_1, value = Data\_1); (key = textbox\_2, value = Data\_2)].
-
+\begin{align*}
+(key : textbox\_1, value : Data\_1)\\
+(key : textbox\_2, value : Data\_2)
+\end{align*}
 
 \myparagraph{Commit} In the commitment phase, the \device waits for the user to operate on a UI element which has a \texttt{trigger} capability. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute can take either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value that denotes that the the button can submit the values that are provided by the user or abort the form altogether. When the user performs some actions on the \texttt{trigger} enabled UI elements, the \device sends the signed recorded value to the \name JavaScript snippet. The \name \js snippet then sends these information to the remote server by a \texttt{XMLHttpRequest} call.   
 
