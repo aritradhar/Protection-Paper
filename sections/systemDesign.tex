@@ -170,6 +170,12 @@ Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 
 \myparagraph{Commit} In the commitment phase, the \device waits for the user to operate on a UI element which has a \texttt{trigger} capability. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute can take either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value that denotes that the the button can submit the values that are provided by the user or abort the form altogether. When the user performs some actions on the \texttt{trigger} enabled UI elements, the \device sends the signed recorded value to the \name JavaScript snippet. The \name \js snippet then sends these information to the remote server by a \texttt{XMLHttpRequest} call.   
 
+
+\subsection{Server-side Computation}
+\label{sec:systemDesign:serverSide}
+
+After the \device commits the input records to the remote server, the remote server verifies the input with the data that is submitted by the browser running on the compromised host. The browser sends a \http packet to the server that contains the form data submitted by the user. On the other hand, the \device sends the signed input traces from the user via the \tls channel between the \device and the remote server. The server verifies the signature and accepts the input if they are identical to the data submitted by the browser.
+
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 6.5cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
