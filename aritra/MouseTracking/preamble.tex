@@ -4,24 +4,29 @@
 %\usepackage{usenix2019,epsfig,endnotes}
 %%%%%%%%%%%%%%%%%%%%%%
 %CCS
-\documentclass[sigconf, anonymous]{acmart}
+%\documentclass[sigconf, anonymous]{acmart}
 
 % remove reference format for submission
-\settopmatter{printacmref=false}
+%\settopmatter{printacmref=false}
 
 % remove copyright box for submission
-\renewcommand\footnotetextcopyrightpermission[1]{}
+%\renewcommand\footnotetextcopyrightpermission[1]{}
 
 % control headers 
-\fancyhf{} 
-\fancyhead[C]{Anonymous submission \#9999 to ACM CCS 2019} % TODO: replace 9999 with your paper number
-\fancyfoot[C]{\thepage}
+%\fancyhf{} 
+%\fancyhead[C]{Anonymous submission \#9999 to ACM CCS 2019} % TODO: replace 9999 with your paper number
+%\fancyfoot[C]{\thepage}
 
-\setcopyright{none} % No copyright notice required for submissions
-\acmConference[Anonymous Submission to ACM CCS 2019]{ACM Conference on Computer and Communications Security}{Due 5 February 2019}{London, UK}
+%\setcopyright{none} % No copyright notice required for submissions
+%\acmConference[Anonymous Submission to ACM CCS 2019]{ACM Conference on Computer and Communications Security}{Due 5 February 2019}{London, UK}
 %\acmYear{2019}
 
 %%%%%%%%%%%%%%%%%%%%%%
+
+%S&P
+\documentclass[conference]{IEEEtran}
+
+
 
 \newif\ifdraft
 %\drafttrue
@@ -39,12 +44,13 @@
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage{wasysym}
+\usepackage{array}
 
 %\usepackage[font={small}]{caption}
 %\usepackage{enumitem}
-%\usepackage{cite}
+\usepackage{cite}
 %\usepackage{flushend}
-%\usepackage{hyperref}
+\usepackage{hyperref}
 %\usepackage{caption}
 
 
