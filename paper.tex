@@ -12,6 +12,7 @@
 \begin{document}
 \title{\name: Root-of-Trust for IO}
 
+\maketitle
 
 \begin{abstract}
  
@@ -19,8 +20,6 @@ Recent exploitations, hardware-based malwares and privacy breaches shows that th
 
 In this paper, we propose \name, a system that introduces three security properties concerning input, output, and activity using a low-TCB trusted embedded auxiliary device. \name provides these security propertied that can be fined tuned based on the application requirements such as input privacy/integrity, output privacy/integrity and activity integrity. All of these security properties are ensured under the attacker model that compromises the host system entirely. The auxiliary device acts as a bridge between all the IO devices and the compromised host. The devices taps the HDMI channels, analyses frame by frame to corresponds user's executed command with the intent. 
 \end{abstract}
-
-\maketitle
 
 \input{sections/intro}
 \input{sections/problemStatement}
@@ -30,7 +29,8 @@ In this paper, we propose \name, a system that introduces three security propert
 \input{sections/usecase}
 \input{sections/attacks}
 
-\bibliographystyle{ACM-Reference-Format}
+\bibliographystyle{IEEEtran}
+%\bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
 \end{document}

@@ -39,7 +39,8 @@ In this section, we motivate our work, explain the security properties, describe
 \centering
 %\bgroup
 %\def\arraystretch{1.2}
-  \begin{tabular}{ l | c  c  c  c | c  c  c  c}  
+\resizebox{\textwidth}{!}{
+  \begin{tabular}{ l | c  c  c  c | c  c  c  c} 
   
    & \multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c}{IO Protection}\\  \cline{2-9}
    & \multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c}{Output} \\  \cline{2-9}
@@ -86,6 +87,7 @@ In this section, we motivate our work, explain the security properties, describe
     \hline
     \multicolumn{9}{c}{\normalsize \yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
   \end{tabular}
+  }
   \caption{Summarization of existing trusted path solutions by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution.}
   \label{tab:relatedWorks}
 \end{table*}

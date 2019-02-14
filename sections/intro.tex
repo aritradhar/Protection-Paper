@@ -1,13 +1,7 @@
 \section{Introduction}
 \label{sec:intro}
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
-\caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
-\label{fig:motivation}
-\centering
-\end{figure}
+
 
 \myparagraph{Motivation} The attacker can easily change system configurations (i.e., install root certificates), alter the user's transaction, or manipulate the user by showing false information on the screen. Figure~\ref{fig:motivation} provides four such cases where the secrecy and the integrity of the input and output data are crucial. Effectively the primary motivation of this work is to build an efficient and effective \emph{trusted path} solution that provides the highest form of security regarding integrity and privacy. 
 
@@ -20,6 +14,14 @@ Based on these examples we list the security properties that we want to provide 
   \item \textbf{Sandboxed activity.} We define activity analogously to the user intention which is privacy sensitive in many application scenarios. One such concrete example is e-voting where voting privacy is of uttermost importance. Even if there is a system in place that provides input privacy, merely the fact that the user may hover her mouse over some candidates may reveal her candidate preference. Activity privacy is application specific, and in most of the case, it dynamically preserves a part of the scene where the user activity is oblivious to the compromised host. 
   \item\textbf{Low-TCB auxiliary device.} The above security properties are needed to be achieved without assuming any other primitives such as trusted execution environments, trusted hypervisor etc. Instead we opt for a very low TCB embedded auxiliary device that aids the users to achieve all the security properties without compromising usability of the system. 
 \end{enumerate}
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
+\caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
+\label{fig:motivation}
+\centering
+\end{figure}
 
 \myparagraph{Contributions}
 \begin{itemize}
