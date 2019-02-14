@@ -145,7 +145,7 @@ In this section, we describe the most crucial part of the \name solution: transf
 
 \subsubsection{Proof-of-UI} \emph{proof-of-UI} is the property that ensures the integrity of the UI elements that are sent by the remote server. As the specification sent by the server is signed, the \device generates the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display. As the UI is generated as per the specification sent from the remote server, the \device ensures UI integrity.
 
-\subsubsection{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server.  
+\subsubsection{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. Detailed description how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
 
 
 
@@ -165,8 +165,7 @@ When the user finishes providing her input over the input device (mouse and keyb
 
 \myparagraph{Record} When user provides any information on the rendered overlay UI elements (such as textbox, button, slider, radio button, etc.), the \device records that in a (key, value) pair where the key is the identifier of the UI element (\texttt{id} in Specification~\ref{snippet:UISpecification}) and the value is the user provided value. The \texttt{type} of the UI elements determine what information to record. For example, the \device records all the keystrokes when a textbox is selected, the value corresponding to the position of the slider is recorded when the user interacts with a slider, etc. One example of the recording of the input data corresponding to the UI illustrated in Figure~\ref{fig:transformation} and Specification~\ref{snippet:UISpecification} is: 
 \begin{align*}
-(key : textbox\_1, value : Data\_1)\\
-(key : textbox\_2, value : Data\_2)
+Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 \end{align*}
 
 \myparagraph{Commit} In the commitment phase, the \device waits for the user to operate on a UI element which has a \texttt{trigger} capability. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute can take either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value that denotes that the the button can submit the values that are provided by the user or abort the form altogether. When the user performs some actions on the \texttt{trigger} enabled UI elements, the \device sends the signed recorded value to the \name JavaScript snippet. The \name \js snippet then sends these information to the remote server by a \texttt{XMLHttpRequest} call.   
