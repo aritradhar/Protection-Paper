@@ -1,4 +1,4 @@
-\section{\name: Hardened Integrity Protection for Generic IO Devices}
+\section{\name: IO Root-of-Trust}
 \label{sec:systemDesign}
 
 
@@ -70,6 +70,16 @@ After this, both the device and the remote server have each other's public certi
 \label{fig:mouseAnalysis}
 \centering
 \end{figure}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 14.5cm 22cm 0}, clip, width=0.6\linewidth]{screenPartition.pdf}
+\caption{\textbf{\device overlay and security properties}}
+\label{fig:screenPartition}
+\centering
+\end{figure}
+
 
 \subsection{Analysis of HDMI Frames for Proof-of-pointer}
 \label{sec:systemDesign:analysis}
@@ -147,7 +157,30 @@ In this section, we describe the most crucial part of the \name solution: transf
 
 \subsubsection{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. Detailed description how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 4cm 17cm 0}, clip, width=0.8\linewidth]{activityPrivacyRender.pdf}
+\caption{\textbf{Activity privacy.}}
+\label{fig:activityPrivacy}
+\centering
+\end{figure}
 
+
+
+\subsection{Input Privacy}
+\label{sec:systemDesign:mousePrivacy}
+
+The host system can be made fully oblivious of the mouse pointer, user activity and UI for a small portion of the browser that handles sensitive data or operations. We call this part of the display \emph{Oblivious Window} (OW). We opted out from the device rendering the HTML element inside the OW. Figure~\ref{fig:activityPrivacy} shows the overall construct of this idea. The server stores pre-rendered images corresponding to the OW and send the encrypted image along with the HTML page to the host system. The host renders the webpage along with an encrypted OW encoded as a QR code. The content of the QR code is encrypted with the \tls key that is shared between the device and the remote server.
+
+The flow of the system can be divided into three parts: initialization, operation, and update.
+
+\myparagraph{Initialization.} The initialization phase establishes a secure channel between the device and the remote server over the HTTP channel between the host and the remote host. The \js snippet that is served by the remote server handles the handshake between the device and remote server that is required to establish the secure channel. The flow of the system is the following: 
+\begin{mylist}
+  \item The user initiates a new session by pressing a button on the device. This makes the device ready for an initialization phased with a remote server.
+  \item When the user loads the web page from the remote server for the first time, the remote server sends its public certificate signed by a CA encoded in a QR code. 
+  \item The device reads the QR and sends keyboard events that encode the signed public certificate of the device's public key in base64 encoded format. The \js served by the remote serve gets the keystrokes and generates a \texttt{XMLHttpRequest}.
+  \item After exchanging the signed public certificates, the device and the remote server generates a shared secret that is used to encrypt and authenticate communications between the device and the remote server.
+\end{mylist}
 
 \subsection{Secure Attention Sequence}
 \label{sec:systemDesign:SAS}
