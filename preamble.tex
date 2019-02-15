@@ -207,13 +207,13 @@
 
 % This mylist environment indents items, and saves less space than the above.
 \newcounter{myctr}
-\newenvironment{mylist}{\begin{list}{(\textbf{\arabic{myctr}})}
+\newenvironment{mylist}{\begin{list}{(\textbf{\roman{myctr}})}
 {\usecounter{myctr}
 \setlength{\topsep}{1mm}\setlength{\itemsep}{0.5mm}
 \setlength{\parsep}{0.5mm}
-\setlength{\itemindent}{0mm}\setlength{\partopsep}{0mm}
+\setlength{\itemindent}{1mm}\setlength{\partopsep}{0mm}
 \setlength{\labelwidth}{-2mm}
-\setlength{\leftmargin}{0mm}}}{\end{list}}
+\setlength{\leftmargin}{1mm}}}{\end{list}}
 
 % Space saving List environment for itemizing.
 \newenvironment{mybullet}{\begin{list}{$\bullet$}
