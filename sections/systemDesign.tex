@@ -140,7 +140,7 @@ In this section, we describe the most crucial part of the \name solution: transf
 \end{figure}
 
 \begin{mylist}
-\item \textbf{Transformation.} The transformation of the web page UI elements are handled by the \name JavaScript snippet that is served from the remote server. UI elements that require integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}.
+\item \textbf{Transformation.} The transformation of the web page UI elements are handled by the \name JavaScript\footnote{In the prototype implementation on \name, we use QRCode.js, a \js library to produce QR codes} snippet that is served from the remote server. UI elements that require integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}.
 
 \item \textbf{Overlay.} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. 
 \end{mylist}
@@ -152,11 +152,29 @@ In this section, we describe the most crucial part of the \name solution: transf
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 4cm 17cm 0}, clip, width=0.8\linewidth]{activityPrivacyRender.pdf}
-\caption{\textbf{Activity privacy.}}
+\caption{\textbf{Privacy of the UI and the pointer.} The figure shows how \name achieves the privacy of the UI elements and the mouse pointer in the presence of a compromise host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user sees the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
 \label{fig:activityPrivacy}
 \centering
 \end{figure}
 
+
+
+\lstset{language=HTML, frame=tb, caption=\textbf{Partially encrypted HTML page.} , label = snippet:encryptedHTML, firstnumber =1}
+\begin{figure}[t]
+\small
+\begin{lstlisting}[mathescape=true]
+<form action="/some_action">
+  First name:<br>
+  <input type="text" name="First name">
+  <br> Last name:<br>
+  <input type="text" name="name">
+  <encrypted>
+  [encrypted QR code specification]
+  </encrypted>
+  <input type="submit" value="Submit">
+</form> 
+\end{lstlisting} 
+\end{figure}
 
 
 \subsection{Input Privacy}

@@ -67,7 +67,7 @@
 
 \lstset{
   basicstyle=\ttfamily,
-  %numbers=left,
+  numbers=left, xleftmargin=2em,frame=single,framexleftmargin=1.5em,
   %numberstyle=\tiny,
   columns=fullflexible,
   showstringspaces=false,
@@ -82,13 +82,13 @@
   stringstyle=\color{black},
   identifierstyle=\color{darkblue},
   keywordstyle=\color{blue},
-  morekeywords={RegEx,Tag,Type,Input}
+  morekeywords={form,input,encrypted,Input}
 }
 
-\colorlet{punct}{red!60!black}
+\colorlet{punct}{red!70!black}
 \definecolor{background}{HTML}{EEEEEE}
 \definecolor{delim}{RGB}{20,105,176}
-\colorlet{numb}{magenta!60!black}
+\colorlet{numb}{magenta!20!black}
 
 \lstdefinelanguage{json}{
     basicstyle=\small\ttfamily,
@@ -100,6 +100,7 @@
     breaklines=true,
     frame=lines,
     backgroundcolor=\color{background},
+    morekeywords={formId, formName, ui, id, type, label, text, trigger},
     literate=
      *{0}{{{\color{numb}0}}}{1}
       {1}{{{\color{numb}1}}}{1}
