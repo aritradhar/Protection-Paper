@@ -72,14 +72,6 @@ After this, both the device and the remote server have each other's public certi
 \end{figure}
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 14.5cm 22cm 0}, clip, width=0.6\linewidth]{screenPartition.pdf}
-\caption{\textbf{\device overlay and security properties}}
-\label{fig:screenPartition}
-\centering
-\end{figure}
-
 
 \subsection{Analysis of HDMI Frames for Proof-of-pointer}
 \label{sec:systemDesign:analysis}
@@ -174,7 +166,7 @@ The host system can be made fully oblivious of the mouse pointer, user activity 
 
 The flow of the system can be divided into three parts: initialization, operation, and update.
 
-\myparagraph{Initialization.} The initialization phase establishes a secure channel between the device and the remote server over the HTTP channel between the host and the remote host. The \js snippet that is served by the remote server handles the handshake between the device and remote server that is required to establish the secure channel. The flow of the system is the following: 
+\myparagraph{Initialization.} The initialization phase establishes a secure channel between the device and the remote server over the HTTP channel between the host and the remote host. The \js snippet that is served by the remote server handles the handshake between the device and remote server that is required to plestablish the secure channel. The flow of the system is the following: 
 \begin{mylist}
   \item The user initiates a new session by pressing a button on the device. This makes the device ready for an initialization phased with a remote server.
   \item When the user loads the web page from the remote server for the first time, the remote server sends its public certificate signed by a CA encoded in a QR code. 

@@ -3,10 +3,12 @@
 
 
 
+
+
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 6cm 17cm 0}, clip, width=0.85\linewidth]{approachOverview.pdf}
-\caption{\name: approach overview.  The \device connects the IO devices and the attacker-controlled host.}
+\caption{\textbf{High-level approach overview of our solution.}  The \device connects the IO devices and the attacker-controlled host. }
 \label{fig:approachOverview}
 \centering
 \end{figure}
@@ -25,7 +27,18 @@ We only assume that the monitor, keyboard, mouse and the \device are trusted. Wh
 Modern user interfaces are extremely complex to analyze, and such allows many possible ways to provide input. This makes the protection of IO integrity, and privacy is a particularly challenging task. For example, given a command from the user, it is necessary to understand the user intention that corresponds to the mouse movements. Given the screen space, there exist unbounded ways for the user to move a mouse a place it on a specific UI element that fires a command to the remote end system. To provide an end-to-end protection to this entire activity one needs to 1) precisely track the cursor position, 2) correspond the cursor location to the given movement data from the mouse, 3) understand the semantics of the UI element the fires the command and 4) generate an efficient and comprehensive proof that server can use to understand the user's real intention.  
 
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 14.5cm 22cm 0}, clip, width=0.65\linewidth]{screenPartition.pdf}
+\caption{\textbf{\device overlay and security properties.} Our proposed method provides two layers of protection for IO to the user. 1. In all the parts of the screen, the \device provide pointer integrity (the gray part). 2. The green part of the screen where the \device overlays on the HDMI stream where the \device provide integrity and privacy (privacy is dependent on the application requirements) for for input and output.}
+\label{fig:screenPartition}
+\centering
+\end{figure}
+
 \subsection{Approach}
+
+\myparagraph{Display context of the user} Our proposed solution uses a small embedded device that can be either integrated into the graphics card, or can be used as a stand-alone auxiliary device. The device taps into the HDMI channel, extracts frames and determine the current context of the user's action. The device also has the ability to overlay bitmaps into the HDMI channel. By doing this, the device provides security properties to the IO devices that is illustrated in Figure~\ref{fig:screenPartition}.
+
 
 The overall approach is illustrated in Figure~\ref{fig:approachOverview} that utilizes a low TCB embedded device. The embedded device acts as a bridge between all IO devices and the attacker-controlled host. The device works as a second factor for user IO data. In a high level, the remote server and the device establishes a secure channel using the untrusted host as a transport. Note that the low-TCB device does not have any explicit network capabilities. The server also adds a small JavaScript snippet that allows the device and the remote server to communicate. This eliminates any need for additional hardware/software aids.
 
