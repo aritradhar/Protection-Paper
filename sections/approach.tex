@@ -20,7 +20,7 @@ Given the problem statement discussed in Section~\ref{sec:problemStatement}, we 
 
 We assume the highly adversarial scenario where the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
 
-We only assume that the monitor, keyboard, mouse and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
+We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
 \subsection{Challengers}
 
