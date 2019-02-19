@@ -147,7 +147,7 @@ In this section, we describe the most crucial part of the \name solution: transf
 
 \subsubsection{Proof-of-UI} \emph{proof-of-UI} is the output integrity property that ensures the integrity of the UI elements and the data corresponding to them that are sent by the remote server. As the specification sent by the server is signed, the \device generates the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display. As the UI is generated as per the specification sent from the remote server, the \device ensures UI integrity.
 
-\subsubsection{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. Detailed description how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
+\subsubsection{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. One example of the proof-of-action is depicted in Figure~\ref{fig:transformation} that shows the payload that the \device sends to the server. Along with the keyboard data that is provide by the user, the \device also attaches the proof that the user indeed clicked on the \texttt{OK} button that leads to the action. Detailed description how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
 
 \begin{figure}[t]
 \centering
@@ -180,20 +180,14 @@ In this section, we describe the most crucial part of the \name solution: transf
 \end{figure}
 
 
-\subsection{Input Privacy}
+\subsection{Input \& Output Privacy}
 \label{sec:systemDesign:mousePrivacy}
 
-The host system can be made fully oblivious of the mouse pointer, user activity and UI for a small portion of the browser that handles sensitive data or operations. We call this part of the display \emph{Oblivious Window} (OW). We opted out from the device rendering the HTML element inside the OW. Figure~\ref{fig:activityPrivacy} shows the overall construct of this idea. The server stores pre-rendered images corresponding to the OW and send the encrypted image along with the HTML page to the host system. The host renders the webpage along with an encrypted OW encoded as a QR code. The content of the QR code is encrypted with the \tls key that is shared between the device and the remote server.
 
-The flow of the system can be divided into three parts: initialization, operation, and update.
+In the previous section (Section~\ref{sec:systemDesign:transformation}) we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. Similar mechanism can be used to fully hide the input and output from an attacker-controlled host. For input we consider two cases i) the raw input to the remote server that is provided by the user from her input device, and ii) the mouse movement which is not the direct input to the remote server but ultimately leads to sending input to the remote server. To facilitate this, the remote server sends a encrypted UI spec as shown in the HTML snippet~\ref{snippet:encryptedHTML}. The key of the encryption is the session \tls key between the remote server and the \device (detailed key exchange process is described in Section~\ref{sec:systemDesign:keyEstablishment}). The input meade bythe user 
 
-\myparagraph{Initialization.} The initialization phase establishes a secure channel between the device and the remote server over the HTTP channel between the host and the remote host. The \js snippet that is served by the remote server handles the handshake between the device and remote server that is required to plestablish the secure channel. The flow of the system is the following: 
-\begin{mylist}
-  \item The user initiates a new session by pressing a button on the device. This makes the device ready for an initialization phased with a remote server.
-  \item When the user loads the web page from the remote server for the first time, the remote server sends its public certificate signed by a CA encoded in a QR code. 
-  \item The device reads the QR and sends keyboard events that encode the signed public certificate of the device's public key in base64 encoded format. The \js served by the remote serve gets the keystrokes and generates a \texttt{XMLHttpRequest}.
-  \item After exchanging the signed public certificates, the device and the remote server generates a shared secret that is used to encrypt and authenticate communications between the device and the remote server.
-\end{mylist}
+The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}.  
+
 
 \subsection{Secure Attention Sequence}
 \label{sec:systemDesign:SAS}
