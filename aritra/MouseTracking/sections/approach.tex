@@ -16,9 +16,11 @@
 Given the problem statement discussed in Section~\ref{sec:problemStatement}, we first define the attacker model we consider in our proposed system.
 
 
-\subsection{Attacker Model}
+\subsection{System and Attacker Model}
 
-We assume the highly adversarial scenario where the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
+We consider a system model where the user wants to sends the input to a safety-critical remote end-system. The model is depicted in Figure~\ref{fig:approachOverview} that shows the compromised host, remote server and the user IO devices. 
+
+We assume that the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
 
 We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
