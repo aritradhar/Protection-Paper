@@ -45,7 +45,7 @@ In this section, we motivate our work, explain the security properties, describe
    & \multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c}{IO Protection}\\  \cline{2-9}
    & \multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c}{Output} \\  \cline{2-9}
    %\rowcolor{Gray}
-   \cellcolor{white} & Requires TEE & \multicolumn{1}{c|}{External trusted HW} & Isolated API/Drivers & Hypervisor & Keyboard & Pointer & \multicolumn{1}{c|}{Activity} & Display \\
+   \cellcolor{white} & Requires TEE & \multicolumn{1}{c|}{External trusted HW} & Isolated API/Drivers & Hypervisor & Keyboard & Pointer & \multicolumn{1}{c|}{Touch} & Display \\
    \hline
     SGX IO~\cite{weiser2017sgxio}  				 & \yes 	& \no 	& \yes 	& \yes	& \yes 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
@@ -74,10 +74,10 @@ In this section, we motivate our work, explain the security properties, describe
     Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\   
     \rowcolor{Gray}
     VeriUI~\cite{liu2014veriui}				     & \yes 	& \no  & \yes 		& \no 	& \yesNope 		& \no 	& \no 		& \yesNope\\
-	AdAttester~\cite{li2015adattester}			 & \yes 	& \no  & \yes 		& \no 	& \no 			& \yesNope & \no 	& \yesNope\\
+	AdAttester~\cite{li2015adattester}			 & \yes 	& \no  & \yes 		& \no 	& \no 			& \no & \yesNope 	& \yesNope\\
 	\rowcolor{Gray}
 	TruZ-Droid~\cite{ying2018truz}			     & \yes 	& \no  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope\\
-	TrustUI~\cite{li2014building}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \yesNope 	& \no 		& \yesNope\\
+	TrustUI~\cite{li2014building}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \yesNope 		& \yesNope\\
 	\rowcolor{Gray}
 	VButton~\cite{li2018vbutton}			     & \yes 	& \no  & \no 	& \no 	& \yesNope 			& \no 	& \no 		& \yes\\
 	SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \no 	& \yes 	& \no 			& \no 	& \no 		& \yes\\
