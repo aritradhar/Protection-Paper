@@ -37,6 +37,8 @@ The communication channel between the \device and the remote server is construct
 
 The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmits encoded data to the \name JavaScript snippet that is sent to the remove server via \texttt{XMLHttpRequest} call.
 
+One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. Detailed description the key establishment protocol is provided in the following section.
+
 
 \subsection{Key Establishment Protocol}
 \label{sec:systemDesign:keyEstablishment}
