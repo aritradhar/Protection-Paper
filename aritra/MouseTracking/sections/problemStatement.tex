@@ -93,7 +93,7 @@ In this section, we motivate our work, explain the security properties, describe
 \end{table*}
 
 
-\subsection{Motivation: IO for Remote Safety-critical System}
+\subsection{Motivation: IO for Remote Data and Safety-critical System}
 
 
 A user communicates with a remote server through a computer interface, we call it as the host system, that which gives the host access to the plaintext data that goes from the user to the server and vice-versa. Thus, a compromised host can always steal or modify the information going on both directions. An adversary that compromises the user's host can alter user intentions, i.e., it can perform arbitrary actions on behalf of the user. Such an adversary is very powerful and difficult to be prevented by a remote server. The consequences of such attacks are critical depending on the importance of the target application. For example, passing the wrong input to a remote safety-critical system such as a medical device, power plant, etc. can be disastrous. The attacker can redirect user's payments to a malicious account, read all sensitive communication of the user, or even threaten individuals lives by misconfiguring a medical device. 
@@ -173,7 +173,9 @@ Given the attacker's model, there exist several solutions that solve the problem
 Moreover, TEE requires trust assumption on the processors and additional code bases. One such example is Intel SGX where the trust model includes the physical processor package, SGX SDK, quoting enclave, launch enclave and Intel attestation service. Our proposed solution avoids such extensive trust assumptions and assumes that the entire platform is in control of the attacker.
 
 
-\subsubsection{Dedicated hardware-based solution} Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. In their work, Brandon et al. ~\cite{brandon2017trusted} demonstrate screen overlay on Android devices using FPGAs.
+\subsubsection{Dedicated hardware-based solution} Previous research works such as IntegriKey~\cite{IntegriKey} uses a low-TCB embedded device to introduce a second factor for input integrity. Similar solutions exits such as transaction confirmation devices~\cite{filyanov2011uni} that uses a small display device to show the input parameters to the users.
+Such systems are oblivious to the context of the users and the display device hence attacks where attacker selectively drop characters from the text-field are hard to mitigate.  
+Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. In their work, Brandon et al. ~\cite{brandon2017trusted} demonstrate screen overlay on Android devices using FPGAs.
 
 Note that majority of the previous works achieve some form of trusted path specifically for keyboard-based input. However supporting mouse and touch-based input, complex and generic user interfaces and protected user activity in a privacy-sensitive application is not a trivial task. Without proper analysis of every frame that the host system produces, it is not possible to track user intention. In our knowledge, our proposed solution is the first to provide such security properties including the activity privacy. Moreover, we want to achieve this in the absence of any TEE as the trust model of our scenario is significantly different. 
 
