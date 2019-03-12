@@ -2,9 +2,6 @@
 \label{sec:approach}
 
 
-
-
-
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 6cm 17cm 0}, clip, width=0.85\linewidth]{approachOverview.pdf}
@@ -20,13 +17,15 @@ Given the problem statement discussed in Section~\ref{sec:problemStatement}, we 
 
 We consider a system model where the user wants to sends the input to a safety-critical remote end-system. The model is depicted in Figure~\ref{fig:approachOverview} that shows the compromised host, remote server and the user IO devices. 
 
-We assume that the attacker compromises  the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
+We assume that the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controlled the network. We only assume that it is a PPT-attacker, so he can not break crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
 
-We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted. Which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
+We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted, which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
 \subsection{Challengers}
 
-Modern user interfaces are extremely complex to analyze, and such allows many possible ways to provide input. This makes the protection of IO integrity, and privacy is a particularly challenging task. For example, given a command from the user, it is necessary to understand the user intention that corresponds to the mouse movements. Given the screen space, there exist unbounded ways for the user to move a mouse a place it on a specific UI element that fires a command to the remote end system. To provide an end-to-end protection to this entire activity one needs to 1) precisely track the cursor position, 2) correspond the cursor location to the given movement data from the mouse, 3) understand the semantics of the UI element the fires the command and 4) generate an efficient and comprehensive proof that server can use to understand the user's real intention.  
+Modern user interfaces are extremely complex to analyze, and such allows many possible ways to provide input. This makes the protection of IO integrity, and privacy is a particularly challenging task. For example, given a command from the user, it is necessary to understand the user intention that corresponds to the mouse movements. Given the screen space, there exist a multitude of ways for the user to move a mouse a place on a specific UI element that fires a command to the remote end system. To provide an end-to-end protection to this entire activity one needs to 1) precisely track the cursor position, 2) correspond the cursor location to the given movement data from the mouse, 3) understand the semantics of the UI element the fires the command, and 4) generate an efficient and comprehensive proof that the server can use to understand the user's real intention.
+
+Apart from these functional challenges for implementation, there exist multiple attack vectors that we want to provide protection. An attacker that controls the entire host can lunch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following wrong mouse pointer, changing the layout of the UI elements to trick the user into providing sensitive data, tricking the user into moving the mouse to the wrong location and click there, manipulate input data, etc.
 
 
 \begin{figure}[t]
@@ -39,13 +38,13 @@ Modern user interfaces are extremely complex to analyze, and such allows many po
 
 \subsection{Approach}
 
-\myparagraph{Display context of the user} Our proposed solution uses a small embedded device that can be either integrated into the graphics card, or can be used as a stand-alone auxiliary device. The device taps into the HDMI channel, extracts frames and determine the current context of the user's action. The device also has the ability to overlay bitmaps into the HDMI channel. By doing this, the device provides security properties to the IO devices that is illustrated in Figure~\ref{fig:screenPartition}.
+\myparagraph{Display context of the user} Our proposed solution uses a small embedded device that can be either integrated into the graphics card or can be used as a stand-alone auxiliary device. The device taps into the HDMI channel extracts frames and determine the current context of the user's action. The device also can overlay bitmaps into the HDMI channel. By doing this, the device provides security properties to the IO devices that are illustrated in Figure~\ref{fig:screenPartition}.
 
 
 The overall approach is illustrated in Figure~\ref{fig:approachOverview} that utilizes a low TCB embedded device. The embedded device acts as a bridge between all IO devices and the attacker-controlled host. The device works as a second factor for user IO data. In a high level, the remote server and the device establishes a secure channel using the untrusted host as a transport. Note that the low-TCB device does not have any explicit network capabilities. The server also adds a small JavaScript snippet that allows the device and the remote server to communicate. This eliminates any need for additional hardware/software aids.
 
 
-\myparagraph{Mediated input} All the input from the user is intercepted by the device, specifically the mouse pointer and keyboard. The device intercepts the raw mouse data from the user, and on the screen, it detects the corresponding position of the mouse pointer. The device captures a trace of the mouse pointer position and the click data. Using the mouse trace data, the device computes a \emph{\pop}. The \pop serves as an indirect measure for the input integrity as the device confirms the remote server that if the user drags/clicks the mouse in a way that results in an input to the remote server. The device also overlays a mouse-pointer image on the host's cursor. The overlaid mouse pointer is conspicuous to the user and use as a safeguard if the host generates multiple pointers. Additionally, the device employs secure attention sequence (SAS) mechanism that dims all of the display except the overlaid UI and the mouse pointer for user attention.
+\myparagraph{Mediated input} All the input from the user is intercepted by the device, specifically the mouse pointer and keyboard. The device intercepts the raw mouse data from the user, and on the screen, it detects the corresponding position of the mouse pointer. The device captures a trace of the mouse pointer position and the click data. Using the mouse trace data, the device computes a \emph{\pop}. The \pop serves as an indirect measure for the input integrity as the device confirms the remote server that if the user drags/clicks the mouse in a way that results in an input to the remote server. The device also overlays a mouse-pointer image on the host's cursor. The overlaid mouse pointer is conspicuous to the user and uses as a safeguard if the host generates multiple pointers. Additionally, the device employs secure attention sequence (SAS) mechanism that dims all of the display except the overlaid UI and the mouse pointer for user attention.
 Direct inputs such as clicking a button or a text data in a text box are signed by the device and sent to the remote server. These signed input data serves as the second-factor fort the input integrity. The server receives and matches the \emph{applications-level} payload from the browser and the \emph{signed second factor} from the device. 
 
 
