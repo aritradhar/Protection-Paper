@@ -87,7 +87,7 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 \myparagraph{Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming the rest of the part of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds).  
 
 
-\begin{figure}[!htpb]
+\begin{figure}[t]
 \centering
 \includegraphics[trim={0 12.5cm 21cm 0}, clip, width=0.65\linewidth]{uiDetect.pdf}
 \caption{\textbf{Potential solution to understand the context of an UI element}. The earlier version of the \name solution employs image analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
@@ -110,6 +110,9 @@ Such \poa mechanism can also be transformed into online verification by using th
   \item \textbf{Performance.} The image/text analysis is CPU intensive and causes a low number of frame output by the \device. Commonly used image analysis frameworks such as OpenCV~\cite{opencv} is CPU intensive and it hard to achieve $24$ fps after the operation on the \device that is implemented on an ARM-based Raspberry Pi.
   \item \textbf{TCB.} The image/text analysis functions are needed to be implemented either on the \device or the remote server. Such increases the size of the TCB significantly.
 \end{mylist}
+
+Due to such limitations, and the inherent offline nature of this solution, we developed more efficient \poa that provides more security properties in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server.
+
 
 \begin{figure*}[t]
 \centering
