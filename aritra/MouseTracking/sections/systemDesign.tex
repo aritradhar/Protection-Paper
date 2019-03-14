@@ -242,7 +242,7 @@ For input we consider two cases i) the raw input to the remote server that is pr
 
 \subsubsection{Activity Privacy}
 
-The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}.  
+The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}. When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the host system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device directly sends the commands to the remote server making the input commands/values hidden from the attacker-controlled host.  
 
 
 \subsection{Secure Attention Sequence}
