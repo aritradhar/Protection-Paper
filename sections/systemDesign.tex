@@ -117,7 +117,7 @@ Due to such limitations, and the inherent offline nature of this solution, we de
 
 \begin{figure*}[t]
 \centering
-\includegraphics[trim={0 4cm 0 0}, clip, width=0.85\linewidth]{formTransform.pdf}
+\includegraphics[trim={0 4cm 0 0}, clip, width=0.8\linewidth]{formTransform.pdf}
 \caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \html source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed into a QR code (\two). The QR code encodes a UI specification that recreates the transformed UI. Specification~\ref{snippet:UISpecification} shows the corresponding UI specification that is created by the \name \js code. The QR code is then decoded and overlaid (\three) on the HDMI stream by the \device. Upon the user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the UI elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
