@@ -133,29 +133,59 @@ In the previous section, we describe \poa using image/text analysis that has sev
 
 
 \lstset{language=JSON, frame=tb, caption=\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}., label=snippet:UISpecification, firstnumber =1}
+
 \begin{figure}[t]
 \begin{lstlisting}[mathescape=true]
 { "formId": "form1",
   "formName": "form1",
-  "domain": "secure-site.io"
-  "ui": [{ "id":"textbox_1",
-     "type":"textbox",
-     "label":"Sensitive field 1",
-     "text":"secret data 1"},
-   { "id":"textbox_2",
-     "type":"textbox",
-     "label":"Sensitive field 2",
-     "text":"secret data 2"},
-   {"id":"OK_button",
-     "type":"button",
-     "trigger":"true",
-     "label":"OK"},    
-   {"id":"Cancel_button",
-     "type":"button",
-     "trigger":"false",
-     "label":"Cancel"}]}
+  "domain": "secure_site.io",
+  "dim": "400*400",
+  "ui": [{"id":"textbox_1",
+  	"type":"textbox",
+	"label":"Sensitive field 1",
+	"text":"secret data 1",
+	"size": 40},
+	{"id":"textbox_2",
+	"type":"textbox",
+	"label":"Sensitive field2 ",
+	"text":"secret data 2",
+	"size": 40},
+	{"id":"b1",
+	"type":"button",
+	"label":"OK",
+	"trigger":"true",
+	"size": 10},	
+	{"id":"b2",
+	"type":"button",
+	"label":"Cancel",
+	"trigger":"true",
+	"size": 10}]}
 \end{lstlisting}
 \end{figure}
+
+%%%old specification
+% 
+% { "formId": "form1",
+%   "formName": "form1",
+%   "domain": "secure-site.io"
+%   "ui": [{ "id":"textbox_1",
+%      "type":"textbox",
+%      "label":"Sensitive field 1",
+%      "text":"secret data 1"},
+%    { "id":"textbox_2",
+%      "type":"textbox",
+%      "label":"Sensitive field 2",
+%      "text":"secret data 2"},
+%    {"id":"OK_button",
+%      "type":"button",
+%      "trigger":"true",
+%      "label":"OK"},    
+%    {"id":"Cancel_button",
+%      "type":"button",
+%      "trigger":"false",
+%      "label":"Cancel"}]}
+%%
+
 
 \begin{mylist}
 \item \textbf{Transformation.} The transformation of the web page UI elements are handled by the \name JavaScript\footnote{In the prototype implementation on \name; we use QRCode.js, a \js library to produce QR codes} snippet that is served from the remote server. UI elements that require integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements that have additional attribute \texttt{protect=``true''} requires integrity protection from the \device. The transformation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation
