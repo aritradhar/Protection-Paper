@@ -62,7 +62,7 @@ When the user opens up a webpage that supports \name mechanism, key exchange is 
   \item In case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involve \device fro their operation.
 \end{mylist}
 
-After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret.}.
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret.}.
 
 
 
@@ -84,8 +84,10 @@ The primary contribution of \name is to provide the integrity protection for mou
 \subsubsection{Detection of pointer} Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. We define the mouse trace as the time series $(\Delta x_i = |x_{t_{i-1}} - x_{t_{i}}|, \Delta y_i=|y_{t_{i-1}} - y_{t_{i}}|)$ delta co-ordinates: $\{(\Delta x_1, \Delta y_1), (\Delta x_2, \Delta y_2), \ldots, (\Delta x_n, \Delta y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. $x_{t_{i}}$ and $y_{t_{i}}$ denote the pixel position of the mouse pointer on the screen at time $t_i$. At the time of initialization, i.e., the first time the \device turned on after the host boot up, the \device pushes the mouse at the left-upper corner of the screen, hence the initial mouse pointer position is set to $(x_0, y_0) = (0, 0)$.  
 Note that a mouse only provides displacement of over $x$ and $y$ coordinates. This corresponds that at time $t_i$ the mouse reported $(\Delta x_i, \Delta y_i)$ displacement to the \device. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$ over the same time interval $(t_1, t_2,\ldots t_n)$. At time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (which is enough to cover a mouse cursor on the screen\footnote{in our evaluation we saw that only a 30 $\times$ 30 square px. could cover the default mouse pointer provided by Ubuntu OS.}). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions; otherwise it stops all the communications and shows an error on display.
 
-\subsubsection{Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming the rest of the part of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds).  
+\subsubsection{Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming the rest of the part of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds).
 
+
+\subsubsection{Coping with the blinking cursor} In the case the user is tying in a text editor, in some OS (e.g. Windows), the cursor starts to blink. To cope with this, the \device listens to all the keyboard input as the keyboard is also connected to the \device. Wen the \device detects there are key strokes,
 
 \begin{figure}[t]
 \centering
@@ -97,7 +99,7 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 
 
 
-\subsection{\Poa for Audit}
+\subsection{\Poa for Audit: Text/Image Analysis of the UIs}
 \label{sec:systemDesign:poa}
 
 
@@ -112,7 +114,7 @@ Such \poa mechanism can also be transformed into online verification by using th
   \item \textbf{TCB.} The image/text analysis functions are needed to be implemented either on the \device or the remote server. Such increases the size of the TCB significantly.
 \end{mylist}
 
-Due to such limitations, and the inherent offline nature of this solution, we developed more efficient \poa that provides more security properties in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server.
+Due to such limitations, and the inherent offline nature of this solution, we developed more efficient \poa that provides more security properties in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server but provides better security and usability. We describe our solution in the following section.
 
 
 \begin{figure*}[t]
@@ -123,7 +125,7 @@ Due to such limitations, and the inherent offline nature of this solution, we de
 \end{figure*}
 
 
-\subsection{Transformation of UI Elements for more Efficient \Poa and \Poui}
+\subsection{Transformation of UI Elements for an Efficient \Poa and \Poui}
 \label{sec:systemDesign:transformation}
 
 In the previous section, we describe \poa using image/text analysis that has several drawbacks. In this section, we describe more efficient technique: transformation of the user interface (UI) elements. This transformation provides two security properties i) \poa that ensures the integrity of the user input, and ii) \poui that ensures secure display.
@@ -139,7 +141,6 @@ In the previous section, we describe \poa using image/text analysis that has sev
 { "formId": "form1",
   "formName": "form1",
   "domain": "secure_site.io",
-  "signature": "0x45565AB246...",
   "dim": "400*400",
   "ui": [{"id":"textbox_1",
   	"type":"textbox",
@@ -160,7 +161,8 @@ In the previous section, we describe \poa using image/text analysis that has sev
 	"type":"button",
 	"label":"Cancel",
 	"trigger":"true",
-	"size": 10}]}
+	"size": 10}],
+  "signature": "0x45565AB246..."}
 \end{lstlisting}
 \end{figure}
 
@@ -194,7 +196,7 @@ In the previous section, we describe \poa using image/text analysis that has sev
 \item \textbf{Overlay.} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. As the \device parses all the HDMI frames for the QR code, the overlay does not get interrupted by scrolling.
 \end{mylist}
 
-\subsubsection{Proof-of-UI} \emph{proof-of-UI} is the output integrity property that ensures the integrity of the UI elements and the data corresponding to them that are sent by the remote server. As the specification sent by the server is signed, the \device generates the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display. As the UI is generated as per the specification sent from the remote server, the \device ensures UI integrity.
+\subsubsection{Proof-of-UI} \emph{proof-of-UI} is the output integrity property that ensures the integrity of the UI elements and the data corresponding to them that are sent by the remote server. As the specification sent by the server is signed (\texttt{signature} attribute in the UI specification mentioned in the Specification~\ref{snippet:UISpecification}), the \device generates the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display. As the UI is generated as per the specification sent from the remote server, the \device ensures UI integrity.
 
 \subsubsection{Proof-of-action} After the UI elements are correctly overlaid on the screen, the users can interact with the elements as if there is no alternation. The \device understands the semantics of all the generated UI elements, such as when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. One example of the proof-of-action is depicted in Figure~\ref{fig:transformation} that shows the payload that the \device sends to the server. Along with the keyboard data that is provided by the user, the \device also attaches the proof that the user indeed clicked on the \texttt{OK} button that leads to the action. Detailed description of how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
 
@@ -256,7 +258,7 @@ This can be activated explicitly by the user by pressing \texttt{ctrl} button.
 As the \device overlays on the HDMI frames, the attacker can not manipulate any overwriting by rendering anything on top of them. 
 There are to SAS mechanisms that \name employs. One is intrinsic to the user action. When the user moves her mouse, the \device briefly outlines the overlay UI. The other SAS mechanism is when the user presses a button on the \device, the \device dims the rest of the part of the display except the legitimate mouse pointer and the overlaid UIs. By doing so, the user can easily discriminate the secure UIs and the legitimate mouse pointer.
 
-\myparagraph{Mouse pointer overlay} The mouse-pointer overlay also employs SAS. When the user press \texttt{ctrl} key on her keyboard, the \device dims all the portion of the screen except the overlaid UI and the overlaid mouse pointer. This allows the user to determine the legitimate pointer and the overlaid UI.
+\myparagraph{Mouse pointer overlay} The mouse-pointer overlay also employs SAS. When the user press \texttt{ctrl} key on her keyboard, the \device dims all the portion of the screen except the overlaid UI and the overlaid mouse pointer. This allows the user to determine the legitimate pointer and the overlaid UI. For additional user attention, the mouse pointer also changes the out border color (\textcolor{red}{red} to \textcolor{green}{green}) when the user enters inside the overlaid UI. This also works as a indicator for the user if the browser/host impersonates a overlaid UI to trick the user into providing some security critical data.
  
 
 \subsection{Committing User Input}
