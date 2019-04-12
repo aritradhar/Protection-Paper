@@ -108,7 +108,7 @@ In this section, we motivate our work, explain the security properties, describe
 
 \node[node1] {Trusted path}
 child[grow=right] {
-child[arrow] {node[node1](h){Hypervisor}} child[arrow] {node[node1](htee){Hypervisor + TEE}} child[arrow] {node[node1](tee){TEE}} child[arrow] {node[node1](br){Browser-based}} child[arrow] {node[node1](teehw){TEE + External HW}} child[arrow] {node[nodex](hw){External HW}}};
+child[arrow] {node[node1](h){Hypervisor}} child[arrow] {node[node1](htee){Hypervisor + TEE}} child[arrow] {node[node1](tee){TEE}} child[arrow] {node[node1, xshift=15pt](br){Browser-based}} child[arrow] {node[node1](teehw){TEE + External HW}} child[arrow] {node[nodex](hw){External HW}}};
 
 \node[node2, right=5pt of hw] {\textbf{\name}};
 \node[node2, right=5pt of br] {InContext~\cite{blake1998authenticated}};
