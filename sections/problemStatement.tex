@@ -45,8 +45,11 @@ In this section, we motivate our work, explain the security properties, describe
    & &\multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c}{IO Protection}\\  \cline{3-10}
    & &\multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c}{Output} \\  \cline{3-10}
    %\rowcolor{Gray}
-   \cellcolor{white} & & Requires TEE & \multicolumn{1}{c|}{External trusted HW} & Isolated API/Drivers & Hypervisor & Keyboard & Pointer & \multicolumn{1}{c|}{Touch} & Display \\
+   \cellcolor{white} & & Requires TEE & \multicolumn{1}{c|}{External trusted HW} & Isolated API/Drivers & Hypervisor/OS & Keyboard & Pointer & \multicolumn{1}{c|}{Touch} & Display \\
    \hline
+    &Browser-based~\cite{ye2005trusted}			 & \no 		& \no  	& \yes 		& \yes 	& \no 			& \no 	& \no 		& \yesNope\\
+    \rowcolor{Gray}
+   	\cellcolor{white} & InContext~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \yes 	& \no 		& \no\\
     & Overshadow~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
     \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no\\
@@ -58,7 +61,7 @@ In this section, we motivate our work, explain the security properties, describe
     \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no\\
     &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	& \no 	& \yes 	& \yes	& \yes 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
-    \cellcolor{white}\parbox[t]{1mm}{\multirow{-8}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor-based}}}}  \ldelim\{{-8}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \no 	& \yes 	& \no 			& \no 	& \no 		& \yes\\
+    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \no 	& \yes 	& \no 			& \no 	& \no 		& \yes\\
     &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	& \no  	& \no 		& \no 	& \yes 			& \no 	& \no 		& \no\\
     \rowcolor{Gray}
     \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope & \no  	& \no 		& \no 	& \no 			& \no 	& \no 		& \no\\
@@ -80,7 +83,7 @@ In this section, we motivate our work, explain the security properties, describe
     &IntegriKey~\cite{IntegriKey}				 & \no 		& \yes  & \yesNope 	& \no 	& \yesNope 		& \no 	& \no 		& \no\\ 
     \rowcolor{Gray}
     \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\   
-    &Browser-based~\cite{ye2005trusted}			 & \no 		& \no  	& \yes 		& \no 	& \no 			& \no 	& \no 		& \yesNope\\
+    
 	\rowcolor{HGray}
 	\cellcolor{white}&\textbf{\name}	    			& \no 		& \yes  & \no 		& \no 	& \yes 			& \yes 	& \yes 		& \yes\\
     \hline
@@ -92,26 +95,30 @@ In this section, we motivate our work, explain the security properties, describe
 \end{table*}
 
 \tikzstyle{line}=[draw] 
-\begin{figure*}[t]
+\begin{figure}[t]
 \small
     \centering
-\begin{tikzpicture}[level distance=10mm,
+\begin{tikzpicture}[level distance=10mm, 
   sibling distance=10mm,
-  every node/.style={fill=black!5,rectangle,rounded corners,draw},
+  nodex/.style={fill=green!20,rectangle,rounded corners,draw},
+  node1/.style={fill=black!5,rectangle,rounded corners,draw},
+  node2/.style={fill=white,rectangle},
   arrow/.style={edge from parent/.style={draw,-latex}}
 ]
 
-\node {Trusted path}
+\node[node1] {Trusted path}
 child[grow=right] {
-child[arrow] {node[yshift=-10pt]{Hardware} child{
-child {node{TEE}} child {node{External trusted HW}}
-}} child[arrow] {node[yshift=10pt]{Software} child{
-child {node{Isolated API/Driver}} child {node{Hypervisor}}
-}}};
+child[arrow] {node[node1](h){Hypervisor}} child[arrow] {node[node1](htee){Hypervisor + TEE}} child[arrow] {node[node1](tee){TEE}} child[arrow] {node[node1](br){Browser-based}} child[arrow] {node[nodex](teehw){TEE + External HW}}};
+
+\node[node2, right=5pt of br] {InContext~\cite{blake1998authenticated}};
+\node[node2, right=5pt of htee] {SGX IO~\cite{weiser2017sgxio}};
+\node[node2, right=5pt of tee] {BASTION-SGX~\cite{BASTION-SGX}	};
+\node[node2, right=5pt of teehw] {Fidelius~\cite{Fidelius}, \textbf{\name}};
+\node[node2, right=5pt of h] {Overshadow~\cite{Overshadow}};
 \end{tikzpicture}
     \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution.}
     \label{fig:relayTree}
-\end{figure*}
+\end{figure}
 
 
 \subsection{Motivation: IO for Remote Data and Safety-critical System}
