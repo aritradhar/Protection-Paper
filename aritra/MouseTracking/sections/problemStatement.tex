@@ -108,15 +108,16 @@ In this section, we motivate our work, explain the security properties, describe
 
 \node[node1] {Trusted path}
 child[grow=right] {
-child[arrow] {node[node1](h){Hypervisor}} child[arrow] {node[node1](htee){Hypervisor + TEE}} child[arrow] {node[node1](tee){TEE}} child[arrow] {node[node1](br){Browser-based}} child[arrow] {node[nodex](teehw){TEE + External HW}}};
+child[arrow] {node[node1](h){Hypervisor}} child[arrow] {node[node1](htee){Hypervisor + TEE}} child[arrow] {node[node1](tee){TEE}} child[arrow] {node[node1](br){Browser-based}} child[arrow] {node[node1](teehw){TEE + External HW}} child[arrow] {node[nodex](hw){External HW}}};
 
+\node[node2, right=5pt of hw] {\textbf{\name}};
 \node[node2, right=5pt of br] {InContext~\cite{blake1998authenticated}};
 \node[node2, right=5pt of htee] {SGX IO~\cite{weiser2017sgxio}};
 \node[node2, right=5pt of tee] {BASTION-SGX~\cite{BASTION-SGX}	};
-\node[node2, right=5pt of teehw] {Fidelius~\cite{Fidelius}, \textbf{\name}};
+\node[node2, right=5pt of teehw] {Fidelius~\cite{Fidelius}};
 \node[node2, right=5pt of h] {Overshadow~\cite{Overshadow}};
 \end{tikzpicture}
-    \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution.}
+    \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions. Detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
     \label{fig:relayTree}
 \end{figure}
 
