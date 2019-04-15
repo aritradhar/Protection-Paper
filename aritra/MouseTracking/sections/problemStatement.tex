@@ -3,8 +3,9 @@
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
-\caption{\textbf{Trusted path system model.} The figures shows the system and the attacker model of the trusted path.}
+%\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
+\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel_all.pdf}
+\caption{\textbf{Trusted path system model.} The figures shows the system and the attacker model of the trusted path. We generally consider two trusted path scenarios, \one trusted path to a remote server, and \two trusted path to a trusted execution environment (TEE) such as the Intel SGX.}
 \label{fig:systemModel}
 \centering
 \end{figure}
@@ -94,6 +95,9 @@ In this section, we motivate our work, explain the security properties, describe
   \label{tab:relatedWorks}
 \end{table*}
 
+
+
+\iffalse
 \tikzstyle{line}=[draw] 
 \begin{figure}[t]
 \small
@@ -119,6 +123,41 @@ child[arrow] {node[node1](h){Hypervisor}} child[arrow] {node[node1](htee){Hyperv
 \end{tikzpicture}
     \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions. Detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
     \label{fig:relatedWorksTree}
+\end{figure}
+\fi
+
+
+\begin{figure}[t]
+\footnotesize
+    \centering
+    \begin{tikzpicture}[
+solved/.style={rectangle,draw,fill=purple!40, rounded corners, align=center},
+not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
+neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
+]]
+    \node[neutral](root) {Trusted path}
+    child { node[neutral, yshift=12pt] (hw) {External\\ HW}}
+    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {Transaction\\ confirmation\\ Device}}  
+    child { node[neutral, yshift=12pt, xshift=20pt] (tee) {TEE}
+      child { node[neutral, yshift=0pt, xshift=-5pt] (teehv) {Hypervisor+\\TEE}}
+      child { node[neutral, yshift=0pt, xshift=2pt] (teehw) {TEE + \\ External HW} } }
+      child { node[neutral, yshift=8pt, xshift=15pt] (br) {Browser\\ Based}}   
+     child { node[neutral, yshift=12pt, xshift=20pt] (hv) {Hypervisor}}  ;
+    
+      
+
+    \node[below=0cm of hw] {\textbf{\name}};
+    \node[below=0cm of tc] {Uni-dir~\cite{filyanov2011uni}};
+    \node[below=0cm of hv] {Overshadow~\cite{Overshadow}};
+    \node[below=0cm of teehv] {SGXIO~\cite{weiser2017sgxio}};
+    \node[below=0cm of teehw] {Fidelius~\cite{Fidelius}};
+     \node[below=0cm of br] {InContext~\cite{blake1998authenticated}};
+
+    
+    \end{tikzpicture}
+    
+   \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions. Detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
+     \label{fig:relatedWorksTree}
 \end{figure}
 
 
