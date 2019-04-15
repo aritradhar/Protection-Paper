@@ -91,7 +91,7 @@ In this section, we motivate our work, explain the security properties, describe
     \multicolumn{10}{c}{\small\yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
   \end{tabular}
   }
-  \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution.\red{TrustUI uses UI randomization to protect inputs, secure framebuffer for display}}
+  \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution. \red{To be moved in Appendix}}
   \label{tab:relatedWorks}
 \end{table*}
 
@@ -234,11 +234,8 @@ We list the fine-grained security properties that we want to provide in our prop
 
 \subsection{Existing Solutions and their drawbacks}
 
-Given the attacker's model, there exists several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models. Table~\ref{tab:relatedWorks} presents a summarization of such works. We categorize the existing research works into two aspects i) trust assumption, where a lesser number of trust assumption is desirable, and ii) security features that provide integrity and privacy protection for IO. The security features are fine-grained into four sub-features: i) direct input from a keyboard or ii) mouse, ii) mouse pointer movement by the user on top a specific UI element, and iv) output to a display.
-
+Given the attacker's model, there exists several solutions that solve the problem of a trusted path to and from the IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models.
 Figure~\ref{fig:relatedWorksTree} provides a board classification of the related works and shows where our proposed work stands with respect to them. Detailed description of the relation research is also described in Table~\ref{tab:relatedWorks}.
-
-%\subsubsection{Strawman solution: trusted OS} Trusted OS could be seen as a straightforward solution as traditionally OS handles all the IO drives, computation, and network communications. Assuming a trusted OS significantly reduces the complexity of the solution but the security assumption suffers. Trusted OS introduces a large trusted code base and a multitude of vulnerabilities. 
 
 \subsubsection{Trusted hypervisor/OS-based solutions} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path.  In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. One major drawback of such solution is the trust assumption that involves a full hypervisors. One can argue that that a hypervisor that provides rich set of functionalities has code base size of an OS. Most of the minimal hypervisor also does not provide common usable features such as rich IO, UI etc. 
 
