@@ -11,12 +11,15 @@ Figure~\ref{fig:approachOverview} provides the high-level approach overview of \
 
 \begin{mylist}
   \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
-  \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI.
+  \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI. Note that the \device lacks any networking capability to minimize the TCB. Additionally, the \device can emulate itself as a composite \usb device to the host.
   \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over a \usb interface.
   \item \textbf{Display.} The display device is connected to the \device over HDMI interface.
   \item \textbf{Remote server.} The remote server is a trusted entity that serves the web application to the host system over \http. The remote server also creates a secure channel with the \device using the host as an untrusted transport. 
   
 \end{mylist}
+
+For all these components to work in tandem, the \device and the remote server requires a communication channel. As described before, the \device does not have any networking capability. Only using the HDMI and the keyboard emulation, the \device creates a bidirectional channel with the remote server. The details of the communication channel is discussed in Section~\ref{sec:systemDesign:communicationChannel}.
+
 
 \iffalse
 \subsection{Initialization} 
