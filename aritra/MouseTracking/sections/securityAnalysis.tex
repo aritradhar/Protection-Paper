@@ -72,7 +72,15 @@ $$Input():[m]\rightarrow I$$
 $$Transform():m,I\rightarrow [m'], \exists i\in I:i=\phi$$
 Both of them are \emph{bijective}.
 
-One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper
+One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
+
+\begin{theorem}
+If \user does not send all the transformations till $[m']_i$ corresponding to the input $I_i$, input integrity can not be achieved. 
+\end{theorem}
+
+\begin{proof}
+If \user does not attach all the transformation till $[m']_i$, i.e., $[m']_1, [m']_2, \ldots, [m']_{i-1}, [m']_i$  corresponding to inputs $I-1, I-2,\ldots, I_{i-1}, I_i$, then the server can not verify all the transformations corresponding to the input. \host could modify a specific $[m]_x$ to influence \user input.
+\end{proof}
 
 \begin{theorem}
 If the channel from \user and \server is not authenticated, input integrity is not achievable. But the channel from \server to \user does not require to be secure.
