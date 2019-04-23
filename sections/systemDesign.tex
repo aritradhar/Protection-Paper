@@ -331,14 +331,16 @@ In the previous Sections, we explain the basic components of \name. Now in this 
 \centering
 \end{figure}
 \fi
-% \begin{figure}
-% \centering
-% \includegraphics[width=\linewidth]{ui_detect.jpg}
-% \caption{Detection of UI elements}
-% \label{fig:uiDetect}
-% \centering
-% \end{figure}
 
+\iffalse
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{ui_detect.jpg}
+\caption{Detection of UI elements}
+\label{fig:uiDetect}
+\centering
+\end{figure}
+\fi
 
 
 \iffalse
@@ -348,6 +350,7 @@ In the previous Sections, we explain the basic components of \name. Now in this 
 Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ square pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an example of detecting the UI element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
 \fi
 
+\iffalse
 \begin{figure}[h]
 \centering
 \includegraphics[trim={0 11cm 16.5cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
@@ -355,4 +358,4 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \label{fig:inputPrivacy}
 \centering
 \end{figure}
-
+\fi

@@ -28,7 +28,7 @@
 
 \newif\ifdraft
 %\drafttrue
-
+\usepackage[T1]{fontenc}
 \usepackage{xcolor}
 \usepackage{graphicx,pifont}
 \usepackage{adjustbox}
@@ -48,7 +48,8 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
-\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{shapes,arrows,calc}
+\usepackage[underline=false]{pgf-umlsd}
 
 %\usepackage[font={small}]{caption}
 %\usepackage{enumitem}
@@ -180,7 +181,10 @@
 
 \newcommand{\poui}{proof-of-UI\xspace}
 \newcommand{\Poui}{Proof-of-UI\xspace}
-\newcommand{\server}{\textsc{Server}\xspace}
+
+\newcommand{\server}{$\mathcal{S}$}
+\newcommand{\user}{$\mathcal{U}$}
+\newcommand{\host}{$\mathcal{H}$}
 
 \newcommand{\toolname}{\name\xspace}
 
