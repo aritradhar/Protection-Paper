@@ -75,6 +75,7 @@ Both of them are \emph{bijective}.
 One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
 
 \begin{theorem}
+\label{theorem:th1}
 If \user does not send all the transformations till $[m']_i$ corresponding to the input $I_i$, input integrity can not be achieved. 
 \end{theorem}
 
@@ -83,11 +84,12 @@ If \user does not attach all the transformation till $[m']_i$, i.e., $[m']_1, [m
 \end{proof}
 
 \begin{theorem}
+\label{theorem:th2}
 If the channel from \user and \server is not authenticated, input integrity is not achievable. But the channel from \server to \user does not require to be secure.
 \end{theorem}
 
 \begin{proof}
-The proof is trivial. If the channel from \user to \server is not authenticated, any input provided by \user can be manipulated by \host without trace. Hence input integrity is not achievable.
+The proof is trivial. If the channel from \user to \server is not authenticated, any input provided by \user can be manipulated by \host without trace. Hence input integrity is not achievable. As long as \user sends message transformation along with the input, a manipulated message transformation bt \host would be detectable by \server (see Theorem~\ref{theorem:th1}).
 \end{proof}
 
 
