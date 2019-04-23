@@ -27,7 +27,9 @@ In this section, we describe our prototype implementation of \name as an auxilia
 
   \item \textbf{Input interceptor.} The input interceptor is composed of a Arduino Due (\three) and an Arduino Zero (\four) that is connected to the input device over \usb (\two) interface. The input interceptor has a \usb out interface that connects to the host (\five) that relays all the user inputs to the host. 
 
-  \item \textbf{HDMI interceptor.} The HDMI interceptor (\seven) is implemented using a B101 HDMI to CSI-2 Bridge that takes the HDMI channel (\eight) from the host and convert it to camera input signal to the Raspberry Pi 3.  
+  \item \textbf{HDMI interceptor.} The HDMI interceptor (\seven) is implemented using a B101 HDMI to CSI-2 Bridge~\cite{b101} that takes the HDMI channel (\eight) from the host and convert it to camera input signal to the Raspberry Pi 3.  
   
       \item \textbf{Compute component.} We use a Raspberry Pi 3 to implement the compute device that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing \tls protocol etc. Once could use an ASIC to further improve performance and reduce the code base of the compute component. The compute device is connected to the display over HDMI (\nine) interface. The compute component is implemented using Python and Java.
 \end{mylist}
+
+Additionally, for testing we also create a simulator of the prototype that runs in pure java to emulate more UIs as a proof of concept. The emulator creates desktop mirroring emulating the HDMI intercept.
