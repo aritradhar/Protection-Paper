@@ -5,7 +5,7 @@
 \begin{figure}[t]
 \centering
 %\includegraphics[trim={0 0 15cm 0}, clip, width=\linewidth]{setUp.pdf}
-\includegraphics[trim={0 12cm 21.7cm 0}, clip, width=0.7\linewidth]{setUpBlock.pdf}
+\includegraphics[trim={0 12cm 21.7cm 0}, clip, width=0.65\linewidth]{setUpBlock.pdf}
 \caption{\textbf{\name prototype architecture}. }
 \label{fig:prototypeArch}
 \centering
@@ -21,9 +21,11 @@
 \centering
 \end{figure}
 
-In this section, we describe our prototype implementation of \name as an auxiliary device. Figure~\ref{fig:prototype} depicts the \name prototype that has the following components
+In this section, we describe our prototype implementation of \name as an auxiliary device. Figure~\ref{fig:prototype} depicts the \name prototype that has the following components and interfaces:
 
-\begin{enumerate}
-  \item \textbf{IO interceptor.} The IO interceptor is composed of a  
-  \item \textbf{HDMI interceptor.} 
-\end{enumerate}
+\begin{mylist}
+
+  \item \textbf{Input interceptor.} The input interceptor is composed of a Arduino Due (\three) and an Arduino Zero (\four) that is connected to the input device over \usb (\two) interface. The input interceptor has a \usb out interface that connects to the host (\five) that relays all the user inputs to the host. 
+    \item \textbf{Compute component.} We use a Raspberry Pi 3 to implement the compute device that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing \tls protocol etc. Once could use an ASIC to further improve performance and reduce the code base of the compute component. The compute device is connected to the display over HDMI (\nine) interface. 
+  \item \textbf{HDMI interceptor.} The HDMI interceptor (\seven) is implemented using a B101 HDMI to CSI-2 Bridge that takes the HDMI channel (\eight) from the host and convert it to camera input signal to the Raspberry Pi 3. 
+\end{mylist}
