@@ -68,7 +68,7 @@ A \emph{Trusted path} provides confidentiality and integrity to the IO data exch
   
   \item \textbf{Output integrity and confidentiality.} Similar to the input integrity, output integrity ensures that information that is sent by the remote endpoint is presented to the user as it was meant to be. One example of output integrity is the integrity of the UI elements. Such property ensures that the host system renders the UI elements faithfully as they were sent by the remote system. Output confidentiality ensures that the information sent by the remote server can not be accessed by the attacker-controlled host. 
   
-   \item \textbf{Usability.} The trusted path should neither change the typical user interaction with a computer nor should require extensive changes into the existing systems. This way the trusted path should not introduce cognitive load to the users.
+   \item \textbf{Usability.} The trusted path should neither change the typical user interaction with a computer nor should require extensive changes into the existing systems.
 
   As discussed on the Section~\ref{sec:securityAnalysis}, ensuring output integrity is essential for providing input integrity against advanced attackers that trick the user into sending non-legitimate data to the server. For example, the user wants to send a number \texttt{10} to the server, but the malicious host shows on screen \texttt{100} and fools the user into believing he mistyped a \texttt{0}. The user deletes one \texttt{0} and sees \texttt{10} on the screen---as he intended initially---and submits the data, however, on the server arrives just \texttt{1}. 
   
@@ -130,7 +130,7 @@ There exist several works that use TEE and hypervisor simultaneously to mitigate
 
 
 
-\subsubsection{Dedicated hardware-based solution}  Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. Additionally, Fidelius uses overlays to hide the keyboard input from the compromised host so that the input is only visible from the user. In their work, Brandon et al. ~\cite{brandon2017trusted} demonstrate screen overlay on Android devices using FPGAs.
+\subsubsection{Dedicated hardware-based solution}  Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. Additionally, Fidelius uses overlays to hide the keyboard input from the compromised host so that the input is only visible from the user. In their work, Brandon et al. ~\cite{brandon2017trusted} demonstrate screen overlay on Android devices using FPGAs. None of these works looked into complex user interactions such as mouse movement or complex user interfaces. Fidelius only tackles keyboard based input and utilizes SGX that separates Fidelius and \name in terms of the trust assumption.  
 
 
 
