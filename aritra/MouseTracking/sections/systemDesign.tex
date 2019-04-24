@@ -12,7 +12,7 @@ Figure~\ref{fig:approachOverview} provides the high-level approach overview of \
 \begin{mylist}
   \item \textbf{Host system.} The host system is completely compromised (hardware, OS and the installed applications) by the attacker.
   \item \textbf{\device.} The \device is connected to the input devices and sits between the host and the display. The \device is connected to the input devices over the \usb interface and connected to the host and the display over HDMI. Note that the \device lacks any networking capability to minimize the TCB. Additionally, the \device can emulate itself as a composite \usb device to the host.
-  \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over a \usb interface.
+  \item \textbf{Input device.} The input devices such as the mouse, keyboard, touchpad, etc. are connected to the \device over a \usb interface. We assume that the input devices are trusted.
   \item \textbf{Display.} The display device is connected to the \device over HDMI interface.
   \item \textbf{Remote server.} The remote server is a trusted entity that serves the web application to the host system over \http. The remote server also creates a secure channel with the \device using the host as an untrusted transport. 
   
@@ -44,8 +44,6 @@ The \emph{upstream} channel, i.e., the data from the \device to the remote serve
 One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. The following section provides a detailed description of the key establishment protocol.
 
 
-\subsection{Key Establishment Protocol}
-\label{sec:systemDesign:keyEstablishment}
 
 \begin{figure}[t]
 \centering
@@ -55,34 +53,23 @@ One instance of the communication channel is depicted in Figure~\ref{fig:keyExch
 \centering
 \end{figure}
 
-When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also access if the user has a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
-
-\begin{mylist}
-  \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
-  \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
-  \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
-  \item The \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server, and the \name JavaScripts loads the webpage.
-  \item In case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involve \device fro their operation.
-\end{mylist}
-
-After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}.
-
 
 
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
-\caption{\textbf{\Pop} The figure shows the high-level procedure of \pop. The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
+\caption{\textbf{Pointer integrity.} The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
 \label{fig:mouseAnalysis}
 \centering
 \end{figure}
 
 
 
-\subsection{Analysis of HDMI Frames for \Pop}
+\subsection{Finding Mouse Pointer in the HDMI Frame}
 \label{sec:systemDesign:analysis}
 
-\Pop is an crucial security property to understand user intention that ensures that the user is following the correct mouse pointer and all the moose actions are actually executed by the user. Protecting the integrity of the mouse actions (move, drag, and click) is non-trivial as one needs to know the user's context on the screen.\name achieves this by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the frame to extract the cursor context and overlay a \device-generated mouse pointer. The overlay provides a visual cue for the user about the correct location of the mouse pointer in the case the attacker wants to trick the user by spanning multiple pointers on the screen. We call this property as the \emph{\pop} where the \device generates the proof of the traces of the pointer. \Pop has two phases: detection of the pointer and overlay of the \device-generated pointer.
+%\Pop is an crucial security property to understand user intention that ensures that the user is following the correct mouse pointer and all the mouse actions are actually executed by the user. 
+Protecting the integrity of the mouse actions (move, drag, and click), also known as the \emph{pointer integrity} is non-trivial as one needs to know the user's context (such as the location, acceleration of the mouse pointer) on the screen. \name extracts the user context by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the HDMI frame to extract the cursor context and overlay a \device-generated mouse pointer. The overlay provides a visual cue for the user about the correct location of the mouse pointer in the case the attacker wants to trick the user by spawning multiple pointers on the screen. Pointer integrity requires two steps: detection of the pointer from the HDMI frames and overlay of the \device-generated pointer.
 
 \subsubsection{Detection of pointer} Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. We define the mouse trace as the time series $(\Delta x_i = |x_{t_{i-1}} - x_{t_{i}}|, \Delta y_i=|y_{t_{i-1}} - y_{t_{i}}|)$ delta co-ordinates: $\{(\Delta x_1, \Delta y_1), (\Delta x_2, \Delta y_2), \ldots, (\Delta x_n, \Delta y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. $x_{t_{i}}$ and $y_{t_{i}}$ denote the pixel position of the mouse pointer on the screen at time $t_i$. At the time of initialization, i.e., the first time the \device turned on after the host boot up, the \device pushes the mouse at the left-upper corner of the screen, hence the initial mouse pointer position is set to $(x_0, y_0) = (0, 0)$.  
 Note that a mouse only provides displacement of over $x$ and $y$ coordinates. This corresponds that at time $t_i$ the mouse reported $(\Delta x_i, \Delta y_i)$ displacement to the \device. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$ over the same time interval $(t_1, t_2,\ldots t_n)$. At time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (which is enough to cover a mouse cursor on the screen\footnote{in our evaluation we saw that only a 30 $\times$ 30 square px. could cover the default mouse pointer provided by Ubuntu OS.}). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions; otherwise it stops all the communications and shows an error on display.
@@ -104,11 +91,12 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 
 
 
-\subsection{\Poa for Audit: Text/Image Analysis of the UIs}
+\subsection{Strawman solution: Text/Image Analysis of the UIs}
 \label{sec:systemDesign:poa}
 
 
-We define \emph{\poa} as the mechanism by which the \device confirm that the user executes certain action, e.g., clicking a button  or selecting an option from a drop-down menu. This is achieved by the \device to take a few snapshot of the HDMI frames when the user clicks. In the previous section (Section~\ref{sec:systemDesign:analysis}) we described how the \device tracks the mouse-pointer movement across the screen preciously. As the\device precisely knows current mouse pointer, as soon as the user executes an action, e.g., clicking the mouse, the \device takes a snapshot (of area approximately $100 \times 100$ sq. px) around the mouse pointer and send the snapshot to the server using the TLS upstream channel (communication channels are discussed in Section~\ref{sec:systemDesign:communicationChannel}). Along with the snapshot, the \device also transfers the timestamp for later verification. Together the user input data, snapshot, and the timestamp form the \device generated \emph{transcript} that serves as the \poa. Note that, our design of \poa primarily targets offline audit. One use case scenario is a bank where the signed transcript can be later used to solve transaction dispute. 
+%We define \emph{\poa} as the mechanism by which the \device confirm that the user executes certain action, e.g., clicking a button  or selecting an option from a drop-down menu. 
+First we explain a strawman solution by which the \device confirm that the user executes certain action, e.g., clicking a button  or selecting an option from a drop-down menu. This is achieved by the \device to take a few snapshots of the HDMI frames when the user clicks. In the previous section (Section~\ref{sec:systemDesign:analysis}) we described how the \device tracks the mouse-pointer movement across the screen preciously. As the\device precisely knows current mouse pointer, as soon as the user executes an action, e.g., clicking the mouse, the \device takes a snapshot (of area approximately $100 \times 100$ sq. px) around the mouse pointer and send the snapshot to the server using the TLS upstream channel (communication channels are discussed in Section~\ref{sec:systemDesign:communicationChannel}). Along with the snapshot, the \device also transfers the timestamp for later verification. The user input data, snapshot, and the timestamp from the \device generate the proof that the user executes certain activities. Note that, this strawman solution primarily serves as an offline audit. One use case scenario is a bank where the signed transcript can be later used to solve transaction dispute. 
 
 Such \poa mechanism can also be transformed into online verification by using the image and text analysis to understand the semantics of the UI elements. In Figure~\ref{fig:uiDetect} we illustrate an example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to understand user action. E.g., in Figure~\ref{fig:uiDetect}, \one the user first drags along the slider UI to set a value (\texttt{35}) and then \two the user clicks on the \texttt{OK}. The \device uses character recognition technique to extract the label and the data from the UI. This example shows the apparent complexity of this mechanism that does not scale with all UI. Further investigation and prototype implementation shows several drawbacks of this solution:
 
@@ -130,7 +118,7 @@ Due to such limitations, and the inherent offline nature of this solution, we de
 \end{figure*}
 
 
-\subsection{Transformation of UI Elements for an Efficient \Poa and \Poui}
+\subsection{\device Overlay of UI Elements}
 \label{sec:systemDesign:transformation}
 
 In the previous section, we describe \poa using image/text analysis that has several drawbacks. In this section, we describe more efficient technique: transformation of the user interface (UI) elements. This transformation provides two security properties i) \poa that ensures the integrity of the user input, and ii) \poui that ensures secure display.
@@ -354,8 +342,24 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \begin{figure}[h]
 \centering
 \includegraphics[trim={0 11cm 16.5cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
-\caption{Input privacy}
+\caption{Input Confidentiality}
 \label{fig:inputPrivacy}
 \centering
 \end{figure}
 \fi
+
+
+\subsection{Key Establishment Protocol}
+\label{sec:systemDesign:keyEstablishment}
+
+When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also access if the user has a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
+
+\begin{mylist}
+  \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
+  \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
+  \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
+  \item The \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server, and the \name JavaScripts loads the webpage.
+  \item In case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involve \device fro their operation.
+\end{mylist}
+
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}.
