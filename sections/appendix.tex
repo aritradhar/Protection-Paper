@@ -1,0 +1,59 @@
+\begin{table*}[t]
+\scriptsize
+\centering
+%\bgroup
+%\def\arraystretch{1.2}
+\resizebox{\textwidth}{!}{
+  \begin{tabular}{l | l | c  c  c  c | c  c  c  c} 
+   \multirow{3}{*}{Category}
+   & &\multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c}{IO Protection}\\  \cline{3-10}
+   & &\multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c}{Output} \\  \cline{3-10}
+   %\rowcolor{Gray}
+   \cellcolor{white} & & Requires TEE & \multicolumn{1}{c|}{External trusted HW} & Isolated API/Drivers & Hypervisor/OS & Keyboard & Pointer & \multicolumn{1}{c|}{Touch} & Display \\
+   \hline
+    &Browser-based~\cite{ye2005trusted}			 & \no 		& \no  	& \yes 		& \yes 	& \no 			& \no 	& \no 		& \yesNope\\
+    \rowcolor{Gray}
+   	\cellcolor{white} & InContext~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \yes 	& \no 		& \no\\
+    & Overshadow~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \no 	& \no 		& \no\\
+    \rowcolor{Gray}
+    \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no\\
+    &TrustVisor~\cite{mccune2010trustvisor} 		 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no\\
+    \rowcolor{Gray}
+    \cellcolor{white}&Inktag~\cite{hofmann2013inktag} 			 & \no 		& \no 	& \no 		& \yes 	& \no			 & \no 	& \no 		& \no\\
+    &Splitting interfaces~\cite{ta2006splitting}  & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \yes\\
+    \rowcolor{Gray}
+    \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no\\
+    &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	& \no 	& \yes 	& \yes	& \yes 			& \no 	& \no 		& \no\\
+    \rowcolor{Gray}
+    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \no 	& \yes 	& \no 			& \no 	& \no 		& \yes\\
+    &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	& \no  	& \no 		& \no 	& \yes 			& \no 	& \no 		& \no\\
+    \rowcolor{Gray}
+    \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope & \no  	& \no 		& \no 	& \no 			& \no 	& \no 		& \no\\
+    &TrustOTP~\cite{sun2015trustotp}			     & \yes 	& \no  	& \no 		& \no 	& \yes		 	& \no 	& \no 		& \yesNope\\
+    \rowcolor{Gray}
+    \cellcolor{white}&VeriUI~\cite{liu2014veriui}				     & \yes 	& \no  & \yes 		& \no 	& \yesNope 		& \no 	& \no 		& \yesNope\\
+	&AdAttester~\cite{li2015adattester}			 & \yes 	& \no  & \yes 		& \no 	& \no 			& \no & \yesNope 	& \yesNope\\
+	\rowcolor{Gray}
+	\cellcolor{white}&TruZ-Droid~\cite{ying2018truz}			     & \yes 	& \no  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope\\
+	&TrustUI~\cite{li2014building}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \yesNope 		& \yesNope\\
+	\rowcolor{Gray}
+	\cellcolor{white}&VButton~\cite{li2018vbutton}			     & \yes 	& \no  & \yes 	& \no 	& \yesNope 			& \no 	& \yes 		& \yes\\
+    &CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	& \no 		& \no 	& \no 			& \no 	& \no 		& \no\\
+    \rowcolor{Gray}
+    \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	& \no 	& \yes 			& \no 	& \no 		& \no\\
+     \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope\\
+    \rowcolor{Gray}
+    \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}		 & \no 		& \yes  & \no 		& \no 	& \yes 			& \no 	& \no 		& \yes\\
+    &IntegriKey~\cite{IntegriKey}				 & \no 		& \yes  & \yesNope 	& \no 	& \yesNope 		& \no 	& \no 		& \no\\ 
+    \rowcolor{Gray}
+    \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no\\   
+    
+	\rowcolor{HGray}
+	\cellcolor{white}&\textbf{\name}	    			& \no 		& \yes  & \no 		& \no 	& \yes 			& \yes 	& \yes 		& \yes\\
+    \hline
+    \multicolumn{10}{c}{\small\yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
+  \end{tabular}
+  }
+  \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution}
+  \label{tab:relatedWorks}
+\end{table*}

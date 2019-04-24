@@ -3,7 +3,7 @@
 
 \begin{figure}[t]
 \begin{center}
-\begin{tikzpicture}[scale=0.15]
+\begin{tikzpicture}[scale=0.12]
 \tikzstyle{every node}+=[inner sep=0pt]
 \draw [black] (66,-23.1) circle (3);
 \draw (66,-23.1) node {\server};
@@ -38,7 +38,7 @@
     % enable scaling of nodes
     transform shape,
     % set scale factor
-    scale=0.75
+    scale=0.8
   }
   }
 \begin{sequencediagram}
@@ -48,8 +48,8 @@
 \mess{s}{$m$}{h}
 \mess{h}{$[m']_1$}{u}
 \mess{u}{$I_1,[m']_1$}{h}
-\mess{h}{$[m']_2$}{u}
-\mess{u}{$I_2,[m']_2$}{h}
+%\mess{h}{$[m']_2$}{u}
+%\mess{u}{$I_2,[m']_2$}{h}
 \mess{h}{...}{u}
 \mess{u}{...}{h}
 \mess{h}{$[m']_n$}{u}
@@ -66,13 +66,19 @@
 \myparagraph{Interaction Protocol} The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is a public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue till \user finishes her input. After every input \host hands over new message transformation to \user (either results of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
 
 We also define two functions:
-$$Input():[m]\rightarrow I$$
-$$Transform():m,I\rightarrow [m'], \exists i\in I:i=\phi$$
+\begin{align*}
+\texttt{Input()}&:[m]\rightarrow I \\
+\texttt{Transform()}&:m,I\rightarrow [m'],\ \exists i\in I:i=\phi
+\end{align*}
 Both of them are \emph{bijective}.
 
 One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
 
-\myparagraph{Verification process} \server checks $[m']_i = transform(m_{i-1}, I_{i-1})$ where $I_0=\phi$.
+\begin{definition}{Input integrity}
+Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. The host changes the message transformation to $[m']$ where $[m']\neq [m]$. We also define correct \user input to be $I$ when \host sends a correct message transformation $[m]$ to \user. We define input integrity as the property where the \server does not accept input $I'$ where $I'\neq I$from \user if the \host changes the message transformation.
+\end{definition}
+
+\myparagraph{Verification process} \server checks $$[m']_i = \texttt{Transform}(m_{i-1}, I_{i-1})$$ where $I_0=\phi$.
 
 \begin{theorem}
 \label{theorem:th1}
@@ -92,6 +98,14 @@ If the channel from \user and \server is not authenticated, input integrity is n
 The proof is trivial. If the channel from \user to \server is not authenticated, any input provided by \user can be manipulated by \host without trace. Hence input integrity is not achievable. As long as \user sends message transformation along with the input, a manipulated message transformation bt \host would be detectable by \server (see Theorem~\ref{theorem:th1}).
 \end{proof}
 
+\begin{theorem}
+\label{theorem:th3}
+Ensuring output integrity also ensures input integrity provided there is an authenticated channel from\user to \server.
+\end{theorem}
+
+\begin{proof}
+
+\end{proof}
 
 \iffalse
 \subsection{Protection against phishing attacks}
