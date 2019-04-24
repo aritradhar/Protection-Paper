@@ -26,6 +26,24 @@ We assume that the attacker compromises the host system completely (OS, installe
 
 We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted, which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
+\iffalse
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 13cm 21.7cm 0}, clip, width=0.65\linewidth]{screenPartition.pdf}
+\caption{\textbf{\device's pointer tracking, pointer \& UI overlay, and security properties.} Our proposed method provides two layers of protection for IO to the user. 1. In all the parts of the screen, the \device provide pointer integrity (the gray part). 2. The green part of the screen where the \device overlays on the HDMI stream where the \device provide integrity and privacy (privacy is dependent on the application requirements) for the IO.}
+\label{fig:screenPartition}
+\centering
+\end{figure}
+\fi
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 11cm 20cm 0}, clip, width=0.8\linewidth]{overlayScreenShot.pdf}
+\caption{\textbf{\device generated UI overlay} that our solution use to hide the sensitive UI elements and inputs from the attacker-controlled host. Any input in the UI overlay is signed by the \device, hence the integrity of the user input is preserved.}
+\label{fig:screenshot_1}
+\centering
+\end{figure}
+
 \subsection{High-level Description of the System}
 
 \name assumes that IO devices (mouse, keyboard, and display) are connected to a trusted component called \device. This setup allows the trusted \device to receive raw inputs from the user and show overlays on the display. The goal of \name is to keep the code running on the \device minimal and in the same time support a wide variety of applications. Thus, we avoid running any application, such as browsers, on the trusted component in order to keep the TCB very small.
@@ -46,14 +64,10 @@ The second challenge arises while ensuring IO confidentiality. For mouse input, 
 Apart from these functional challenges for implementation, there exist multiple attack vectors that we want to provide protection. An attacker that controls the entire host can lunch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer, changing the layout of the UI elements to trick the user into providing sensitive data, tricking the user into moving the mouse to the wrong location and click there, manipulate input data, etc.
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 13cm 21.7cm 0}, clip, width=0.65\linewidth]{screenPartition.pdf}
-\caption{\textbf{\device's pointer tracking, pointer \& UI overlay, and security properties.} Our proposed method provides two layers of protection for IO to the user. 1. In all the parts of the screen, the \device provide pointer integrity (the gray part). 2. The green part of the screen where the \device overlays on the HDMI stream where the \device provide integrity and privacy (privacy is dependent on the application requirements) for the IO.}
-\label{fig:screenPartition}
-\centering
-\end{figure}
 
+
+
+\iffalse
 \subsection{Approach}
 
 The main objective of our approach is to provide a secure channel between the user IO devices and the remote server that provides integrity and privacy of the IO data. Our solution uses the \device as the IO \emph{root-of-trust}. The \device that can be either integrated into the graphics card or can be used as a stand-alone auxiliary device (as we did in our implementation). The \device taps into the HDMI channel extracts frames and determine the current context of the user's action. The \device also can overlay bitmaps into the HDMI channel. By doing this, the \device provides security properties to the IO devices that are illustrated in Figure~\ref{fig:screenPartition}. Using such capability, our system provides the following security properties: \emph{\pop}, \emph{\poui}, \emph{\poa}, and integrity and privacy of the IO.
@@ -67,3 +81,4 @@ The main objective of our approach is to provide a secure channel between the us
 \myparagraph{IO integrity and privacy} As the \device also sits on the HDMI channel between the host and display \device, it can overlay objects on the HDMI stream and thus achieves display integrity and privacy. All the objects that are overlaid by the \device can only be seen by the user, and the host is oblivious to the IO.
 
 
+\fi
