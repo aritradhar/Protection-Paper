@@ -4,6 +4,7 @@
 
 In this section, we provide the technical details of \name integrity protection for IO devices.  
 
+\iffalse
 \subsection{System Components}
 \label{sec:systemDesign:components}
 
@@ -19,7 +20,7 @@ Figure~\ref{fig:approachOverview} provides the high-level approach overview of \
 \end{mylist}
 
 For all these components to work in tandem, the \device and the remote server requires a communication channel. As described before, the \device does not have any networking capability. Only using the HDMI and the keyboard emulation, the \device creates a bidirectional channel with the remote server. The details of the communication channel is discussed in Section~\ref{sec:systemDesign:communicationChannel}.
-
+\fi
 
 \iffalse
 \subsection{Initialization} 
@@ -34,64 +35,18 @@ There are two steps of initialization process:
 \end{mylist}
 \fi
 
-\subsection{Communication Channel}
-\label{sec:systemDesign:communicationChannel}
-
-The communication channel between the \device and the remote server is constructed without employing any and separate hardware/software or web-browser extensions. \name two-way communication works out-of-the-box using JavaScript code and QR code decoding routine that runs on the \device. The \emph{downstream} channel, i.e., the data channel from the remote server and the \device relies on the HDMI channel. The remote server encodes the information in the webpage in QR code that is intercepted by the \device from the HDMI channel and decoded.
-
-The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
-
-One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. The following section provides a detailed description of the key establishment protocol.
-
-
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
-\caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
-\label{fig:keyExchange}
-\centering
-\end{figure}
-
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
-\caption{\textbf{Pointer integrity.} The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
-\label{fig:mouseAnalysis}
-\centering
-\end{figure}
-
-
-
-\subsection{Finding Mouse Pointer in the HDMI Frame}
-\label{sec:systemDesign:analysis}
-
-%\Pop is an crucial security property to understand user intention that ensures that the user is following the correct mouse pointer and all the mouse actions are actually executed by the user. 
-Protecting the integrity of the mouse actions (move, drag, and click), also known as the \emph{pointer integrity} is non-trivial as one needs to know the user's context (such as the location, acceleration of the mouse pointer) on the screen. \name extracts the user context by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the HDMI frame to extract the cursor context and overlay a \device-generated mouse pointer. The overlay provides a visual cue for the user about the correct location of the mouse pointer in the case the attacker wants to trick the user by spawning multiple pointers on the screen. Pointer integrity requires two steps: detection of the pointer from the HDMI frames and overlay of the \device-generated pointer.
-
-\subsubsection{Detection of pointer} Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. We define the mouse trace as the time series $(\Delta x_i = |x_{t_{i-1}} - x_{t_{i}}|, \Delta y_i=|y_{t_{i-1}} - y_{t_{i}}|)$ delta co-ordinates: $\{(\Delta x_1, \Delta y_1), (\Delta x_2, \Delta y_2), \ldots, (\Delta x_n, \Delta y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. $x_{t_{i}}$ and $y_{t_{i}}$ denote the pixel position of the mouse pointer on the screen at time $t_i$. At the time of initialization, i.e., the first time the \device turned on after the host boot up, the \device pushes the mouse at the left-upper corner of the screen, hence the initial mouse pointer position is set to $(x_0, y_0) = (0, 0)$.  
-Note that a mouse only provides displacement of over $x$ and $y$ coordinates. This corresponds that at time $t_i$ the mouse reported $(\Delta x_i, \Delta y_i)$ displacement to the \device. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$ over the same time interval $(t_1, t_2,\ldots t_n)$. At time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (which is enough to cover a mouse cursor on the screen\footnote{in our evaluation we saw that only a 30 $\times$ 30 square px. could cover the default mouse pointer provided by Ubuntu OS.}). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions; otherwise it stops all the communications and shows an error on display.
-
-\subsubsection{Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming the rest of the part of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds).
-
-
-\subsubsection{Coping with the blinking cursor} In the case the user is tying in a text editor, in some OS (e.g. Windows), the cursor starts to blink. To cope with this, the \device listens to all the keyboard input as the keyboard is also connected to the \device. Wen the \device detects there are key strokes,
-
-\begin{figure}[t]
-\centering
-%\includegraphics[trim={0 12.5cm 21cm 0}, clip, width=0.65\linewidth]{uiDetect.pdf}
-%\includegraphics[trim={0 13.5cm 21cm 0}, clip, width=0.65\linewidth]{uiDetect_1.pdf}
 \includegraphics[trim={0 13.5cm 11.5cm 0}, clip, width=\linewidth]{uiDetect_2.pdf}
 \caption{\textbf{Strawman solution: Text/Image Analysis of the UIs}. This strawman solution uses image/text analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
 \label{fig:uiDetect}
 \centering
 \end{figure}
 
+%\subsection{Output Integrity}
 
-
-\subsection{Strawman solution: Text/Image Analysis of the UIs}
+\subsection{Strawman solution for IO Integrity}
 \label{sec:systemDesign:poa}
 
 
@@ -111,16 +66,16 @@ This making of taking screenshot of UI elements an also be transformed into onli
 Due to such limitations, and the inherent offline nature of this solution, we developed more efficient solution to preserve the integrity of user actions on a UI element. We describe the method in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server but provides better security and usability. We describe our solution in the following section.
 
 
+
+\subsection{\device Overlay of UI Elements}
+\label{sec:systemDesign:transformation}
+
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4cm 0 0}, clip, width=0.8\linewidth]{formTransform.pdf}
 \caption{\textbf{Transformation of UI elements.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \html source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed into a QR code (\two). The QR code encodes a UI specification that recreates the transformed UI. Specification~\ref{snippet:UISpecification} shows the corresponding UI specification that is created by the \name \js code. The QR code is then decoded and overlaid (\three) on the HDMI stream by the \device. Upon the user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the UI elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
-
-
-\subsection{\device Overlay of UI Elements}
-\label{sec:systemDesign:transformation}
 
 In the previous section, we describe \poa using image/text analysis that has several drawbacks. In this section, we describe more efficient technique: transformation of the user interface (UI) elements. This transformation provides two security properties i) \poa that ensures the integrity of the user input, and ii) \poui that ensures secure display.
 
@@ -198,48 +153,34 @@ In the previous section, we describe \poa using image/text analysis that has sev
 \subsubsection{Changing browser tabs or browsers}
 The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieved the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs. 
 
+
+\subsection{Finding Mouse Pointer in the HDMI Frame}
+\label{sec:systemDesign:analysis}
+
+
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
-\caption{\textbf{Privacy of the UI and the pointer.} The figure shows how \name achieves the privacy of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
-\label{fig:activityPrivacy}
+\includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
+\caption{\textbf{Pointer integrity.} The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
+\label{fig:mouseAnalysis}
 \centering
 \end{figure}
 
 
+%\Pop is an crucial security property to understand user intention that ensures that the user is following the correct mouse pointer and all the mouse actions are actually executed by the user. 
+Protecting the integrity of the mouse actions (move, drag, and click), also known as the \emph{pointer integrity} is non-trivial as one needs to know the user's context (such as the location, acceleration of the mouse pointer) on the screen. \name extracts the user context by intercepting the HDMI frames from the host system. The \device sits between the host and the display device (the monitor) and captures the HDMI frame to extract the cursor context and overlay a \device-generated mouse pointer. The overlay provides a visual cue for the user about the correct location of the mouse pointer in the case the attacker wants to trick the user by spawning multiple pointers on the screen. Pointer integrity requires two steps: detection of the pointer from the HDMI frames and overlay of the \device-generated pointer.
 
-\lstset{language=HTML, frame=tb, caption=\textbf{HTML page from the remote server that contains the encrypted UI specification for IO privacy.} , label = snippet:encryptedHTML, firstnumber =1}
-\begin{figure}[t]
-\small
-\begin{lstlisting}[mathescape=true]
-<form action="/some_action">
-  First name:<br>
-  <input type="text" name="First name">
-  <br> Last name:<br>
-  <input type="text" name="name">
-  <encrypted>
-  [QR code with encrypted specification]
-  </encrypted>
-  <input type="submit" value="Submit">
-  <script>
-  [javaScript that outputs encrypted QR code]
-  </script>
-</form> 
-\end{lstlisting} 
-\end{figure}
+\subsubsection{Detection of pointer} Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $60$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $60$ fps. We define the mouse trace as the time series $(\Delta x_i = |x_{t_{i-1}} - x_{t_{i}}|, \Delta y_i=|y_{t_{i-1}} - y_{t_{i}}|)$ delta co-ordinates: $\{(\Delta x_1, \Delta y_1), (\Delta x_2, \Delta y_2), \ldots, (\Delta x_n, \Delta y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. $x_{t_{i}}$ and $y_{t_{i}}$ denote the pixel position of the mouse pointer on the screen at time $t_i$. At the time of initialization, i.e., the first time the \device turned on after the host boot up, the \device pushes the mouse at the left-upper corner of the screen, hence the initial mouse pointer position is set to $(x_0, y_0) = (0, 0)$.  
+Note that a mouse only provides displacement of over $x$ and $y$ coordinates. This corresponds that at time $t_i$ the mouse reported $(\Delta x_i, \Delta y_i)$ displacement to the \device. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$ over the same time interval $(t_1, t_2,\ldots t_n)$. At time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (which is enough to cover a mouse cursor on the screen\footnote{in our evaluation we saw that only a 30 $\times$ 30 square px. could cover the default mouse pointer provided by Ubuntu OS.}). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions; otherwise it stops all the communications and shows an error on display.
+
+\subsubsection{Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming the rest of the part of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds).
 
 
-\subsection{Input \& Output Privacy}
-\label{sec:systemDesign:mousePrivacy}
+\subsubsection{Coping with the blinking cursor} In the case the user is tying in a text editor, in some OS (e.g. Windows), the cursor starts to blink. To cope with this, the \device listens to all the keyboard input as the keyboard is also connected to the \device. Wen the \device detects there are key strokes,
 
 
-In the previous section (Section~\ref{sec:systemDesign:transformation}) we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. A similar mechanism can be used to fully hide the IO to and from an attacker-controlled host. 
 
-For input we consider two cases i) the raw input to the remote server that is provided by the user from her input device, and ii) the mouse movement which is not the direct input to the remote server but ultimately leads to sending input to the remote server. To facilitate this, the remote server sends an encrypted UI spec as shown in the HTML snippet~\ref{snippet:encryptedHTML}. The key of the encryption is the session \tls key between the remote server and the \device (detailed key exchange process is described in Section~\ref{sec:systemDesign:keyEstablishment}). The \device stops forwarding any input made by the user as soon as the user enters the overlaid area. To keep the user experience consistent, the \device also overlays  
 
-\subsubsection{Activity Privacy}
-
-The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}. When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the host system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device directly sends the commands to the remote server making the input commands/values hidden from the attacker-controlled host.  
 
 
 \subsection{Secure Attention Sequence}
@@ -301,44 +242,6 @@ In the previous Sections, we explain the basic components of \name. Now in this 
 
 
 
-% \begin{figure}[t]
-% \centering
-% \includegraphics[trim={0 5.8cm 13cm 0}, clip, width=\linewidth]{flow.pdf}
-% \caption{Protocol}
-% \label{fig:protocol}
-% \end{figure}
-
-
-
-
-\iffalse
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 12cm 17cm 0}, clip, width=0.8\linewidth]{uiDetect.pdf}
-\caption{Detection of the UI elements upon mouse click event in the incoming frame.}
-\label{fig:uiDetect}
-\centering
-\end{figure}
-\fi
-
-\iffalse
-\begin{figure}
-\centering
-\includegraphics[width=\linewidth]{ui_detect.jpg}
-\caption{Detection of UI elements}
-\label{fig:uiDetect}
-\centering
-\end{figure}
-\fi
-
-
-\iffalse
-\subsection{Detecting UI elements}
-\label{sec:systemDesign:uiElements}
-
-Detecting the UI elements triggers when the user clicks. The \device uses a square of $X$ square pixels around the mouse pointer and analyze the image. Figure~\ref{fig:uiDetect} illustrates an example of detecting the UI element from the captured frame. For example, if the user clicks on a button, the \device executes the image analysis on the part of the image to try to figure out if there is a button and parse the text. Additionally, the \device also sends the button text to the server. The server checks the data sent by the \device and the data received from the browser and compares them. In case there is a mismatch, the server notifies the \device and the \device overlays an error message on the screen. 
-\fi
-
 \iffalse
 \begin{figure}[h]
 \centering
@@ -350,8 +253,70 @@ Detecting the UI elements triggers when the user clicks. The \device uses a squa
 \fi
 
 
+
+
+\subsection{Input \& Output Confidentiality}
+\label{sec:systemDesign:mousePrivacy}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
+\caption{\textbf{Confidentiality of the UI and the pointer.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
+\label{fig:activityPrivacy}
+\centering
+\end{figure}
+
+
+\lstset{language=HTML, frame=tb, caption=\textbf{HTML page from the remote server that contains the encrypted UI specification for IO privacy.} , label = snippet:encryptedHTML, firstnumber =1}
+\begin{figure}[t]
+\small
+\begin{lstlisting}[mathescape=true]
+<form action="/some_action">
+  First name:<br>
+  <input type="text" name="First name">
+  <br> Last name:<br>
+  <input type="text" name="name">
+  <encrypted>
+  [QR code with encrypted specification]
+  </encrypted>
+  <input type="submit" value="Submit">
+  <script>
+  [javaScript that outputs encrypted QR code]
+  </script>
+</form> 
+\end{lstlisting} 
+\end{figure}
+
+In the previous section (Section~\ref{sec:systemDesign:transformation}) we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. A similar mechanism can be used to fully hide the IO to and from an attacker-controlled host. 
+
+For input we consider two cases i) the raw input to the remote server that is provided by the user from her input device, and ii) the mouse movement which is not the direct input to the remote server but ultimately leads to sending input to the remote server. To facilitate this, the remote server sends an encrypted UI spec as shown in the HTML snippet~\ref{snippet:encryptedHTML}. The key of the encryption is the session \tls key between the remote server and the \device (detailed key exchange process is described in Section~\ref{sec:systemDesign:keyEstablishment}). The \device stops forwarding any input made by the user as soon as the user enters the overlaid area. To keep the user experience consistent, the \device also overlays  
+
+\subsubsection{Activity Privacy}
+
+The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}. When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the host system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device directly sends the commands to the remote server making the input commands/values hidden from the attacker-controlled host.  
+
+
+\subsection{Communication Channel}
+\label{sec:systemDesign:communicationChannel}
+
+The communication channel between the \device and the remote server is constructed without employing any and separate hardware/software or web-browser extensions. \name two-way communication works out-of-the-box using JavaScript code and QR code decoding routine that runs on the \device. The \emph{downstream} channel, i.e., the data channel from the remote server and the \device relies on the HDMI channel. The remote server encodes the information in the webpage in QR code that is intercepted by the \device from the HDMI channel and decoded.
+
+The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
+
+One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. The following section provides a detailed description of the key establishment protocol.
+
 \subsection{Key Establishment Protocol}
 \label{sec:systemDesign:keyEstablishment}
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
+\caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
+\label{fig:keyExchange}
+\centering
+\end{figure}
+
 
 When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also access if the user has a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
