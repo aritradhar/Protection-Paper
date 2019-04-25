@@ -96,7 +96,7 @@ In the previous section, we describe the strawman solution using image/text anal
 
 We assume that the public certificate of the remote server is embedded into the \device. This allows the \device to verify any statement that is signed by the remote server's private key. It is also possible to establish a conventional \tls channel between the \device and the server using the HDMI channel. We provide the details how to build this \tls channel in Section~\ref{sec:systemDesign:keyEstablishment}.
 
-This approach requires one extra component at the server side that is a Java script code snippet that we call \name JS. After the establishment of the secure channel between the \device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires IO integrity protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has two phases: \emph{QR code generation}, and \emph{overlay of the UI}.
+\subsubsection{\device generated UI overlay.} \label{sec:systemDesign:transformation:overlay} This approach requires one extra component at the server side that is a Java script code snippet that we call \name JS. After the establishment of the secure channel between the \device and the remote server, the \name JS snippet that is served with the webpage transform the UI elements that requires IO integrity protection. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has two phases: \emph{QR code generation}, and \emph{overlay of the UI}.
 
 
 \lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
@@ -233,6 +233,35 @@ Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 
 \subsubsection{Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if a input field is annotated as \texttt{protect=``true''}, the server does not accept any input with the the \device signature. This prevents the attacker-controlled host to submit data. 
 
+\subsection{Key Establishment Protocol}
+\label{sec:systemDesign:keyEstablishment}
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
+\caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
+\label{fig:keyExchange}
+\centering
+\end{figure}
+
+
+When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also access if the user has a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
+
+\begin{mylist}
+  \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
+  \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
+  \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
+  \item The \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server, and the \name JavaScripts loads the webpage.
+  \item In case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involve \device fro their operation.
+\end{mylist}
+
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}.
+
+
+
+
+\subsection{Main Protocol}
+\label{sec:systemDesign:mainProtocol}
 
 \begin{figure}[t]
 \centering
@@ -242,19 +271,17 @@ Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 \centering
 \end{figure}
 
-\subsection{Main Protocol}
-\label{sec:systemDesign:mainProtocol}
 
-In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or write on the browser link field which web application to open. The steps are the following:
+In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol by putting these components together. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or write on the browser link field which web application to open. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:systemDesign:keyEstablishment}. The rest of the steps are the as the following:
 
 
 \begin{mylist}
-  \item[\one] The browser on the host system receives the response from the remote server. The browser renders the webpage. Note, that the webpage contains the protected UI fields that are transformed by the \name JavaScript snippet to a QR code (detailed description in Section~\ref{sec:systemDesign:transformation}). The QR code contains a UI specification that can be decoded by the \device.
+  \item[\one] The browser renders the webpage that comes with \name JS. As described in Section~\ref{sec:systemDesign:transformation}, \name JS transforms the UI elements to a QR code that contains the equivalent UI specification.
   \item[\two] The graphics driver sends the rendered frame to the \device over the HDMI channel.
-  \item[\three] The \device intercepts the HDMI signal and decode the QR code to retrieve the UI specification. After the decoding of the QR code, the \device renders the bitmap corresponding to the specification.
+  \item[\three] The \device intercepts the HDMI signal and decode the QR code to retrieve the UI specification. After the decoding of the QR code, the \device renders the bitmap corresponding to the specification as described in Section~\ref{sec:systemDesign:transformation:overlay}.
   \item[\four] The \device send the HDMI frame with the UI overlay to the display device.
   \item[\five] After observing the HDMI frame and the overlaid UI, the user passes her input to the \device via the keyboard/mouse that is connected to the \device over the \usb interface.
-  \item[\six] In this step, the \device forwards mouse traces (i.e., the $(\Delta x,\Delta y)$-mouse movements along $x$ and $y$ axis) to the host system. This is achieved as the \device enumerate itself as a composite HID (that includes both keyboard and mouse) to the host. Moreover, the \device also draw an overlay of the mouse pointer on its overlaid UI as the \device draws over the HDMI frames that are generated by the host. This provides a seamless user experience (\Pop in Section~\ref{sec:systemDesign:analysis}).
+  \item[\six] The \device uses raw mouse data and the HDMI frames to interpolate the mouse pointer using the method described in Section~\ref{sec:systemDesign:analysis}. This ensures pointer integrity. \device also overlays a mouse pointer on the HDMI frames.
   \item[\seven] When the user input her data to the host, the \device records her input data (Record phase in Section~\ref{sec:systemDesign:commit:send}).
   \item[\eight] The \name JavaScript snippet also acts as a upstream channel from the \device to the remote server (refer to Section~\ref{sec:systemDesign:commit:upload}). Via this channel, the \device sends the signed user action to the remote server. This signed user action can be seen as the second factor for the integrity of the user input data. (Commit phase in Section~\ref{sec:systemDesign:commit:send})
   \item [\nine] The server verifies the data from the two channels that are submitted by the host and the \device. (Section~\ref{sec:systemDesign:commit:verification})
@@ -316,26 +343,4 @@ For input we consider two cases i) the raw input to the remote server that is pr
 
 
 
-\subsection{Key Establishment Protocol}
-\label{sec:systemDesign:keyEstablishment}
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
-\caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
-\label{fig:keyExchange}
-\centering
-\end{figure}
-
-
-When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also access if the user has a \device. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
-
-\begin{mylist}
-  \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
-  \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
-  \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
-  \item The \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server, and the \name JavaScripts loads the webpage.
-  \item In case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that does not involve \device fro their operation.
-\end{mylist}
-
-After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ being the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}.
