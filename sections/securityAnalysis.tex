@@ -110,6 +110,31 @@ Ensuring output integrity also ensures input integrity provided there is an auth
 This proof is also trivial. As we describe in the Definition~\ref{def:inputIntegrity} and~\ref{def:outputIntegrity},  
 \end{proof}
 
+\subsection{Integrity, then Confidentiality}
+
+\subsection{Attacks on confidentiality}
+The host shows a fake form mimicking the overlay of the device. If the user forgets SAS, he sends all information to the host (e.g., payment details, or votes!), so the confidentiality is lost. However, the integrity should remain, the device signs only data that user has typed.
+
+\subsection{Fast-switching}
+The attacker can show QR-code, so the device renders the overlay. The host removes QR-code (and the device removes the overlay), then device shows a fake render that mimics the one from the device to show some malicious views. This can be repeated many times.
+
+\subsection{Form manipulation}
+The attacker can try to add, change or remove elements into the form rendered by the device. E.g., if you have 4 candidates to vote, it wants to show only one. This should be prevented by the signature.
+
+\subsection{Clickjacking}
+The host shows a second mouse shifted with x pixels from the real one and wants to trick the user into clicking the 'Yes' button on the overlay instead of 'No'. Clickjacking should be possible on the overlay, because the host cursor is not visible.
+
+\subsection{Hover activity}
+The attacker wants to learn what button did the user click by tracking the cursor movement. This should be prevented if the device does not send any event to the host when inside the overlay.
+
+\subsection{Timing attacks on keystrokes}
+This should be ruled out by design because the device does not send any event to the host when user is typing to the protected elements.
+
+\subsection{Replay Attack}
+What if the user sends a payment once, and the attacker replays same encrypted data multiple times?
+
+
+
 \iffalse
 \subsection{Protection against phishing attacks}
 \subsection{Keyboard Manipulation Attacks and Defenses}
