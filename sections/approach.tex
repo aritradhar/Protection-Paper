@@ -22,7 +22,7 @@ We first define the system and attacker model, then outline the challenges and t
 
 We consider a system model where the user wants to sends the input to a safety-critical remote end-system. The model is depicted in Figure~\ref{fig:approachOverview} that shows the compromised host, remote server and the user IO devices. 
 
-We assume that the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controls the network. We only assume that it is a PPT-attacker, so he can not break the crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
+We assume that the attacker compromises the host system completely (OS, installed applications and hardware). The attacker also controls the network. We assume that the attacker is a probabilistic polynomial time (PPT) algorithm that can not break crypto. Figure~\ref{fig:systemModel} shows the components of the system that are controlled by the attacker, i.e., the host and the network communication channel between the host and the remote server.
 
 We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted, which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
