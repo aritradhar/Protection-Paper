@@ -2,7 +2,7 @@
 \label{sec:systemDesign}
 
 
-In this section, we provide the technical details of \name integrity protection for IO devices.  
+In this section, we provide the technical details of \name integrity protection for IO devices.
 
 \iffalse
 \subsection{System Components}
@@ -46,6 +46,17 @@ There are two steps of initialization process:
 
 %\subsection{Output Integrity}
 
+\iffalse
+\subsection{Communication Channel}
+\label{sec:systemDesign:communicationChannel}
+
+The communication channel between the \device and the remote server is constructed without employing any and separate hardware/software or web-browser extensions. \name two-way communication works out-of-the-box using JavaScript code and QR code decoding routine that runs on the \device. The \emph{downstream} channel, i.e., the data channel from the remote server and the \device relies on the HDMI channel. The remote server encodes the information in the webpage in QR code that is intercepted by the \device from the HDMI channel and decoded.
+
+The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
+\fi
+
+%One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. The following section provides a detailed description of the key establishment protocol.
+
 \subsection{Strawman solutions for IO integrity}
 \label{sec:systemDesign:strawman}
 
@@ -76,7 +87,8 @@ Due to such limitations, and the inherent offline nature of this solution, we de
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4cm 0 0}, clip, width=0.8\linewidth]{formTransform.pdf}
-\caption{\textbf{Transformation of UI elements: UI $\rightarrow$ QR code $\rightarrow$ \device generated UI overlay.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \html source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed into a QR code (\two). The QR code encodes a UI specification that recreates the transformed UI. Specification~\ref{snippet:UISpecification} shows the corresponding UI specification that is created by the \name \js code. The QR code is then decoded and overlaid (\three) on the HDMI stream by the \device. Upon the user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the UI elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
+%\caption{\textbf{Transformation of UI elements: UI $\rightarrow$ QR code $\rightarrow$ \device generated UI overlay.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \html source shows the UI elements that requires integrity/privacy protection. These UI elements are transformed into a QR code (\two). The QR code encodes a UI specification that recreates the transformed UI. Specification~\ref{snippet:UISpecification} shows the corresponding UI specification that is created by the \name \js code. The QR code is then decoded and overlaid (\three) on the HDMI stream by the \device. Upon the user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the UI elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
+\caption{\textbf{Transformation of UI elements: UI $\rightarrow$ QR code $\rightarrow$ \device generated UI overlay.} \one The actual webpage and the corresponding \html source shows the UI elements that requires integrity protection. \two These UI elements are transformed into a QR code by the \name JS. The QR code encodes a UI specification (e.g., Specification~\ref{snippet:UISpecification}). \three AThe QR code decoded and overlaid on the HDMI stream by the \device. \four Upon the user's action on the overlaid UI elements, the device signs all the input data. \five The \device sends these signed input data them to the remote server. Note, that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \label{fig:transformation}
 \end{figure*}
 
@@ -203,7 +215,12 @@ There are to SAS mechanisms that \name employs. One is intrinsic to the user act
 \subsection{Committing User Input}
 \label{sec:systemDesign:commit}
 
-When the user finishes providing her input over the input device (mouse and keyboard), the \device commits these values to the remote server. The commitment is executed by providing the signed input values to the remote server. The commitment procedure is illustrated in Figure~\ref{fig:transformation}. The commitment has two phases: \emph{record} and \emph{commit}.
+When the user finishes providing her input over the input device (mouse and keyboard), the \device commits these values to the remote server.
+Sending the signed input values to the server requires a upstream channel from the \device to the server.
+
+\myparagraph{Upstream channel.} The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
+
+The commitment procedure is illustrated in Figure~\ref{fig:transformation}. The commitment has two phases: \emph{record} and \emph{commit}.
 
 \myparagraph{Record} When user provides any information on the rendered overlay UI elements (such as textbox, button, slider, radio button, etc.), the \device records that in a (key, value) pair where the key is the identifier of the UI element (\texttt{id} in Specification~\ref{snippet:UISpecification}) and the value is the user provided value. The \texttt{type} of the UI elements determine what information to record. For example, the \device records all the keystrokes when a textbox is selected, the value corresponding to the position of the slider is recorded when the user interacts with a slider, etc. One example of the recording of the input data corresponding to the UI illustrated in Figure~\ref{fig:transformation} and Specification~\ref{snippet:UISpecification} is: 
 \begin{align*}
@@ -296,19 +313,9 @@ In the previous section (Section~\ref{sec:systemDesign:transformation}) we descr
 
 For input we consider two cases i) the raw input to the remote server that is provided by the user from her input device, and ii) the mouse movement which is not the direct input to the remote server but ultimately leads to sending input to the remote server. To facilitate this, the remote server sends an encrypted UI spec as shown in the HTML snippet~\ref{snippet:encryptedHTML}. The key of the encryption is the session \tls key between the remote server and the \device (detailed key exchange process is described in Section~\ref{sec:systemDesign:keyEstablishment}). The \device stops forwarding any input made by the user as soon as the user enters the overlaid area. To keep the user experience consistent, the \device also overlays  
 
-\subsubsection{Activity Privacy}
-
-The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}. When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the host system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device directly sends the commands to the remote server making the input commands/values hidden from the attacker-controlled host.  
+\myparagraph{Confidential input} The \name \js convert this specification to a QR code that is intercepted, decoded and decrypted by the \device. The overall flow of the system is shown in Figure~\ref{fig:activityPrivacy}. When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the host system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device directly sends the commands to the remote server making the input commands/values hidden from the attacker-controlled host.  
 
 
-\subsection{Communication Channel}
-\label{sec:systemDesign:communicationChannel}
-
-The communication channel between the \device and the remote server is constructed without employing any and separate hardware/software or web-browser extensions. \name two-way communication works out-of-the-box using JavaScript code and QR code decoding routine that runs on the \device. The \emph{downstream} channel, i.e., the data channel from the remote server and the \device relies on the HDMI channel. The remote server encodes the information in the webpage in QR code that is intercepted by the \device from the HDMI channel and decoded.
-
-The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
-
-One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. The following section provides a detailed description of the key establishment protocol.
 
 \subsection{Key Establishment Protocol}
 \label{sec:systemDesign:keyEstablishment}
