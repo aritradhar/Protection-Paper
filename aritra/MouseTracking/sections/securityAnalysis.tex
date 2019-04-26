@@ -1,7 +1,7 @@
 \section{Security Analysis}
 \label{sec:securityAnalysis}
 
-In this section, we analyze the security of \name by modeling the interaction between the user, host and the remote server. We assume that the user behaves reasonably and we argue that \name provides sufficient mechanism to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. As long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
+In this section, we analyze the security of \name by modeling the interaction between the user, host and the remote server.
 
 
 \begin{figure}[t]
@@ -65,7 +65,12 @@ In this section, we analyze the security of \name by modeling the interaction be
 \subsection{Modelling the Protocol}
 \label{sec:securityAnalysis:modelling}
 
-\myparagraph{Interaction Protocol} The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
+\subsubsection{Modelling the user behavior}
+
+Correctly understanding the user behaviour is critical as \name focuses to secure user interaction with the remote server. In Section~\ref{sec:systemDesign:SAS}, we explain secure attention sequence (SAS) that \name uses to provide visual cues. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. This is achieved by dimming out the screen except the pointer and the UI overlay. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
+
+\subsubsection{Interaction Protocol} 
+The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
 %Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
 In this model, we simplify the user input by assuming that the \user only provides an input $I$ only after observing a message transformation $[m]$. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue until \user finishes her input. After every input \host hands over new message transformation to \user (either result of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
 
