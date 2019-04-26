@@ -62,6 +62,8 @@ In this section, we analyze the security of \name by modeling the interaction be
 \label{fig:protocol}
 \end{figure}
 
+\subsection{Modelling the Protocol}
+\label{sec:securityAnalysis:modelling}
 
 \myparagraph{Interaction Protocol} The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
 %Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
@@ -86,7 +88,7 @@ Assume that \server handed a message $m$ to \host where the proper message trans
 Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. Output integrity defines that in all circumstances, \user receives the correct message transformation $[m]$ from \host.
 \end{definition}
 
-\myparagraph{Verification process} \server checks $$[m']_i = \texttt{Transform}(m_{i-1}, I_{i-1})$$ where $I_0=\phi$.
+\myparagraph{Verification process} \server checks $\forall i=1\ldots n$ $$[m']_i = \texttt{Transform}(m_{i-1}, I_{i-1})$$ where $I_0=\phi$.
 
 \begin{theorem}
 \label{theorem:th1}
@@ -115,7 +117,9 @@ Ensuring output integrity also ensures input integrity provided there is an auth
 This proof is also trivial. As we describe in the Definition~\ref{def:inputIntegrity} and~\ref{def:outputIntegrity}, if all the message transform from \host $[m']=[m]$, and \host always executes \texttt{transform()} properly, the input integrity is preserved. As \name ensures output integrity and all the input from the user is signed by the \device, \name preserves input integrity. 
 \end{proof}
 
-\subsection{Integrity, then Confidentiality}
+\subsection{Proof of Integrity}
+
+From the theorem that are described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server can not be manipulated by the host. Also the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides full IO integrity.    
 
 \subsection{Attacks on confidentiality}
 The host shows a fake form mimicking the overlay of the device. If the user forgets SAS, he sends all information to the host (e.g., payment details, or votes!), so the confidentiality is lost. However, the integrity should remain, the device signs only data that user has typed.
@@ -127,7 +131,7 @@ The attacker can show QR-code, so the device renders the overlay. The host remov
 The attacker can try to add, change or remove elements into the form rendered by the device. E.g., if you have 4 candidates to vote, it wants to show only one. This should be prevented by the signature.
 
 \subsection{Clickjacking}
-The host shows a second mouse shifted with x pixels from the real one and wants to trick the user into clicking the 'Yes' button on the overlay instead of 'No'. Clickjacking should be possible on the overlay, because the host cursor is not visible.
+The host shows a second mouse shifted with x pixels from the real one and wants to trick the user into clicking the 'Yes' button on the overlay instead of 'No'. Clickjacking should not be possible on the overlay, because the host cursor is not visible.
 
 \subsection{Hover activity}
 The attacker wants to learn what button did the user click by tracking the cursor movement. This should be prevented if the device does not send any event to the host when inside the overlay.
