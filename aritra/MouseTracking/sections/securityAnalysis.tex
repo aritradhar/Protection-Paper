@@ -66,6 +66,7 @@ In this section, we analyze the security of \name by modeling the interaction be
 \label{sec:securityAnalysis:modelling}
 
 \subsubsection{Modelling the user behavior}
+\label{sec:securityAnalysis:modelling:user}
 
 Correctly understanding the user behaviour is critical as \name focuses to secure user interaction with the remote server. In Section~\ref{sec:systemDesign:SAS}, we explain secure attention sequence (SAS) that \name uses to provide visual cues. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. This is achieved by dimming out the screen except the pointer and the UI overlay. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
 
@@ -124,7 +125,7 @@ This proof is also trivial. As we describe in the Definition~\ref{def:inputInteg
 
 \subsection{Proof of Integrity}
 
-From the theorem that are described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server can not be manipulated by the host. Also the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides full IO integrity.    
+From the theorem that are described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server can not be manipulated by the host. Also the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides IO integrity as long as we assume that the user can isolate the secure overlay from the rest of the screen (Discussed in Section~\ref{sec:securityAnalysis:modelling:user}).    
 
 \subsection{Attacks on confidentiality}
 The host shows a fake form mimicking the overlay of the device. If the user forgets SAS, he sends all information to the host (e.g., payment details, or votes!), so the confidentiality is lost. However, the integrity should remain, the device signs only data that user has typed.
