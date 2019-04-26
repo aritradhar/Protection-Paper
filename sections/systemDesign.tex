@@ -165,11 +165,8 @@ We assume that the public certificate of the remote server is embedded into the 
 
 \subsubsection{Integrity of the UI elements} Output integrity ensures the integrity of the UI elements that are sent by the remote server. As the specification sent by the server is signed (\texttt{signature} attribute in the UI specification mentioned in the Specification~\ref{snippet:UISpecification}), the \device-generated UI overlay ensure the integrity and authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display and the host can not manipulate the overlays.
 
-\subsubsection{Integrity of the user input} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different then a standard UI, making the user habituation seamless. The UI specification encodes the behavior of all the generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. One example of the proof-of-action is depicted in Figure~\ref{fig:transformation} that shows the payload that the \device sends to the server. Along with the keyboard data that is provided by the user, the \device also attaches the proof that the user indeed clicked on the \texttt{OK} button that leads to the action. Detailed description of how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
+%\subsubsection{Integrity of the user input} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different then a standard UI, making the user habituation seamless. The UI specification encodes the behavior of all the generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. One example of the proof-of-action is depicted in Figure~\ref{fig:transformation} that shows the payload that the \device sends to the server. Along with the keyboard data that is provided by the user, the \device also attaches the proof that the user indeed clicked on the \texttt{OK} button that leads to the action. Detailed description of how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
 
-
-\subsubsection{Changing browser tabs or browsers}
-The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieved the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs. 
 
 
 \subsection{Continuous Tracking of Mouse Pointer in the HDMI Frame}
@@ -231,9 +228,12 @@ Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 \end{align*}
 
 \item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether. When user clicks the \texttt{OK} button, the device signs the record. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Upon clicking, the \device encodes the entire packet into a base64 encoded string and submit it to the \name JavaScript snippet (over the uplink channel by emulating itself as a keyboard device). The \name \js snippet then sends the packet to the remote server by a \texttt{XMLHttpRequest} call.
-\end{mylist}
+\end{mylist} 
 
 \subsubsection{Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if a input field is annotated as \texttt{protect=``true''}, the server does not accept any input with the the \device signature. This prevents the attacker-controlled host to submit data. 
+
+\subsubsection{Changing browser tabs or browsers}
+The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieved the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs.
 
 \subsection{Key Establishment Protocol}
 \label{sec:systemDesign:keyEstablishment}
@@ -308,40 +308,43 @@ In the previous Sections, we explain the basic components of \name. Now in this 
 \label{sec:systemDesign:mousePrivacy}
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
-\caption{\textbf{Confidentiality of the UI and the pointer.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
-\label{fig:activityPrivacy}
-\centering
-\end{figure}
-
-
 \lstset{language=HTML, frame=tb, caption=\small{\textbf{HTML page from the remote server that contains the encrypted UI specification for IO privacy.}} , label = snippet:encryptedHTML, firstnumber =1}
 \begin{figure}[t]
 \small
 \begin{lstlisting}[mathescape=true]
 <form action="/some_action">
-  First name:<br>
-  <input type="text" name="First name">
-  <br> Last name:<br>
-  <input type="text" name="name">
+  Text box 1:<br>
+  <input type="text" name="text_box_1">
+  <br> text box 2:<br>
+  <input type="text" name="text_box_2">
   <encrypted>
-  [QR code with encrypted specification]
+  0x455544.......
   </encrypted>
-  <input type="submit" value="Submit">
   <script>
-  [javaScript that outputs encrypted QR code]
+  [javaScript that outputs QR code that encode encrypted specification]
   </script>
 </form> 
 \end{lstlisting} 
 \end{figure}
 
-In the previous sections (the main protocol is described in Section~\ref{sec:systemDesign:mainProtocol}), we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. Minor changes can be made tp this method to introduce confidentiality to all IO.
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
+\caption{\textbf{IO confidentiality.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
+\label{fig:activityPrivacy}
+\centering
+\end{figure}
+
+
+
+
+In the previous sections (the main protocol is described in Section~\ref{sec:systemDesign:mainProtocol}), we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. Minor changes can be made tp this method to introduce confidentiality to all IO. Figure~\ref{fig:activityPrivacy} shows the overall approach for IO confidentiality.
 
 \subsubsection{Output confidentiality.} Output confidentiality ensures that no information sent from the remote server is visible to the host. To enable output confidentiality, the UI overlay mechanism that is described in Section~\ref{sec:systemDesign:transformation} is modified slightly. Here we \name does not required \name JS to transform all the UI elements to QR code specification. A small server-side module that is very similar to \name JS transforms the UI elements to the UI specification (one such specification is provided in Specification~\ref{snippet:UISpecification}) and encrypt the specification with the \tls session key (Section~\ref{sec:systemDesign:keyEstablishment}). The \device decodes the QR code from the intercepted HDMI frames, decrypts the specification and overlays the UI on the HDMI frames.
 
-\myparagraph{Confidential input} . When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the output system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device encrypts and signs the packets and sends the packet to the remote server making the input commands/values hidden from the attacker-controlled host.  
+\subsubsection{Input Confidentiality} . When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the output system, making the host completely oblivious to any mouse movement done by the user. Likewise when the user selects a UI element, for example a radio button that is shown in Figure~\ref{fig:activityPrivacy},the \device encrypts and signs the packets and sends the packet to the remote server making the input commands/values hidden from the attacker-controlled host.  
 
 
 
