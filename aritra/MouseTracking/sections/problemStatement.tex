@@ -11,52 +11,18 @@
 \end{figure}
 
 
-In this section, we motivate our work, explain the security properties, describe existing literature lacks proper solution and explain the goals of our work.
+In this section, we motivate our work in the context of securing user's IO to remote servers. We also describe selected existing literature that tackles relevant problem and we discuss how those works lack proper solution and how our solution is different from the. Lastly, we explain the goals of our work.
 
-
-
-\begin{figure}[t]
-\footnotesize
-    \centering
-    \begin{tikzpicture}[
-solved/.style={rectangle,draw,fill=purple!40, rounded corners, align=center},
-not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
-neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
-]]
-    \node[neutral](root) {Trusted path}
-    child { node[neutral, yshift=12pt] (hw) {External\\ HW}}
-    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {Transaction\\ confirmation\\ Device}}  
-    child { node[neutral, yshift=12pt, xshift=20pt] (tee) {TEE}
-      child { node[neutral, yshift=0pt, xshift=-5pt] (teehv) {Hypervisor+\\TEE}}
-      child { node[neutral, yshift=0pt, xshift=2pt] (teehw) {TEE + \\ External HW} } }
-      child { node[neutral, yshift=8pt, xshift=15pt] (br) {Browser\\ Based}}   
-     child { node[neutral, yshift=12pt, xshift=20pt] (hv) {Hypervisor}}  ;
-    
-      
-
-    \node[below=0cm of hw] {\textbf{\name}};
-    \node[below=0cm of tc] {Uni-dir~\cite{filyanov2011uni}};
-    \node[below=0cm of hv] {Overshadow~\cite{Overshadow}};
-    \node[below=0cm of teehv] {SGXIO~\cite{weiser2017sgxio}};
-    \node[below=0cm of teehw] {Fidelius~\cite{Fidelius}};
-     \node[below=0cm of br] {InContext~\cite{blake1998authenticated}};
-
-    
-    \end{tikzpicture}
-    
-   \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
-     \label{fig:relatedWorksTree}
-\end{figure}
 
 
 \subsection{Motivation: IO for Remote Data and Safety-critical System}
 
 
-A user communicates with a remote server through a host system, which gives the host access to the plaintext data that goes from the user to the server and vice-versa. Thus, a compromised host can always observe or modify the information exchanged between the user and the server. An adversary that compromises the user's host can alter user intentions, i.e., it can perform arbitrary actions on behalf of the user. Such an adversary is very powerful and difficult to detect or prevent by the remote server. The consequences of such attacks might be severe when safety-critical applications are targeted. The attacker can pass the wrong input to a remote safety-critical system such as a medical device, power plant, etc. 
+A user communicates with a remote server through a computer (we call it host in the rest of the paper), which gives the host access to the plaintext data that goes from the user to the server and vice-versa. Thus, a compromised host can always observe or modify the information exchanged between the user and the server. An adversary that compromises the user's host can alter user intentions, i.e., it can perform arbitrary actions on behalf of the user. Such an adversary is very powerful and difficult to detect or prevent by the remote server. The consequences of such attacks might be severe when safety-critical applications are targeted. The attacker can pass the wrong input to a remote safety-critical system such as a medical device, power plant, etc. 
 
-Trusted execution environments (TEEs) such as Intel SGX enable remote trust into the code executing on the processor, effectively eliminating the need to trust more significant code base (motherboard, memory modules, OS and other applications). However, despite the TEEs, the problem of isolating user's input and output remains as the operating system handles the IO drivers and data. Therefore, service providers typically operate with the assumption that honest users genuinely generate the data they receive and not altered by a compromised computer. In a few use cases, e.g., online payments, the service providers ask for user confirmation on a second device (phone or specialized hardware) to detect such attacks. However, this solution is limited to applications in which a user can check the input on a secondary device. 
+Trusted execution environments (TEEs) such as Intel SGX enable remote trust into the code executing on the processor, effectively eliminating the need to trust more significant code base (motherboard, memory modules, OS and other applications). However, despite the TEEs, the problem of isolating user's input and output remains as the operating system handles the IO drivers and data. Therefore, service providers typically operate with the assumption that honest users genuinely generate the data they receive and not altered by a compromised host. In a few use cases, e.g., online payments, the service providers ask for user confirmation on a second device (phone or specialized hardware) to detect such attacks. However, this solution is limited to applications in which a user can check the input on a secondary device. 
 
-A \emph{Trusted path} provides confidentiality and integrity to the IO data exchanged between the users and the end systems. In principle, a trusted path solve the general security problem of the IO data. But practically establishing a trusted path in general IO devices is a nontrivial problem specifically if one considers the plethora of complex UI objects and input methods as well as different security and functional properties that a solution should satisfy.
+A \emph{Trusted path} provides confidentiality and integrity to the IO data exchanged between the users and the end systems. In principle, a trusted path solve the general security problem of the IO data. But practically establishing a trusted path in general IO devices is a nontrivial problem specifically if one considers the plethora of complex UI objects and input methods as well as different security and functional properties that a solution should satisfy. In this paper, we primarily target the trusted path problem to a remote server (such as a remote PLC, web server or remotely accessible medical device etc.).
 
 \iffalse
 \subsection{Security Properties}
@@ -65,7 +31,7 @@ A \emph{Trusted path} provides confidentiality and integrity to the IO data exch
 
 
 \begin{mylist}
-  \item \textbf{Input integrity and privacy.} These properties define that any input that is coming from the user input devices are fully protected in two ways: i) the input issued by the user reaches to the remote end-point as it was generated by the user - \emph{integrity}, and ii) in specific application scenarios, the attacker-controlled host is entirely oblivious about the input from the user - \emph{confidentiality}. The trusted path system should consider a wide range of input devices, such as keyboard, mouse, touch, etc. We consider any sort of input action by the user that may include moving the mouse or using the keyboard navigation keys to select a specific item in a list.
+  \item \textbf{Input integrity and confidentiality.} These properties define that any input that is coming from the user input devices are fully protected in two ways: i) the input issued by the user reaches to the remote end-point as it was generated by the user - \emph{integrity}, and ii) in specific application scenarios, the attacker-controlled host is entirely oblivious about the input from the user - \emph{confidentiality}. The trusted path system should consider a wide range of input devices, such as keyboard, mouse, touch, etc. We consider any sort of input action by the user that may include moving the mouse or using the keyboard navigation keys to select a specific item in a list.
   
   
   \item \textbf{Output integrity and confidentiality.} Similar to the input integrity, output integrity ensures that information that is sent by the remote endpoint is presented to the user as it was meant to be. One example of output integrity is the integrity of the UI elements. Such property ensures that the host system renders the UI elements faithfully as they were sent by the remote system. Output confidentiality ensures that the information sent by the remote server can not be accessed by the attacker-controlled host. 
@@ -117,6 +83,40 @@ A \emph{Trusted path} provides confidentiality and integrity to the IO data exch
 
 \subsection{Existing Solutions and their drawbacks}
 
+\begin{figure}[t]
+\footnotesize
+    \centering
+    \begin{tikzpicture}[
+solved/.style={rectangle,draw,fill=purple!40, rounded corners, align=center},
+not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
+neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
+]]
+    \node[neutral](root) {Trusted path}
+    child { node[neutral, yshift=12pt] (hw) {External\\ HW}}
+    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {Transaction\\ confirmation\\ Device}}  
+    child { node[neutral, yshift=12pt, xshift=20pt] (tee) {TEE}
+      child { node[neutral, yshift=0pt, xshift=-5pt] (teehv) {Hypervisor+\\TEE}}
+      child { node[neutral, yshift=0pt, xshift=2pt] (teehw) {TEE + \\ External HW} } }
+      child { node[neutral, yshift=8pt, xshift=15pt] (br) {Browser\\ Based}}   
+     child { node[neutral, yshift=12pt, xshift=20pt] (hv) {Hypervisor}}  ;
+    
+      
+
+    \node[below=0cm of hw] {\textbf{\name}};
+    \node[below=0cm of tc] {Uni-dir~\cite{filyanov2011uni}};
+    \node[below=0cm of hv] {Overshadow~\cite{Overshadow}};
+    \node[below=0cm of teehv] {SGXIO~\cite{weiser2017sgxio}};
+    \node[below=0cm of teehw] {Fidelius~\cite{Fidelius}};
+     \node[below=0cm of br] {InContext~\cite{blake1998authenticated}};
+
+    
+    \end{tikzpicture}
+    
+   \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
+     \label{fig:relatedWorksTree}
+\end{figure}
+
+
 There exist several works that try to solve the problem of trusted paths for IO devices in the presence of a compromised host. But all of these solutions targeted for different problem settings and models. Figure~\ref{fig:relatedWorksTree} provides a board classification of the related works and illustrates where our proposed work stands concerning them. Detailed description of the related research is also described in Table~\ref{tab:relatedWorks} in Appendix~\ref{sec:summaryResearch}.
 
 \subsubsection{Transaction confirmation devices} In their paper, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. The transaction confirmation suffers from two significant drawbacks. First, it introduces lots of cognitive load over the user and may force the user to confirm their action without even looking to the input data. Such user action makes the transaction confirmation device impractical in day-to-day interactions. Second, transaction confirmation is not practical/suitable for complex interaction, rather simple text-based inputs. In contrary, \name supports generic input devices and supports complex user interfaces and user interactions. Moreover, the complete automated nature of \name does not introduce any cognitive load on the user, making the system less susceptible to user error.
@@ -136,19 +136,20 @@ There exist several works that use TEE and hypervisor simultaneously to mitigate
 
 
 
-Note that the majority of the previous works achieve some form of trusted path specifically for keyboard-based input. However supporting mouse and touch-based input, complex and generic user interfaces and protected users' action (such as the movement of the mouse pointer, gestures, etc.) in a privacy-sensitive application is not a trivial task. Without proper analysis of every frame that the host system produces, it is not possible to track user intention. In our knowledge, our proposed solution is the first to provide such security properties including the mouse movement privacy. Moreover, we want to achieve this in the absence of any TEE as the trust model of our scenario is significantly different.
+Note that the majority of the previous works achieve some form of trusted path specifically for keyboard-based input. However supporting mouse and touch-based input, complex and generic user interfaces and protected users' action (such as the movement of the mouse pointer, gestures, etc.) in a security-sensitive application (such as e-voting) is not a trivial task. Without proper analysis of every frame that the host system produces, it is not possible to track user intention. In our knowledge, our proposed solution is the first to provide such security properties including the confidentiality of user input (e.g., mouse movement). Moreover, we want to achieve this in the absence of any TEE as the trust model of our scenario is significantly different.
 
 \subsection{Goals}
 
 In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes our solution different from them is the specific settings that it targets. We do not assume trust in the OS, particular drivers, TEEs, hypervisors, etc. As all of these techniques as mentioned earlier require trust on a large code base. Instead, our proposed solution solves the problem of building an efficient, trusted path using an off-the-shelf microcontroller and single board computers that require a bare-minimum trust assumption. The most distinguishing factor is the type of IOs our proposed system targets to protect, namely mouse/touch inputs and sophisticated user interfaces. Existing research works primarily targets character-based input devices such as keyboards, and the methods cannot be trivially applied to mouse/touch-based inputs or complex UI elements. The general goals of this paper are the following:
 
 \begin{mylist}
-  \item  \textbf{Rich set of IO security features.} Most of the existing trusted path solutions focus on a minimal set of feature (e.g., only support for keyboard). \name is compatible with generic IO device (such as a keyboard, mouse, touch screen, display, etc.), and provides a rich set of IO security (such as IO integrity and confidentiality) for the first time. 
+  \item  \textbf{Rich set of IO security features.} Most of the existing trusted path solutions focus on a minimal set of feature (e.g., only support for keyboard). The primary goal of \name is to having compatibility compatible with generic IO device (such as a keyboard, mouse, touch screen, display, etc.), and to provides a rich set of IO security (such as IO integrity and confidentiality). 
   
-  \item  \textbf{Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption. \name does not rely on a specialized hypervisor or OS or TEEs. Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
+  \item  \textbf{Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption that does not rely on a specialized hypervisor or OS or TEEs. %Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
   
-  \item \textbf{Usability.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device which is compatible with any platform (OS, processor architecture, etc.). Moreover, \name does not change the way users interacts with UI elements and does not impose cognitive load such as looking to a security indicator or confirming actions, etc. 
-  
+  \item \textbf{Usability.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device which is compatible with any platform (OS, processor architecture, etc.). Moreover, our goal is not to change the way users interacts with UI elements and imposing no or minimal cognitive load such as looking to a security indicator or confirming actions, etc. 
 \end{mylist}
+
+In the following section what follow is the \name's design and how \name achieves these goals.
 
 
