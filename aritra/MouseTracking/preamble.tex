@@ -77,7 +77,7 @@ all=normal,floats=tight
 
 
 \lstset{
-  basicstyle=\ttfamily,
+  basicstyle=\ttfamily\small,
   numbers=left, xleftmargin=2em,frame=single,framexleftmargin=1.5em,
   %numberstyle=\tiny,
   columns=fullflexible,
@@ -87,13 +87,14 @@ all=normal,floats=tight
 
 \lstdefinelanguage{HTML}
 {
+  basicstyle=\footnotesize\ttfamily,
   morestring=[b]",
   morestring=[s]{>}{<},
   morecomment=[s]{<?}{?>},
   stringstyle=\color{black},
   identifierstyle=\color{darkblue},
-  keywordstyle=\color{blue},
-  morekeywords={form,input,encrypted,Input}
+  keywordstyle=\bfseries\color{blue},
+  morekeywords={form,input,encrypted_qr,Input}
 }
 
 \colorlet{punct}{red!70!black}
@@ -102,11 +103,11 @@ all=normal,floats=tight
 \colorlet{numb}{magenta!20!black}
 
 \lstdefinelanguage{json}{
-    basicstyle=\small\ttfamily,
+    basicstyle=\footnotesize\ttfamily,
     numbers=left,
     numberstyle=\scriptsize,
     stepnumber=1,
-    numbersep=8pt,
+    numbersep=5pt,
     showstringspaces=false,
     breaklines=true,
     frame=lines,
