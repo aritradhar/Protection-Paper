@@ -30,6 +30,7 @@ Figure~\ref{fig:approachOverview} shows the components of the system that are co
 We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted.
 %which is not unrealistic. The monitor, keyboard, and mouse have hardly any complex hardware. The TCB is very small.
 
+\myparagraph{Attacker's capability} As the host is attacker-controlled, it can intercept, drop or modify the user IO data to and from the remote server.On top of it, the host can launch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer, changing the layout of the UI elements to trick the user into providing sensitive data, tricking the user into moving the mouse to the wrong location and click there, manipulate input data, etc.
 
 \iffalse
 \begin{figure}[t]
@@ -42,6 +43,34 @@ We only assume that the monitor, keyboard, mouse (in a word all the IO devices t
 \fi
 
 
+\subsection{Strawman solutions for IO integrity}
+\label{sec:approach:strawman}
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 13.5cm 11.5cm 0}, clip, width=\linewidth]{uiDetect_2.pdf}
+\caption{\textbf{Strawman solution: Text/Image Analysis of the UIs}. This strawman solution uses image/text analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
+\label{fig:uiDetect}
+\centering
+\end{figure}
+
+Here we explain two strawman solutions by which the \device confirm that the user executes certain action, e.g., clicking a button  or selecting an option from a drop-down menu and ensures that the user views legitimate UI.
+
+
+Note that the \device sits between all the IO devices and the host. This enables the \device to intercept the HDMI interface. As soon as the user executes an action, e.g., clicking the mouse, the \device takes a snapshot of the screen and send the snapshot to the server using the TLS upstream channel (Section~\ref{sec:systemDesign:confidentiality:tls}. Along with the snapshot, the \device also transfers the timestamp for later verification. The user input data, snapshot, and the timestamp from the \device generate the proof that the user executes certain activities. Note that, this strawman solution primarily serves as an offline audit. One use case scenario is a bank where the signed transcript can be later used to solve transaction dispute. 
+
+This making of taking screenshot of UI elements an also be transformed into online verification by using the image and text analysis to extracts the information from the UI elemets. Such as the label on a button or the markers on a slider, etc. In Figure~\ref{fig:uiDetect} we illustrate an example scenario where the \device extract the context of the mouse position when a user clicks. This involves the \device to take a truncated screen-shot from the HDMI frame and use image analysis to understand user action. E.g., in Figure~\ref{fig:uiDetect}, \one the user first drags along the slider UI to set a value (\texttt{35}) and then \two the user clicks on the \texttt{OK}. The \device uses character recognition technique to extract the label and the data from the UI. This example shows the apparent complexity of this mechanism that does not scale with all UI. Further investigation and prototype implementation shows several drawbacks of this solution:
+
+
+\begin{mylist}
+  \item \textbf{Incomplete user context.} The proposed method failed to capture the complete context of the user input. Capturing the UI element only around the mouse pointer ignore the input values that are provided by the user. For example, the use may press \texttt{OK} button after providing the sensitive data, but to capture those data, the \device needs to capture more screen area. Such a method would complicate the entire process and does not generalize.
+  \item \textbf{Robustness.} Previous research works such as as~\cite{lukaSpoof,Chen:2010:DVS:1754393.1754394} propose detection of a phishing attack by visually analyzing the web interface of the mobile applications. All of these proposed methods fail to achieve 100\% accuracy in the real world scenarios. Our prototype implementation also confirm that the method lacks robustness in real life as most of the time the \device fails to either recognize the UI elements or extract the label from the UI elements properly despite of using state-of-the-art image/text analysis tools~\cite{opencv}. More importantly, adversarial machine learning techniques~\cite{eykholt2017robust,sitawarin2018rogue} could make the image/text recgnition technique insecure.
+  \item \textbf{Performance.} The image/text analysis is CPU intensive and causes a low number of frame output by the \device. Commonly used image analysis frameworks such as OpenCV~\cite{opencv} is CPU intensive and it hard to achieve $24$ fps after the operation on the \device that is implemented on an ARM-based Raspberry Pi.
+  \item \textbf{TCB.} The image/text analysis functions are needed to be implemented either on the \device or the remote server. Such increases the size of the TCB significantly.
+  \item \textbf{Privacy.} Taking the screenshot also reveal other applications that the user is operating which can be a threat to privacy.
+\end{mylist}
+
+Due to such limitations, and the inherent offline nature of this solution, we developed more efficient solution to preserve the integrity of user actions on a UI element. We describe the method in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server but provides better security and usability. We describe our solution in the following section.
 
 \subsection{High-level Description of the System}
 
@@ -69,12 +98,13 @@ Therefore, user inputs (mouse events and keystrokes) addressed to the protected 
 
 %Modern user interfaces are extremely complex to analyze, and such allows many possible ways to provide input. This makes the protection of IO integrity, and privacy is a particularly challenging task. For example, given a command from the user, it is necessary to understand the user intention that corresponds to the mouse movements. Given the screen space, there exist a multitude of ways for the user to move a mouse a place on a specific UI element that fires a command to the remote end system. To provide an end-to-end protection to this entire activity one needs to 1) precisely track the cursor position, 2) correspond the cursor location to the given movement data from the mouse, 3) understand the semantics of the UI element the fires the command, and 4) generate an efficient and comprehensive proof that the server can use to understand the user's real intention.
 
-Modern user interfaces (UIs) are diverse and hard to generalize, resulting in many possible ways to provide input and receiving output.  This makes the protection of IO integrity, and confidentiality is a particularly challenging task. For example, given a mouse movement and clicking on a button from the user, it is necessary to understand the user intention that corresponds to the mouse movements. One naive solution would be to record a continuous screen capture of display and send it to the server. As the screen capture captures all the information displayed on the screen, later review should uncover if the attacker attempts to manipulate the UI or the IO data. Even though this naive solution provides strong security guarantee, it is impractical. So, the first challenge arises to build a secure system that is feasible and can be generalized with all the IO devices.   
+Modern user interfaces (UIs) are diverse and hard to generalize, resulting in many possible ways to provide input and receiving output.  This makes the protection of IO integrity, and confidentiality is a particularly challenging task. For example, given a mouse movement and clicking on a button from the user, it is necessary to understand the user intention that corresponds to the mouse movements. 
+%One naive solution would be to record a continuous screen capture of display and send it to the server. As the screen capture captures all the information displayed on the screen, later review should uncover if the attacker attempts to manipulate the UI or the IO data. Even though this naive solution provides strong security guarantee, it is impractical. So, the first challenge arises to build a secure system that is feasible and can be generalized with all the IO devices.   
 
 The second challenge arises while ensuring IO confidentiality. For mouse input, hiding the mouse movement while keeping all the regular functionality intact is a challenging task as we do not consider large TCB-based solution such as a trusted hypervisor.
 
 
-Apart from these functional challenges for implementation, there exist multiple attack vectors that we want to provide protection. An attacker that controls the entire host can lunch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer, changing the layout of the UI elements to trick the user into providing sensitive data, tricking the user into moving the mouse to the wrong location and click there, manipulate input data, etc.
+Apart from these functional challenges for implementation, there exist multiple attack vectors that we want to provide protection. 
 
 
 \iffalse
