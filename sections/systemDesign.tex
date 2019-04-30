@@ -107,6 +107,7 @@ This approach requires one extra component at the client side that is a JavaScri
   "formName": "form1",
   "domain": "secure_site.io",
   "dim": "400*400",
+  "SAS": "sas policy",
   "ui": [{"id":"textbox_1",
   	"type":"textbox",
 	"label":"Sensitive field 1",
@@ -200,16 +201,20 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 \subsection{Secure Attention Sequence}
 \label{sec:systemDesign:SAS}
 
-Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism and adapts it into the system. 
+Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location and adapts it into the system. 
 
-\subsubsection{SAS overlay for UI} \name provides a mechanism for SAS where the user forces the \device to highlight the overlaid UI and the mouse pointer location. SAS eliminates any possibility that the attacker either i) creates any malicious UI in the screen that tricks the user into submitting sensitive information, or ii) spawns a fake mouse pointer to trick the user into clicking into a different location, i.e., clickjacking. To protect against such scenarios, \device also provides SAS using which the user can highlight the overlaid UIs and the mouse pointer on display. 
-This can be activated explicitly by the user by pressing \texttt{ctrl} button.
-As the \device overlays on the HDMI frames, the attacker can not manipulate any overwriting by rendering anything on top of them. 
-There are two SAS mechanisms that \name employs. One is intrinsic to the user action. When the user moves her mouse, the \device briefly outlines the overlay UI. The other SAS mechanism is when the user presses a button on the \device, the \device dims the rest of the part of the display except the legitimate mouse pointer and the overlaid UIs. By doing so, the user can easily discriminate the secure UIs and the legitimate mouse pointer. 
+SAS eliminates any possibility that the attacker either i) creates any malicious UI in the screen that tricks the user into submitting sensitive information or provide fraudulent information on the screen that influences user, or ii) spawns a fake mouse pointer to trick the user into clicking into a different location, i.e., clickjacking. To protect against such scenarios, \device also provides SAS using which the user can highlight the overlaid UIs and the mouse pointer on display. 
 
-The dimming of the non-overlaid part of the screen is also activated when the user enters or exits the overlay. This aids the user in the case she is following a fake mouse pointer on the screen while the real cursor enters/exits the sensitive UI.
 
-\subsubsection{Mouse pointer overlay} The mouse-pointer overlay also employs SAS. When the user press \texttt{ctrl} key on her keyboard, the \device dims all the portion of the screen except the overlaid UI and the overlaid mouse pointer. This allows the user to determine the legitimate pointer and the overlaid UI. For additional user attention, the mouse pointer also changes the out border color (\textcolor{red}{red} to \textcolor{green}{green}) when the user enters inside the overlaid UI. This also works as a indicator for the user if the browser/host impersonates a overlaid UI to trick the user into providing some security critical data.
+\myparagraph{SAS policy} The remote server can set configurable SAS policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute this. One example policy could be \texttt{x:5} which denotes that user needs to press key `\texttt{Ctrl+x}' to unlock the UI overlay. Pressing this key also trigger the \device to back out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). As the \device overlays on the HDMI frames, the attacker can not manipulate any overwriting by rendering anything on top of them. The dimming of the non-overlaid part of the screen is also activated when the user enters or exits the overlay. This aids the user in the case she is following a fake mouse pointer on the screen while the real cursor enters/exits the sensitive UI.
+
+%\name provides a mechanism for SAS where the user forces the \device to highlight the overlaid UI and the mouse pointer location. SAS eliminates any possibility that the attacker either i) creates any malicious UI in the screen that tricks the user into submitting sensitive information, or ii) spawns a fake mouse pointer to trick the user into clicking into a different location, i.e., clickjacking. To protect against such scenarios, \device also provides SAS using which the user can highlight the overlaid UIs and the mouse pointer on display. 
+%This can be activated explicitly by the user by pressing \texttt{ctrl} button.
+%As the \device overlays on the HDMI frames, the attacker can not manipulate any overwriting by rendering anything on top of them. 
+%There are two SAS mechanisms that \name employs. One is intrinsic to the user action. When the user moves her mouse, the \device briefly outlines the overlay UI. The other SAS mechanism is when the user presses a button on the \device, the \device dims the rest of the part of the display except the legitimate mouse pointer and the overlaid UIs. By doing so, the user can easily discriminate the secure UIs and the legitimate mouse pointer. 
+
+
+%\subsubsection{Mouse pointer overlay} The mouse-pointer overlay also employs SAS. When the user press \texttt{ctrl} key on her keyboard, the \device dims all the portion of the screen except the overlaid UI and the overlaid mouse pointer. This allows the user to determine the legitimate pointer and the overlaid UI. For additional user attention, the mouse pointer also changes the out border color (\textcolor{red}{red} to \textcolor{green}{green}) when the user enters inside the overlaid UI. This also works as a indicator for the user if the browser/host impersonates a overlaid UI to trick the user into providing some security critical data.
  
 
 \subsection{Transmit User Input}
