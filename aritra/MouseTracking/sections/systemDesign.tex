@@ -201,7 +201,7 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 \subsection{Secure Attention Sequence}
 \label{sec:systemDesign:SAS}
 
-Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location and adapts it into the system. 
+Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential.} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location and adapts it into the system. 
 
 SAS eliminates any possibility that the attacker either i) creates any malicious UI in the screen that tricks the user into submitting sensitive information or provide fraudulent information on the screen that influences user, or ii) spawns a fake mouse pointer to trick the user into clicking into a different location, i.e., clickjacking. To protect against such scenarios, \device also provides SAS using which the user can highlight the overlaid UIs and the mouse pointer on display. 
 
