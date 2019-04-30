@@ -3,6 +3,29 @@
 
 
 \begin{figure}[t]
+	\begin{subfigure}{0.4\textwidth}
+	\centering
+		\includegraphics[trim={0 12cm 21.7cm 0}, clip, scale=0.5]{setUpBlock.pdf}
+		\caption{\textbf{\name prototype architecture}. }
+		\label{fig:prototypeArch}
+		\centering
+	\end{subfigure}
+	
+	\vspace{1em} 
+	
+	\begin{subfigure}{0.4\textwidth}
+	\centering
+		\includegraphics[trim={0 5cm 21.5cm 0}, clip, scale=0.55]{setUp_1.pdf}
+		\caption{\textbf{\name prototype}. The figure shows \name prototype that employs Arduino Due and Zero microcontroller board and a Raspberry Pi 3 SBC. The highlighted numbers correspond to the labels in Figure~\ref{fig:prototypeArch}.}
+		\label{fig:prototype}
+	\end{subfigure}
+	\vspace{-1em}
+	\caption{\name Prototype} 
+\end{figure}
+
+
+\iffalse
+\begin{figure}[t]
 \centering
 %\includegraphics[trim={0 0 15cm 0}, clip, width=\linewidth]{setUp.pdf}
 \includegraphics[trim={0 12cm 21.7cm 0}, clip, width=0.65\linewidth]{setUpBlock.pdf}
@@ -20,6 +43,8 @@
 \label{fig:prototype}
 \centering
 \end{figure}
+\fi
+
 
 In this section, we describe our prototype implementation of \name as an auxiliary device. Figure~\ref{fig:prototype} depicts the \name prototype. The prototype \device is connoted to a desktop computer with 3.40 GHz Intel Core i7-6700 processor with 8 GB RAM running Ubuntu 18.04.2 LTS. The \device uses off-the-shelf components that has the following components and interfaces:
 
