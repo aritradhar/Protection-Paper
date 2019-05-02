@@ -60,38 +60,7 @@ We assume that the public certificate of the remote server is embedded into the 
 This approach requires one extra component at the client side that is a JavaScript code snippet that we call \name JS. After the establishment of the secure channel between the \device and the remote server, the \name JS snippet that is served with the webpage transforms the UI elements that require IO integrity protection. Note that \name JS runs on the browser and is not trusted in our system model. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has two phases: \emph{QR code generation}, and \emph{overlay of the UI}.
 
 
-\lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
 
-\begin{figure}[t]
-\begin{lstlisting}[mathescape=true]
-{ "formId": "form1",
-  "formName": "form1",
-  "domain": "secure_site.io",
-  "dim": "400*400",
-  "SAS": "sas policy",
-  "ui": [{"id":"textbox_1",
-  	"type":"textbox",
-	"label":"Sensitive field 1",
-	"text":"secret data 1",
-	"size": 40},
-	{"id":"textbox_2",
-	"type":"textbox",
-	"label":"Sensitive field2 ",
-	"text":"secret data 2",
-	"size": 40},
-	{"id":"b1",
-	"type":"button",
-	"label":"OK",
-	"trigger":"true",
-	"size": 10},	
-	{"id":"b2",
-	"type":"button",
-	"label":"Cancel",
-	"trigger":"true",
-	"size": 10}],
-  "signature": "0x45565AB246..."}
-\end{lstlisting}
-\end{figure}
 
 %%%old specification
 % 
@@ -119,7 +88,7 @@ This approach requires one extra component at the client side that is a JavaScri
 
 \begin{mylist}
 \item \textbf{QR code generation.} QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code\footnote{In the prototype implementation on \name; we use QRCode.js, a \js library to produce QR codes}. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' additional attribute \texttt{protect=``true''}. The \name JS iterate through all the HTML elements that have \texttt{protect=``true''} attribute. The JS then parses the HTML code and extracts information such as name of the label or type of UI element. \device uses preloaded size parameters to specify the size of a text field, button etc. in case the size is not explicitly mentioned in the HTML source. One important attribute for a UI element in the specification is the \texttt{trigger}. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether.
-The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation. 
+The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation.
 
 \item \textbf{Overlay.} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. As the \device parses all the HDMI frames for the QR code, the overlay does not get interrupted by scrolling.
 \end{mylist}
