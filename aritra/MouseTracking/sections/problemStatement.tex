@@ -112,7 +112,41 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     
     \end{tikzpicture}
     
-   \caption{\textbf{Summarization of existing trusted path solutions} by their trust assumptions. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
+   \caption{\textbf{Summarization of existing trusted path solutions} by their approach. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
+     \label{fig:relatedWorksTree}
+\end{figure}
+
+
+\begin{figure}[t]
+\footnotesize
+    \centering
+    \begin{tikzpicture}[
+solved/.style={rectangle,draw,fill=purple!40, rounded corners, align=center},
+not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
+neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
+]]
+    \node[neutral, xshift=60pt](root) {Trusted path}
+    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {Transaction confirmation Device}}  
+    child { node[neutral, yshift=8pt, xshift=80pt] (td) {Trusted Components}
+    	child { node[neutral, yshift=12pt] (hw) {External\\ HW}}
+    	child { node[neutral, yshift=0pt, xshift=-5pt] (teehv) {Hypervisor+\\TEE}}
+      child { node[neutral, yshift=0pt, xshift=2pt] (teehw) {TEE + \\ External HW}}
+      child { node[neutral, yshift=8pt, xshift=15pt] (br) {Browser\\ Based}}   
+     child { node[neutral, yshift=12pt, xshift=20pt] (hv) {Hypervisor}} 
+    }	; 
+      
+
+    \node[below=0cm of hw] {\textbf{\name}};
+    \node[below=0cm of tc] {Uni-dir~\cite{filyanov2011uni}};
+    \node[below=0cm of hv] {Overshadow~\cite{Overshadow}};
+    \node[below=0cm of teehv] {SGXIO~\cite{weiser2017sgxio}};
+    \node[below=0cm of teehw] {Fidelius~\cite{Fidelius}};
+     \node[below=0cm of br] {InContext~\cite{blake1998authenticated}};
+
+    
+    \end{tikzpicture}
+    
+   \caption{\textbf{Summarization of existing trusted path solutions} by their approach. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks}.}
      \label{fig:relatedWorksTree}
 \end{figure}
 
