@@ -60,4 +60,46 @@ In this section, we describe our prototype implementation of \name as an auxilia
       \item \textbf{Compute component.} We use a Raspberry Pi 3 to implement the compute device that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing \tls protocol etc. Once could use an ASIC to further improve performance and reduce the code base of the compute component. The compute device is connected to the display over HDMI (\nine) interface. The compute component is implemented using Python and Java.
 \end{mylist}
 
-Additionally, for testing we also create a simulator of the prototype that runs in pure java to emulate more UIs as a proof of concept. The emulator creates desktop mirroring emulating the HDMI intercept.
+
+\subsection{Implementation of \name Components}
+
+\lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
+
+\begin{figure}[t]
+\begin{lstlisting}[mathescape=true]
+{ "formId": "form1",
+  "formName": "form1",
+  "domain": "secure_site.io",
+  "dim": "400*400",
+  "SAS": "sas policy",
+  "ui": [{"id":"textbox_1",
+  	"type":"textbox",
+	"label":"Sensitive field 1",
+	"text":"secret data 1",
+	"size": 40},
+	{"id":"textbox_2",
+	"type":"textbox",
+	"label":"Sensitive field2 ",
+	"text":"secret data 2",
+	"size": 40},
+	{"id":"b1",
+	"type":"button",
+	"label":"OK",
+	"trigger":"true",
+	"size": 10},	
+	{"id":"b2",
+	"type":"button",
+	"label":"Cancel",
+	"trigger":"true",
+	"size": 10}],
+  "signature": "0x45565AB246..."}
+\end{lstlisting}
+\end{figure}
+
+\subsubsection{QR code generation} 
+QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code\footnote{In the prototype implementation on \name; we use QRCode.js, a \js library to produce QR codes}. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' additional attribute \texttt{protect=``true''}. The \name JS iterate through all the HTML elements that have \texttt{protect=``true''} attribute. The JS then parses the HTML code and extracts information such as name of the label or type of UI element. \device uses preloaded size parameters to specify the size of a text field, button etc. in case the size is not explicitly mentioned in the HTML source. One important attribute for a UI element in the specification is the \texttt{trigger}. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether.
+The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation. 
+
+
+
+%Additionally, for testing we also create a simulator of the prototype that runs in pure java to emulate more UIs as a proof of concept. The emulator creates desktop mirroring emulating the HDMI intercept.
