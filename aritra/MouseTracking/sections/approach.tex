@@ -77,7 +77,7 @@ Due to such limitations, and the inherent offline nature of this solution, we de
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 8cm 20cm 0}, clip, width=0.9\linewidth]{overlayScreenShot.pdf}
-\caption{\textbf{\device generated UI overlay} that our solution use to hide the sensitive UI elements and inputs from the attacker-controlled host. Any input in the UI overlay is signed by the \device, hence the integrity of the user input is preserved.}
+\caption{\textbf{\device generated UI overlay} The figure shows the \name high-level approach. \one shows the non-protected part of the screen where the Ui is rendered by the untrusted host. \two shows the \device generated protected UI overlay that is hidden from the host. The protected part of the screen provides integrity and confidentiality of all user IO.}
 \label{fig:screenshot_1}
 \end{figure}
 
