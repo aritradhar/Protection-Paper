@@ -4,6 +4,8 @@
 
 In this section, we provide the technical details of \name integrity protection for IO devices. \name is built upon some base components such as ensuring pointer integrity, the integrity of the user interaction and UI elements, creating the communication channel between the \device and the remote server, etc. The most crucial of all is to how to preserve user's input on UI elements and preserve the integrity of the UI itself.
 
+\myparagraph{Initialization} 
+
 \iffalse
 \subsection{System Components}
 \label{sec:systemDesign:components}
@@ -21,21 +23,6 @@ Figure~\ref{fig:approachOverview} provides the high-level approach overview of \
 
 For all these components to work in tandem, the \device and the remote server requires a communication channel. As described before, the \device does not have any networking capability. Only using the HDMI and the keyboard emulation, the \device creates a bidirectional channel with the remote server. The details of the communication channel is discussed in Section~\ref{sec:systemDesign:communicationChannel}.
 \fi
-
-\iffalse
-\subsection{Initialization} 
-\label{sec:systemDesign:init}
-
-There are two steps of initialization process: 
-
-\begin{mylist}
-  \item\textbf{IO initialization.} The \device initializes the mouse by instructing the host system to move the mouse pointer to the top right corner (moving to the first right and then up for an arbitrarily large value). As the \device has access to the frames that are displayed on the screen, it can verify if the mouse pointer is at the top-right corner of the screen or not. Then it instructs the host OS to bring it to the center of the screen.
-  
-  \item\textbf{Network initialization.} The \device connects to the remote server using \webusb or \webbt, effectively using the host as an untrusted transport. The \device and the server establishes a secure channel with the public certificates that are distributed before-hand.
-\end{mylist}
-\fi
-
-
 
 
 %\subsection{Output Integrity}
