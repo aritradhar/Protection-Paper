@@ -4,6 +4,14 @@
 
 \red{points for the Intro}
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
+\caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
+\label{fig:motivation}
+\centering
+\end{figure}
+
 Describe the overall problems with examples of attacks. Remote server, safety critical devices, credentials.
 
 What properties we want with the citation or related papers.
@@ -30,13 +38,7 @@ Based on these examples we list the security properties that we want to provide 
   \item\textbf{Low-TCB auxiliary device.} The above security properties are needed to be achieved without assuming any other primitives such as trusted execution environments, trusted hypervisor etc. Instead we opt for a very low TCB embedded auxiliary device that aids the users to achieve all the security properties without compromising usability of the system. 
 \end{mylist}
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
-\caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
-\label{fig:motivation}
-\centering
-\end{figure}
+
 
 \myparagraph{Contributions}
 \begin{mybullet}
