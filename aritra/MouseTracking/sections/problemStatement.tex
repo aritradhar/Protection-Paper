@@ -128,7 +128,7 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     \node[neutral, xshift=60pt](root) {Trusted path}
     child { node[neutral, yshift=8pt, xshift=10pt] (tc) {Transaction confirmation Device}}  
     child { node[neutral, yshift=8pt, xshift=80pt] (td) {Trusted Components}
-    	child { node[neutral, yshift=12pt] (hw) {External\\ HW}}
+    	child { node[neutral, xshift=-20pt] (hw) {External\\ HW}}
     	child { node[neutral, yshift=0pt, xshift=-5pt] (teehv) {Hypervisor+\\TEE}}
       child { node[neutral, yshift=0pt, xshift=2pt] (teehw) {TEE + \\ External HW}}
       child { node[neutral, yshift=8pt, xshift=15pt] (br) {Browser\\ Based}}   
