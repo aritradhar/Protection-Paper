@@ -35,6 +35,7 @@ As we have seen in the strawman solution described in Section~\ref{sec:approach:
 \includegraphics[trim={0 4.8cm 0 0}, clip, width=0.8\linewidth]{formTransform.pdf}
 %\caption{\textbf{Transformation of UI elements: UI $\rightarrow$ QR code $\rightarrow$ \device generated UI overlay.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \html source shows the UI elements that require integrity/privacy protection. These UI elements are transformed into a QR code (\two). The QR code encodes a UI specification that recreates the transformed UI. Specification~\ref{snippet:UISpecification} shows the corresponding UI specification that is created by the \name \js code. The QR code is then decoded and overlaid (\three) on the HDMI stream by the \device. Upon the user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the UI elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \caption{\textbf{Transformation of UI elements: UI $\rightarrow$ encoded specification $\rightarrow$ \device generated UI overlay.} \one The actual webpage and the corresponding \html source shows the UI elements that requires integrity protection. \two These UI elements are transformed into an encoded UI specification (our \name prototype uses QR code that encodes a UI specification, e.g., Specification~\ref{snippet:UISpecification}) by the \name JS. The QR code. \three AThe QR code decoded and overlaid on the HDMI stream by the \device. \four Upon the user's action on the overlaid UI elements, the device signs all the input data. \five The \device sends these signed input data them to the remote server. Note, that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
+\spacesave
 \label{fig:transformation}
 \end{figure*}
 
@@ -89,6 +90,7 @@ This approach requires a JavaScript code snippet that we call \name JS, that exe
 \centering
 \includegraphics[trim={0 5.8cm 8cm 0}, clip, width=\linewidth]{mouseAnalysis.pdf}
 \caption{\textbf{Pointer integrity.} The device knows the initial pointer position by sending a high mouse value to the host that puts the pointer on a specific corner $(x_0, y_0)$. \one The \device captures the raw mouse events ($\Delta x, \Delta y$) from the mouse that is attached to the \device. \two The \device captures the frames from the HDMI channel and checks into the designated pixel position $(x_i + \Delta x, y_i + \Delta y)$ if there exists a pointer.}
+\spacesave
 \label{fig:mouseAnalysis}
 \centering
 \end{figure}
@@ -165,6 +167,7 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 \centering
 \includegraphics[trim={0 6.5cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
 \caption{\textbf{Flow of the \name main protocol.} The figure shows the high-level protocol flow and the main messages that are exchanged between the remote server, host, \device, and the Io devices.}
+\spacesave
 \label{fig:systemDesign}
 \centering
 \end{figure}
@@ -213,6 +216,7 @@ In the previous sections (the main protocol is described in Section~\ref{sec:sys
 \centering
 \includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
 \caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
+\spacesave
 \label{fig:keyExchange}
 \centering
 \end{figure} 
@@ -256,6 +260,7 @@ After this, both the device and the remote server have each other's public certi
 \centering
 \includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
 \caption{\textbf{IO confidentiality.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
+\spacesave
 \label{fig:activityPrivacy}
 \centering
 \end{figure}
