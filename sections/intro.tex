@@ -2,52 +2,35 @@
 \label{sec:intro}
 
 
-\red{points for the Intro}
+
+\red{First draft of the intro. Flow: motivation and examples -> related works -> our approach -> contributions}
 
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
 \caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
+\spacesave
 \label{fig:motivation}
 \centering
 \end{figure}
 
-Describe the overall problems with examples of attacks. Remote server, safety critical devices, credentials.
 
-What properties we want with the citation or related papers.
+Human interaction with computers is one of the most fundamental components in today's complex systems, and interfaces are crucial for the interactions. All computing devices, such as desktop computers, smartwatches, embedded devices provide some input mechanisms via the user interfaces (UI) where the users can provide input to the computers. These input interfaces are the embodiments of the human-computer interaction (HCI). Critical infrastructures and automation systems rely on human input, and the correctness of the input is of uttermost importance. Human interaction with the computer systems over the last few decades evolves both in diversity and complexity. This gives rise to a major threat concerning the integrity and the confidentiality of the user input. Recent revelations like Snowden leaks show that powerful attackers such as state nations can compromise general purpose computing systems (we call them \emph{host} systems, e.g., computers, smartphone, etc.) that include both operating systems and hardware. Research works such as A2~\cite{A2} shows the first fabrication-time attack that can leverage the space common to Application-Specific Integrated Circuit (ASIC) layouts to implement malicious circuits. Such attacks are major threats to the security and privacy of the user interaction with the system as the attacker can monitor and manipulate user interactions. 
+Figure~\ref{fig:motivation} provides four such potential uses cases out of many, where the integrity and confidentiality of user IO data are critical. Networked safety-critical systems, such as Programmable Logic Controllers in a factory plant, are often remotely configurable by administrators through web-based interfaces. Other applications such as home automation systems, medical devices also expose their functionality through web APIs. Apart from the cyber-physical system, other web-based applications such as internet banking, user input are very critical. Manipulating user input in these applications could lead to catastrophic failures, even compromise the safety of humans. Hence, integrity is one of the major aspects while providing input parameters to a critical system. Apart from the integrity, the confidentiality of the user input is also of utmost importance for applications like e-voting, online messenger, web-service credentials, bitcoin wallet, etc. Secure transport layer protocols such as \https (or \tls) can be employed to secure the communication between the host system and the remote server, but the protocols assume that the host system is trusted which may not be the case provided the aforementioned attacker model.
 
-
-Overall approach for \name.
-
-
-Prototype implementation and evaluation.
+InContext~\cite{huang2012clickjacking} presents different clickjacking attacks variants and their solution by ensuring context (both temporal and visual) and pointer integrity in the trusted browser setting. Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Examples of other hypervisor-based works can be found in systems such as Overshadow~\cite{Overshadow}, Virtual ghost~\cite{criswell2014virtual}, Inktag~\cite{hofmann2013inktag}, TrustVisor~\cite{mccune2010trustvisor}, Splitting interfaces~\cite{ta2006splitting}, $SP^3$~\cite{yang2008using}, etc.
 
 
-Contributions
 
-\iffalse
-\myparagraph{Motivation} The attacker can easily change system configurations (i.e., install root certificates), alter the user's transaction, or manipulate the user by showing false information on the screen. Figure~\ref{fig:motivation} provides four such cases where the secrecy and the integrity of the input and output data are crucial. Effectively the primary motivation of this work is to build an efficient and effective \emph{trusted path} solution that provides the highest form of security regarding integrity and privacy. 
+There exist several research works that looked into the security of user IO data. \emph{Trusted path} is the concept that in-theory solves the problem of user IO security between the user and the end-system. The trusted path provides a secure channel between the user (HID) to the end system, and this end system could be a remote server or a local computer. Several ways could be employed to realize the trusted path. For example, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. This allows the user to review her input data on a separate trusted device that is physically separated from the untrusted host. Trusted execution environments (TEE) such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. provide isolated code execution, and can be used to achieve trusted path. Previous research works such as Intel SGX and trusted hypervisor-based SGXIO~\cite{weiser2017sgxio}, Intel SGX based ProximiTEE~\cite{dhar2018proximitee}, TPM and TXT based trusted path~\cite{filyanov2011uni}, and ARM TrustZone based trusted path~\cite{filyanov2011uni,sun2015trustotp} are the example of trusted path construction based on TEEs. All of these solutions require specialized platforms with processors that support such infrastructure. VButton~\cite{li2018vbutton} uses ARM TrustZone to overlay buttons on the mobile devices that confirm if the user taps on a specific button. Processor-TEE such as Intel SGX primarily provides execution privacy and code integrity. In most of the cases, IO is still mediated by the OS. 
 
-Based on these examples we list the security properties that we want to provide in our proposed solution. We now discuss these security properties and corresponds them with the motivating example.
 
+\myparagraph{Our approach} In this paper, we present our solution \name, that leverage the concept of bump-in-the-wire~\cite{McCPerRei2006} to establish a trusted path between a remote server and user IO devices. \name uses a low-TCB auxiliary device that works a generic IO hub between all user IO devices and the untrusted host. 
+We assume that the host and the network are attacker-controlled. The trusted components include the remote server, \device, and IO devices. \device intercepts the display signal from the host, analyze them to understand the correct user context, such as if the user moved her mouse over a specific UI element and click there. The \device also intercepts the mouse and keyboard signal and match them with the display signal that is received from the untrusted host. If both the input and output co-relates, the \device signs all the input and send them to the remote server. \device does not have any explicit network capability to communicate with the remote server. Instead, the \device uses the host as an untrusted transport.
+
+\myparagraph{Contribution} Here we provide the major contributions of this paper:
 \begin{mylist}
-  \item \textbf{Input integrity and privacy.} Input security can be classified into two subfeatures, namely input integrity and input privacy. In a case where the user provides input to a remote safety-critical system, input integrity is a crucial property that ensures that the command from the user reaches to the remote end-point without any modification by the malicious host system. Case 1 in Figure~\ref{fig:motivation} is a concrete example where input integrity is critical for the application to be work properly. Input privacy is required if the malicious host wants to steal the sensitive information from the user. This involves the credentials for various web-service, financial information such as the credit card number, choice of the vote in the e-voting system. Cases 2, 3,and 4 in Figure~\ref{fig:motivation} are the example where input privacy is needed.
-  \item \textbf{Output Integrity and privacy.} Similar to the input security, output security has two aspects: output integrity and privacy. Output integrity is a critical component to ensure a secure display. This involves data coming from remote safety-critical devices, medical implants, financial data such as the bitcoin address, candidate list in the e-voting portal, etc. Cases 1, 2, and 3 in Figure~\ref{fig:motivation} are the potential scenarios where output integrity property is desirable. In many application scenarios, output privacy is required where the data sent from the remote end-point is privacy sensitive. Such includes the web credentials, candidate preference data in the e-voting, the private key of the bitcoin wallet, etc. Example scenarios 2, 3 and 4 in Figure~\ref{fig:motivation} require output privacy. Additionally, we identify a sub category of output intergrity  that we call the \emph{integrity of the UI} where that ensures that the host system renders the UI in faithful way, i.e., the host system does nor modify the UI elements on the screen to trick the user into proving any additional information that may be sensitive.
-  
-  \item \textbf{Sandboxed activity.} We define activity analogously to the user intention which is privacy sensitive in many application scenarios. One such concrete example is e-voting where voting privacy is of uttermost importance. Even if there is a system in place that provides input privacy, merely the fact that the user may hover her mouse over some candidates may reveal her candidate preference. Activity privacy is application specific, and in most of the case, it dynamically preserves a part of the scene where the user activity is oblivious to the compromised host. 
-  \item\textbf{Low-TCB auxiliary device.} The above security properties are needed to be achieved without assuming any other primitives such as trusted execution environments, trusted hypervisor etc. Instead we opt for a very low TCB embedded auxiliary device that aids the users to achieve all the security properties without compromising usability of the system. 
+  \item
 \end{mylist}
 
-
-
-\myparagraph{Contributions}
-\begin{mybullet}
-  \item Track the mouse pointer and key stroke on the screen to understand user intention.
-  \item Understand the application context from the frames captured from the HDMI stream.
-  \item Private input activity of the user.
-  \item Fully end-to-end IO (input and output) privacy and integrity.
-  \item Could be integrated into the graphics card driver making them as an isolated IO environment,
-  \item Easy to setup (no hypervisors, modifications in drivers or OS, no extra application or TEEs), the device is installed between the host and the display, no need to modify websites, or install any application to the host system.
-\end{mybullet}
-
-\fi
+\myparagraph{Organization of the paper}

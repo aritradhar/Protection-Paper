@@ -6,6 +6,7 @@
 \centering
 \includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.85\linewidth]{approachOverview.pdf}
 \caption{\textbf{High-level approach overview of our solution.}  The \device connects the IO devices and the attacker-controlled host. We also assume that the network is also attacker-controlled.}
+\spacesave
 \label{fig:approachOverview}
 \centering
 \end{figure}
@@ -37,6 +38,7 @@ We only assume that the monitor, keyboard, mouse (in a word all the IO devices t
 \centering
 \includegraphics[trim={0 13cm 21.7cm 0}, clip, width=0.65\linewidth]{screenPartition.pdf}
 \caption{\textbf{\device's pointer tracking, pointer \& UI overlay, and security properties.} Our proposed method provides two layers of protection for IO to the user. 1. In all the parts of the screen, the \device provide pointer integrity (the gray part). 2. The green part of the screen where the \device overlays on the HDMI stream where the \device provide integrity and privacy (privacy is dependent on the application requirements) for the IO.}
+\spacesave
 \label{fig:screenPartition}
 \centering
 \end{figure}
@@ -78,6 +80,7 @@ Due to such limitations, and the inherent offline nature of this solution, we de
 \centering
 \includegraphics[trim={0 8cm 20cm 0}, clip, width=0.9\linewidth]{overlayScreenShot.pdf}
 \caption{\textbf{\device generated UI overlay} The figure shows the \name high-level approach. \one shows the non-protected part of the screen where the Ui is rendered by the untrusted host. \two shows the \device generated protected UI overlay that is hidden from the host. The protected part of the screen provides integrity and confidentiality of all user IO.}
+\spacesave
 \label{fig:screenshot_1}
 \end{figure}
 
