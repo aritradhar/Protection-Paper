@@ -40,11 +40,18 @@ InContext~\cite{huang2012clickjacking} presents different clickjacking attacks v
 
 
 \myparagraph{Our approach} In this paper, we present our solution \name, that leverage the concept of bump-in-the-wire~\cite{McCPerRei2006} to establish a trusted path between a remote server and user IO devices. \name uses a low-TCB auxiliary device that works a generic IO hub between all user IO devices and the untrusted host. 
-We assume that the host and the network are attacker-controlled. The trusted components include the remote server, \device, and IO devices. \device intercepts the display signal from the host, analyze them to understand the correct user context, such as if the user moved her mouse over a specific UI element and click there. The \device also intercepts the mouse and keyboard signal and match them with the display signal that is received from the untrusted host. If both the input and output co-relates, the \device signs all the input and send them to the remote server. \device does not have any explicit network capability to communicate with the remote server. Instead, the \device uses the host as an untrusted transport.
+We assume that the host and the network are attacker-controlled. The trusted components include the remote server, \device, and IO devices. \device intercepts the display signal from the host, analyze them to understand the correct user context, such as if the user moved her mouse over a specific UI element and click there. The \device also intercepts the mouse and keyboard signal and match them with the display signal that is received from the untrusted host. If both the input and output co-relates, the \device signs all the input and send them to the remote server. The signed input from the \device ensure input integrity and authenticity. \device does not have any explicit network capability to communicate with the remote server. Instead, the \device uses the host as an untrusted transport. \device ensures output integrity and confidentiality by sending a encoded UI to the host that only the \device ables to decode and overlay on the display signal. The overlay ensures that the host can neither observe nor manipulate any output information. 
+
+
 
 \myparagraph{Contribution} Here we provide the major contributions of this paper:
 \begin{mylist}
   \item
 \end{mylist}
 
-\myparagraph{Organization of the paper}
+\myparagraph{Organization of the paper} The organization of this paper is as the following. Section~\ref{sec:problemStatement} provides the detailed motivation, problem statement, state-of-the-art and the goals of this paper. Section~\ref{sec:approach} provides the system \& attacker model, challenges and a brief overview of our solution. We discussed the technical details of \name in Section~\ref{sec:systemDesign}. Section~\ref{sec:securityAnalysis} provides in-depth security analysis of \name. Section~\ref{sec:prototype} and~\ref{sec:eval} provide details of \name prototype implementation and corresponding evaluation. Finally, Section~\ref{sec:relatedWorks} and~\ref{sec:conclusion} provides the related research works and concludes the paper respectively.
+
+
+
+
+ 
