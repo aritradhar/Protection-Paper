@@ -1,7 +1,15 @@
-\input{preamble.tex}
-
 \newif\ifpaper
 \papertrue
+
+\newif\ifccs
+\ccstrue
+
+\ifccs
+\input{preamble_ccs.tex}
+\else
+\input{preamble.tex}
+\fi
+
 
 
 \newif\ifdesperatetime
@@ -12,7 +20,10 @@
 \begin{document}
 \title{\name: Root-of-Trust for IO}
 
+\ifccs
+\else
 \maketitle
+\fi
 
 \begin{abstract}
  
@@ -21,6 +32,12 @@ Recent exploitations, hardware-based malware and privacy breaches show that the 
 In this paper, we propose \name, a system brings \emph{root-of-trust} into the IO devices by introducing integrity and confidentiality to them in the presence of an attacker-controlled host. Today's off-the-shelf commodity hardware could easily integrate \name with little or no changes into the system. We implement \name using a low-TCB auxiliary device that acts as a trusted mediator all the IO devices and the untrusted host. \name generate proofs for all IO interactions between the user and the remote end-system that the user is accessing. \name capture the display signal, hence efficiently determine the current user context and intentions, and determine if the user input is tampered with by the malicious host or network. Thus, \name provides a generic and usable trusted path for all IO devices.
 
 \end{abstract}
+
+
+\ifccs
+\maketitle
+\else
+\fi
 
 \input{sections/intro}
 \input{sections/problemStatement}
@@ -35,8 +52,12 @@ In this paper, we propose \name, a system brings \emph{root-of-trust} into the I
 %\input{sections/attacks}
 \input{sections/conclusion}
 
+\ifccs
+\bibliographystyle{ACM-Reference-Format}
+\else
 \bibliographystyle{IEEEtran}
-%\bibliographystyle{ACM-Reference-Format}
+\fi
+
 \bibliography{references}
 
 \appendix
