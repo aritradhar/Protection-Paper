@@ -92,13 +92,14 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     child { node[neutral, yshift=8pt, xshift=10pt] (tc) {A. Transaction\\ confirmation Device}}  
     child { node[neutral, yshift=8pt, xshift=80pt] (td) {B. Trusted intermediary}
         child { node[neutral, yshift=0pt, xshift=-40pt] (hw) {B1. External\\ HW}}
-        child { node[neutral, yshift=0pt, xshift=-30pt] (teehv) {B2. TEE}}
+        child { node[neutral, yshift=0pt, xshift=-30pt] (tee) {B2. TEE}}
       child { node[neutral, yshift=0pt, xshift=-20pt] (br) {B3. Browser\\ Based}}   
      child { node[neutral, yshift=0pt, xshift=-5pt] (hv) {B4. Hypervisor\\ Based}} 
     }    ; 
       
 
     \node[below=0cm of hw](gurdion) {\textbf{\name}};
+    \node[below=0cm of tee] {VButton~\cite{li2018vbutton}};
     \node[below=0cm of tc] {Uni-dir~\cite{filyanov2011uni}};
     \node[below=0cm of hv](os) {Overshadow~\cite{Overshadow}};
     \node[below=0cm of os] {SGXIO~\cite{weiser2017sgxio}};
