@@ -1,122 +1,80 @@
-\section{\name: IO \& Activity Privacy}
-\label{sec:IOPrivacy}
-
-In this section we describe how \name provides IO and activity privacy.
-
-\subsection{Input privacy}
-\label{sec:systemDesign:inputPrivacy}
-
-\name provides input privacy from the malicious host. The input privacy feature keeps the malicious host from knowing the sensitive input from the user to the remote server. The outline of the protocol is illustrated in Figure~\ref{fig:inputPrivacy}. The flow of the protocol is as the following:
-
-\begin{enumerate}
-  \item[\one] User input from the keyboard to the \device.
-  \item[\two] The \device encrypts the data and sends to the host.
-  \item[\three] The host renders the frame and send it to the \device.
-  \item[\four] The \device overlays the plain text information on the frame and sends it to the display device.
-\end{enumerate}
-
-
+\iffalse
 \begin{figure}[h]
 \centering
-\includegraphics[trim={0 11cm 19cm 0}, clip, width=\linewidth]{outputPrivacy.pdf}
-\caption{Output privacy}
-\label{fig:outputPrivacy}
+\includegraphics[trim={0 11cm 16.5cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
+\caption{Input Confidentiality}
+\label{fig:inputPrivacy}
 \centering
-\end{figure}
-
-\iffalse
-\lstset{language=HTML, frame=tb, caption=\textbf{Partially encrypted HTML page.} , label = snippet:encryptedHTML, firstnumber =1}
-\begin{figure}[t]
-\small
-\begin{lstlisting}[mathescape=true]
-<!DOCTYPE html>
-<html> <body>
-<form action="/some_action">
-  First name:<br>
-  <input type="text" name="First name">
-  <br> Last name:<br>
-  <input type="text" name="name">
-  <encrypted>
-  [encrypted data]
-  </encrypted>
-  <input type="submit" value="Submit">
-</form> </body> </html>
-\end{lstlisting} 
-\end{figure}
-
-
-\lstset{language=HTML, frame=tb, caption=\textbf{Equivalent decrypted HTML page of Specification~\ref{snippet:encryptedHTML}.} , label = snippet:decryptedHTML, firstnumber =1}
-\begin{figure}[t]
-\small
-\begin{lstlisting}[mathescape=true]
-<!DOCTYPE html>
-<html> <body>
-<form action="/some_action">
-  First name:<br>
-  <input type="text" name="First name">
-  <br> Last name:<br>
-  <input type="text" name="name">
-  <input type="radio" name="candidate1"> Candidate 1
-  <input type="radio" name="candidate2"> Candidate 2
-  <input type="submit" value="Submit">
-</form> </body> </html>
-\end{lstlisting} 
 \end{figure}
 \fi
 
 
 
-\begin{figure}[h]
+\section{Input \& Output Confidentiality}
+\label{sec:confidentiality}
+
+
+In the previous sections (the main protocol is described in Section~\ref{sec:systemDesign:mainProtocol}), we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. Minor modification can be made to this method to introduce confidentiality to all IO. One of the major components for achieving IO confidentiality is to establish a secure channel between the server and the \device. Using this \tls channel, the remote server sends all the UI elements to the \device and the \device submits all user inputs to the remote server.
+
+\subsection{Establishing \tls}
+\label{sec:confidentiality:tls}
+
+\begin{figure}[t]
 \centering
-\includegraphics[trim={0 4cm 17cm 0}, clip, width=0.8\linewidth]{activityPrivacyRender.pdf}
-\caption{\textbf{Activity privacy.}}
+\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
+\caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
+\spacesave
+\label{fig:keyExchange}
+\centering
+\end{figure} 
+
+
+When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also decide if the user has a \device. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
+
+\begin{mylist}
+  \item The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
+  \item The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it.
+  \item If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
+  \item The \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server, and the \name JavaScripts loads the webpage.
+  \item In case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that do not involve \device for their operation.
+\end{mylist}
+
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ is the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}=(g^x)^y=(g^y)^x$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}.
+
+
+
+
+\lstset{language=HTML, frame=tb, caption=\small{\textbf{HTML page from the remote server that contains the encrypted UI specification for IO confidentiality.}} , label = snippet:encryptedHTML, firstnumber =1}
+\begin{figure}[t]
+\small
+\begin{lstlisting}[mathescape=true]
+<form action="/some_action">
+  Text box 1:<br>
+  <input type="text" name="text_box_1">
+  <br> text box 2:<br>
+  <input type="text" name="text_box_2">
+  <encrypted_qr><!-encrypted UI specification->
+  0x4a5c4... </encrypted_qr>
+  <script> [JS outputs QR code that encodes 
+  encrypted specification] </script>
+</form> 
+\end{lstlisting} 
+\end{figure}
+
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
+\caption{\textbf{IO confidentiality.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
+\spacesave
 \label{fig:activityPrivacy}
 \centering
 \end{figure}
 
+After the server and the \device establish the \tls channel, \name is ready to provide IO confidentiality.
 
-\subsection{Activity Privacy}
-\label{sec:systemDesign:mousePrivacy}
+\myparagraph{Output confidentiality} Output confidentiality ensures that no information sent from the remote server is visible to the host. To enable output confidentiality, the UI overlay mechanism that is described in Section~\ref{sec:systemDesign:transformation} is modified slightly. Here we \name does not require \name JS to transform all the UI elements to QR code specification. A small server-side module that is very similar to \name JS transforms the UI elements to the UI specification (one such specification is provided in Specification~\ref{snippet:UISpecification}) and encrypt the specification with the \tls session key (Section~\ref{sec:confidentiality:tls}). The \device decodes the QR code from the intercepted HDMI frames, decrypts the specification and overlays the UI on the HDMI frames. One example is provided in the HTML Snippet~\ref{snippet:encryptedHTML} where the \texttt{<encrypted>} tag contains the encrypted UI specification from the server. The \name JS (inside \texttt{<script>} tag) encodes this encrypted UI specification to a QR code.
 
-The host system can be made fully oblivious of the mouse pointer, user activity and UI for a small portion of the browser that handles sensitive data or operations. We call this part of the display \emph{Oblivious Window} (OW). We opted out from the device rendering the HTML element inside the OW. Figure~\ref{fig:activityPrivacy} shows the overall construct of this idea. The server stores pre-rendered images corresponding to the OW and send the encrypted image along with the HTML page to the host system. The host renders the webpage along with an encrypted OW encoded as a QR code. The content of the QR code is encrypted with the \tls key that is shared between the device and the remote server.
-
-The flow of the system can be divided into three parts: initialization, operation, and update.
-
-\myparagraph{Initialization.} The initialization phase establishes a secure channel between the device and the remote server over the HTTP channel between the host and the remote host. The \js snippet that is served by the remote server handles the handshake between the device and remote server that is required to establish the secure channel. The flow of the system is the following: 
-\begin{enumerate}
-  \item The user initiates a new session by pressing a button on the device. This makes the device ready for an initialization phased with a remote server.
-  \item When the user loads the web page from the remote server for the first time, the remote server sends its public certificate signed by a CA encoded in a QR code. 
-  \item The device reads the QR and sends keyboard events that encode the signed public certificate of the device's public key in base64 encoded format. The \js served by the remote serve gets the keystrokes and generates a \texttt{XMLHttpRequest}.
-  \item After exchanging the signed public certificates, the device and the remote server generates a shared secret that is used to encrypt and authenticate communications between the device and the remote server.
-\end{enumerate}
-
-\subsection{Side-channel Leakages from the Activity Privacy}
-\label{sec:systemDesign:sideChanneLeakage}
-
-Here we discuss the side channel leakages from the activity privacy that may lead to partial of full disclosure of the sensitive information that is overlaid by the \device on the display.
-
-\subsubsection{Entry and the exit of the pointer}
-
-\subsubsection{Time }
-
-
-\subsection{Output Privacy}
-\label{sec:systemDesign:outputPrivacy}
-
-\name provides output privacy and integrity protection of the output. One can think of this property as the ability to retrieve information from the remote server and display it to the user where the host system remains oblivious to the sensitive information. The overall flow of the system is illustrated in Figure~\ref{fig:outputPrivacy}. The steps are the following:
-
-\begin{enumerate}
-  \item[\one] The server sends the webpage and the encrypted data to the host over the \http connection between the browser and the remote server.
-  \item[\two] The host generates the display frames and the encrypted data from the server and send them to the \device over the HDMI.
-  \item[\three] The \device decrypts the encrypted data and overlay them on the frames that are received from the host.
-  \item[\four] The \device sends the frames and corresponding overlays to the display device where the user sees them.
-\end{enumerate}
-
-
-
-
-
-
-
-
+\myparagraph{Input Confidentiality} When the user enters her mouse pointer into the overlaid UI boundary, the \device stops transmitting any mouse data to the output system, making the host completely oblivious to any mouse movement done by the user. Likewise, when the user selects a UI element, for example, a radio button that is shown in Figure~\ref{fig:activityPrivacy}, the \device encrypts and signs the packets and sends the packet to the remote server making the input commands/values hidden from the attacker-controlled host.  
 
