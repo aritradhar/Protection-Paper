@@ -67,14 +67,16 @@ The second strawman solution is to use a trusted external device that contains a
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 13.5cm 11.5cm 0}, clip, width=\linewidth]{uiDetect_2.pdf}
-\caption{\textbf{Strawman solution: Text/Image Analysis of the UIs}. This strawman solution uses image/text analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
+\caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. The external device captures and sends two screenshots to the server. \one when the user sets the slider to the intended position to make sure that the host manipulate the value, and \two the user actually clicks the \texttt{OK} button to conforms her action.}
+%\caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. This strawman solution uses image/text analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
 \label{fig:uiDetect}
 \centering
 \end{figure}
 
 This strawman solution augments the previous by adding the information that the user sees on the display to prevent UI manipulation attack. As previous, the external trusted device sits between all the IO devices and the host. This enables the device to intercept the HDMI interface. As soon as the user executes an action, e.g., clicking the mouse, the device takes a snapshot of the screen, signs the snapshot and it to the server along with the signed input. The signed snapshot the device could reveal if the untrusted host manipulates the UI.
 
-On the remote server's side, the server uses image/text analysis to extract the information from the UI elements. Such as the label on a button or the markers on a slider, etc. In Figure~\ref{fig:uiDetect} we illustrate an example scenario. This involves the \device to take a screen-shot from the HDMI frame and use image analysis to understand user action. E.g., in Figure~\ref{fig:uiDetect}, \one the user first drags along the slider UI to set a value (\texttt{35}) and then \two the user clicks on the \texttt{OK}. The \device uses character recognition technique to extract the label and the data from the UI. This example shows the apparent complexity of this mechanism that does not scale with all UI. Further investigation and prototype implementation shows several drawbacks of this solution:
+On the remote server's side, the server uses image/text analysis to extract the information from the UI elements. Such as the label on a button or the markers on a slider, etc. In Figure~\ref{fig:uiDetect} we illustrate an example scenario. 
+%This involves the \device to take a screen-shot from the HDMI frame and use image analysis to understand user action. E.g., in Figure~\ref{fig:uiDetect}, \one the user first drags along the slider UI to set a value (\texttt{35}) and then \two the user clicks on the \texttt{OK}. The \device uses character recognition technique to extract the label and the data from the UI. This example shows the apparent complexity of this mechanism that does not scale with all UI. Further investigation and prototype implementation shows several drawbacks of this solution:
 
 
 \begin{mylist}
@@ -85,9 +87,10 @@ On the remote server's side, the server uses image/text analysis to extract the 
   \item \textbf{Privacy.} Taking the screenshot also reveal other applications that the user is operating which can be a threat to privacy.
 \end{mylist}
 
-Due to such limitations, and the inherent offline nature of this solution, we developed more efficient solution to preserve the integrity of user actions on a UI element. We describe the method in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server but provides better security and usability. We describe our solution in the following section.
+%Due to such limitations, and the inherent offline nature of this solution, we developed more efficient solution to preserve the integrity of user actions on a UI element. We describe the method in the following section. The solution has a trade-off that the developers need to incorporate some small changes to the remote server but provides better security and usability. We describe our solution in the following section.
 
 
+\iffalse
 \subsection{Challenges}
 
 
@@ -98,7 +101,7 @@ The second challenge arises while ensuring IO confidentiality. For mouse input, 
 
 
 Apart from these functional challenges for implementation, there exist multiple attack vectors that we want to provide protection. 
-
+\fi
 
 \subsection{High-level Description of the System}
 
