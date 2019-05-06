@@ -21,7 +21,7 @@ In the previous sections (the main protocol is described in Section~\ref{sec:sys
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.8\linewidth]{keyExchange.pdf}
+\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.85\linewidth]{keyExchange.pdf}
 \caption{\textbf{Key establishment.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
 \spacesave
 \label{fig:keyExchange}
@@ -65,7 +65,7 @@ After this, both the device and the remote server have each other's public certi
 
 \begin{figure}[t]
 \centering
-\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.85\linewidth]{activityPrivacyRender.pdf}
+\includegraphics[trim={0 3cm 16.5cm 0}, clip, width=0.88\linewidth]{activityPrivacyRender.pdf}
 \caption{\textbf{IO confidentiality.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
 \spacesave
 \label{fig:activityPrivacy}
