@@ -68,7 +68,7 @@ In this section, we analyze the security of \name by modeling the interaction be
 \subsubsection{Modelling the user behavior}
 \label{sec:securityAnalysis:modelling:user}
 
-Correctly understanding the user behaviour is critical as \name focuses to secure user interaction with the remote server. In Section~\ref{sec:systemDesign:SAS}, we explain secure attention sequence (SAS) that \name uses to provide visual cues. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. This is achieved by dimming out the screen except the pointer and the UI overlay. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
+Correctly understanding the user behaviour is critical as \name focuses to secure user interaction with the remote server. In Section~\ref{sec:systemDesign:userAttention}, we explain secure attention sequence (SAS) (Section~\ref{sec:systemDesign:userAttention:sas}) that \name uses to provide visual cues. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. This is achieved by dimming out the screen except the pointer and the UI overlay. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
 
 \subsubsection{Interaction Protocol} 
 The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
@@ -86,6 +86,7 @@ One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. A
 
 \begin{definition}{\textbf{Input integrity}}
 \label{def:inputIntegrity}
+
 Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. The host changes the message transformation to $[m']$ where $[m']\neq [m]$. We also define correct \user input to be $I$ when \host sends a correct message transformation $[m]$ to \user. We define input integrity as the property where the \server does not accept input $I'$ where $I'\neq I$from \user if the \host changes the message transformation.
 \end{definition}
 
@@ -124,15 +125,13 @@ This proof is also trivial. As we describe in the Definition~\ref{def:inputInteg
 \end{proof}
 
 \subsection{Proof of Integrity}
+\label{sec:securityAnalysis:integrity}
 
 From the theorem that are described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server can not be manipulated by the host. Also the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides IO integrity as long as we assume that the user can isolate the secure overlay from the rest of the screen (Discussed in Section~\ref{sec:securityAnalysis:modelling:user}).    
 
-\subsection{Attack on the mouse pointer tracking and overlay}
-\label{sec:securityAnalysis:mousePointer}
+\myparagraph{Attack on the mouse pointer tracking and overlay} The attacker may try to defeat \name mouse pointer tracking and overlay mechanism that is described in Section~\ref{sec:systemDesign:analysis} by introducing a mouse pointer that is visually more detectable by the user. Note that the \device overlaid mouse pointer is quite prominent and hard to miss. One can visualize it as an arms race between the attacker and the \device to grab the attention of the user. But, we can argue that this is a suboptimal strategy for the attacker as both of the pointers will be visible on the screen that can cause suspicion by the user.
 
-The attacker may try to defeat \name mouse pointer tracking and overlay mechanism that is described in Section~\ref{sec:systemDesign:analysis} by introducing a mouse pointer that is visually more detectable by the user. Note that the \device overlaid mouse pointer is quite prominent and hard to miss. One can visualize it as an arms race between the attacker and the \device to grab the attention of the user. But, we can argue that this is a suboptimal strategy for the attacker as both of the pointers will be visible on the screen that can cause suspicion by the user.
-
-\subsection{Attacks on confidentiality}
+\subsection{Proof of Confidentiality}
 The host shows a fake form mimicking the overlay of the device. If the user forgets SAS, he sends all information to the host (e.g., payment details, or votes!), so the confidentiality is lost. However, the integrity should remain, the device signs only data that user has typed.
 
 \subsection{Fast-switching}
