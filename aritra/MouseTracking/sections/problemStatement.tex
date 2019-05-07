@@ -123,10 +123,11 @@ Figure~\ref{fig:relatedWorksTree} provides a board classification of the related
 
 %In contrary, \name supports generic input devices and supports complex user interfaces and user interactions. Moreover, the complete automated nature of \name does not introduce any cognitive load on the user, making the system less susceptible to user error.
 
-\myparagraph{B1. External hardware-based solution}  Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. Additionally, Fidelius uses overlays to hide the keyboard input from the compromised host so that the input is only visible to the user. Fidelius only tackles keyboard-based input and utilizes SGX that separates Fidelius and \name in terms of the trust assumption. Systems such as ZTIC~\cite{weigold2011secure} uses external device with display and smartcard attachment to confirm inputs. Android OS also provide similar~\cite{android_confirm} mechanism to confirm protected transactions.
+\myparagraph{B1. External hardware-based solution}  Also known as the bump in the wire~\cite{McCPerRei2006}. Fidelius~\cite{Fidelius} uses raspberry pi's and Intel SGX to create a secure channel between the keyboard and the display device. By doing so, Fidelius provides secure input and display for the character-based device - keyboard. Additionally, Fidelius uses overlays to hide the keyboard input from the compromised host so that the input is only visible to the user. Fidelius only tackles keyboard-based input and utilizes SGX that separates Fidelius and \name in terms of the trust assumption. Systems such as ZTIC~\cite{weigold2011secure} uses external device with display and smartcard attachment to confirm inputs. Android OS also provide similar~\cite{android_confirm} mechanism to confirm protected transactions.
 %None of these works looked into complex user interactions such as mouse movement or complex user interfaces. 
 
-\myparagraph{B2. Trusted Execution Environments} TEEs specifically system TEEs such as ARM TrustZone is used in the literature to implement a trusted path between the IO devices and the users. %Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality.  
+
+\myparagraph{B2. Trusted Execution Environments} \red{aritra:do we only talk about TZ here?} TEEs specifically system TEEs such as ARM TrustZone is used in the literature to implement a trusted path between the IO devices and the users. %Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality.  
 VButton~\cite{li2018vbutton} leverages ARM TrustZone to overlay buttons on the mobile device to confirm if the user taps on a specific button. Our solution is fundamentally different from VButtion as i) VButtion is specifically tuned for mobile devices, employing ARM TrustZone whereas our solution is more generic and targets specifically PCs, and ii) mouse input is significantly different than touch-based input as mouse input involves continuous movement where the touch or taps are discrete events. In this paper, we concentrate on the non-specialized hardware platform where compatible TEE technologies such as ARM TrustZone may not be available, e.g., x86 architecture. 
 %Intel SGX based trusted path such as BastionSGX~\cite{BASTION-SGX} implements a trusted Bluetooth application inside an Intel SGX enclave to establish a trusted path between the keyboard and mouse and the SGX. But lack of output integrity makes the system unreliable as the paper failed to address how to transfer the mouse data reliably to the user and the remote server. 
 
@@ -148,7 +149,7 @@ VButton~\cite{li2018vbutton} leverages ARM TrustZone to overlay buttons on the m
 \subsection{Goals}
 \label{sec:problemStatement:goals}
 
-In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes our solution different from them is the specific settings that it targets.\footnote{Is this about threat model or goals?}
+In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes our solution different from them is the specific attacker model and the end goals that it targets.
 %We do not assume trust in the OS, particular drivers, TEEs, hypervisors, etc. As all of these techniques as mentioned earlier require trust on a large code base. Instead, our proposed solution solves the problem of building an efficient, trusted path using an off-the-shelf microcontroller and single board computers that require a bare-minimum trust assumption. The most distinguishing factor is the type of IOs our proposed system targets to protect, namely mouse/touch inputs and sophisticated user interfaces. Existing research works primarily targets character-based input devices such as keyboards, and the methods cannot be trivially applied to mouse/touch-based inputs or complex UI elements. 
 The general goals of this paper are the following:
 
@@ -157,7 +158,9 @@ The general goals of this paper are the following:
   
   \item  \textbf{Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption that does not rely on a specialized hypervisor or a trusted OS. %Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
   
-  \item \textbf{Usability.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device which is compatible with any platform (OS, processor architecture, etc.). Moreover, our goal is not to change the way users interacts with UI elements and imposing no or minimal cognitive load such as eliminating cognitive load that is imposed by transaction confirmation devices, i.e., looking to a security indicator and confirming actions, etc. 
+  \item \textbf{Easy to deploy.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device which is compatible with any platform (OS, processor architecture, etc.). 
+  
+  \item \textbf{Usage safety.} Moreover, our goal is not to change the way users interacts with UI elements and imposing no or minimal cognitive load such as eliminating cognitive load that is imposed by transaction confirmation devices, i.e., looking to a security indicator and confirming actions, etc. 
 
 \end{mylist}
 
