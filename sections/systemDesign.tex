@@ -153,7 +153,7 @@ Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystr
 
 When the user finishes providing her input over the input device (mouse and keyboard), the \device sends these values (with signature to ensure integrity) to the remote server. Sending these signed input values to the server requires an upstream channel from the \device to the server.
 
-\subsubsection{Upstream channel}\label{sec:systemDesign:commit:upload} As we mention in Section~\ref{sec:approach:systemAttackerModel}, the \device does not have any explicit means to communicate with the remote server. It relies on the untrusted host to communicate over the browser. The \name JS facilities this upstream channel (i.e., \device $\rightarrow$ remote server). We provide the implementation details of this upload channel in Section~\ref{sec:prototype:impl:upstream}.
+\subsubsection{\bfseries Upstream channel}\label{sec:systemDesign:commit:upload} As we mention in Section~\ref{sec:approach:systemAttackerModel}, the \device does not have any explicit means to communicate with the remote server. It relies on the untrusted host to communicate over the browser. The \name JS facilities this upstream channel (i.e., \device $\rightarrow$ remote server). We provide the implementation details of this upload channel in Section~\ref{sec:prototype:impl:upstream}.
  
 %The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
 
@@ -170,9 +170,9 @@ Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 \item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}).  When user clicks the \texttt{OK} button, the device signs the record. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
 \end{mylist} 
 
-\subsubsection{Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if an input field is annotated as \texttt{protect=``true''}, the server does not accept any input with the \device signature. This prevents the attacker-controlled host to submit data. 
+\subsubsection{\bfseries Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if an input field is annotated as \texttt{protect=``true''}, the server does not accept any input with the \device signature. This prevents the attacker-controlled host to submit data. 
 
-\subsubsection{Changing browser tabs or browsers}
+\subsubsection{\bfseries Changing browser tabs or browsers}
 The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieved the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs.
 
 
