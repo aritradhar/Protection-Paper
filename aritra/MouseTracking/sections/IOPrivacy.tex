@@ -10,11 +10,11 @@
 
 
 
-\section{Input \& Output Confidentiality}
+\section{\name IO Confidentiality}
 \label{sec:confidentiality}
 
 
-In the previous sections (the main protocol is described in Section~\ref{sec:systemDesign:mainProtocol}), we describe how the \name \js and the \device together transform and overlay the UI to ensure the integrity of the UI and the input data. Minor modification can be made to this method to introduce confidentiality to all IO. One of the major components for achieving IO confidentiality is to establish a secure channel between the server and the \device. Using this \tls channel, the remote server sends all the UI elements to the \device and the \device submits all user inputs to the remote server.
+In the previous sections, we describe how the \name \js and the \device together ensure the integrity of the IO. We now augment the design of \name achieve IO confidentiality alongside of the IO integrity. One of the major components for achieving IO confidentiality is to establish a secure channel (i.e., a \tls channel) between the remote server and the \device. \tls ensures that all the IO data from/to the user is hidden from the untrusted host.  
 
 \subsection{Establishing \tls}
 \label{sec:confidentiality:tls}
@@ -28,7 +28,7 @@ In the previous sections (the main protocol is described in Section~\ref{sec:sys
 \centering
 \end{figure} 
 
-
+Note that as described in the system model (see Section~\ref{sec:approach:systemAttackerModel}), the \device lacks any network capability. Hence the \device relies on the untrusted host as the communication channel. Remember that the \device and the remote server already has a bidirectional channel. The downstream channel is the encoded UI specification (see Section~\ref{sec:systemDesign:transformation}) sent by the server and the \name \js provides the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}). 
 When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also decide if the user has a \device. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
 \begin{mylist}
