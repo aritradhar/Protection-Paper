@@ -3,26 +3,8 @@
 
 
 In this section, we provide the technical details of \name integrity protection for IO devices. 
-%\name is built upon some base components such as ensuring pointer integrity, the integrity of the user interaction and UI elements, creating the communication channel between the \device and the remote server, etc. The most crucial of all is to how to preserve user's input on UI elements and preserve the integrity of the UI itself.
-
 
 \myparagraph{Set up} We assume that the \device manufacturer issues a certificate for each of the \device they deploy. The \device maintains a whitelist for the remote servers. The public certificate of the remote servers from the whitelist are embedded into the \device. This allows the \device to verify any statement that is signed by the remote server. It is also possible to establish a conventional \tls channel between the \device and the server using the HDMI channel. Note that \name does not require a secure channel, such as a \tls between the \device and the remote server for IO integrity. \tls between the \device and the remote server is strictly necessary to provide IO confidentiality that is discussed later in Section~\ref{sec:confidentiality}. We provide the details how to build this \tls channel in Section~\ref{sec:confidentiality:tls}. For now, we only focus on IO integrity.
-
-
-
-%\subsection{Output Integrity}
-
-\iffalse
-\subsection{Communication Channel}
-\label{sec:systemDesign:communicationChannel}
-
-The communication channel between the \device and the remote server is constructed without employing any and separate hardware/software or web-browser extensions. \name two-way communication works out-of-the-box using JavaScript code and QR code decoding routine that runs on the \device. The \emph{downstream} channel, i.e., the data channel from the remote server and the \device relies on the HDMI channel. The remote server encodes the information in the webpage in QR code that is intercepted by the \device from the HDMI channel and decoded.
-
-The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite keyboard-mouse device when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
-\fi
-
-%One instance of the communication channel is depicted in Figure~\ref{fig:keyExchange} that is used to establish a \tls channel between the \device and the remote server. The following section provides a detailed description of the key establishment protocol.
-
 
 
 
@@ -43,39 +25,13 @@ As we have seen in the strawman solution described in Section~\ref{sec:approach:
 
 %\subsubsection{\bfseries \device generated UI overlay} \label{sec:systemDesign:transformation:overlay}
  
-This approach requires a JavaScript code snippet that we call \name JS, that executes on the host. The \name JS snippet that is served with the webpage transforms the UI elements that require IO integrity protection. Note that \name JS runs on the browser and is not trusted in our system model. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has two phases: (i) UI $\rightarrow$ encoded specification generation, and (ii) Encoded specification $\rightarrow$ Overlay.
-
-
-
-
-%%%old specification
-% 
-% { "formId": "form1",
-%   "formName": "form1",
-%   "domain": "secure-site.io"
-%   "ui": [{ "id":"textbox_1",
-%      "type":"textbox",
-%      "label":"Sensitive field 1",
-%      "text":"secret data 1"},
-%    { "id":"textbox_2",
-%      "type":"textbox",
-%      "label":"Sensitive field 2",
-%      "text":"secret data 2"},
-%    {"id":"OK_button",
-%      "type":"button",
-%      "trigger":"true",
-%      "label":"OK"},    
-%    {"id":"Cancel_button",
-%      "type":"button",
-%      "trigger":"false",
-%      "label":"Cancel"}]}
-%%
+This approach requires a JavaScript code snippet that we call \name JS, that executes on the host. The \name JS snippet that is served with the webpage transforms the UI elements that require IO integrity protection. Note that \name JS runs on the browser and is not trusted in our system model. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has two phases: (i) UI $\rightarrow$ encoded specification generation, and (ii) Encoded specification $\rightarrow$ Overlay.    
 
 
 \begin{mylist}
 \item \textbf{UI $\rightarrow$ encoded specification generation.} In our implementation of \name, we use the QR code as the intermediate representation of the UI elements that the \name JS generates and the \device interprets. Note that \name is agnostic of the type of intermediate representation. We use the QR code as it is efficient and can be represented as an image in the HDMI stream that the \device intercepts. Figure~\ref{fig:transformation} shows this transformation between the step \one and \two. Note that the user never sees the QR code as it gets decoded and overlaid by the \device. The UI specification describes the UI elements that the \device interprets and use to generate the UI bitmap that is used for the overlay. One such concrete example of the UI specification is provided in Specification~\ref{snippet:UISpecification}. Section~\ref{sec:prototype:impl:qr} provides detailed implementation details of how the \name JS generates the encoded UI specification. 
 
-\item \textbf{Encoded specification $\rightarrow$ Overlay.} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. As the \device parses all the HDMI frames for the QR code, the overlay does not get interrupted by scrolling. As the specification sent by the server is signed (\texttt{signature} attribute in the UI specification mentioned in the Specification~\ref{snippet:UISpecification}), the \device-generated UI overlay ensures the integrity and the authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display, and the host can not manipulate the overlays, hence \emph{output integrity} is ensured.
+\item \textbf{Encoded specification $\rightarrow$ Overlay.} Overlay is the next phase where the QR code that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. As the \device parses all the HDMI frames for the QR code, the overlay does not get interrupted by scrolling. As the specification sent by the server is signed (\texttt{signature} attribute in the UI specification mentioned in the Specification~\ref{snippet:UISpecification}), the \device-generated UI overlay ensures the integrity and the authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display, and the host can not manipulate the overlays. Hence \emph{output integrity} is ensured.
 
 \end{mylist}
 
@@ -122,15 +78,15 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 \subsection{Focusing User Attention}
 \label{sec:systemDesign:userAttention}
 
-In the previous sections, we provide the mechanisms to provide output integrity. Note that the output integrity is crucial to ensure input integrity as the untrusted host may show arbitrary information to to the user (via the untrusted part of the display space) that may influence user. Hence, its is necessary for \name pro provide aid to the user so that they can distinguish the secure overlay of then screen from the insure part of the screen. There are two aspects of UI manipulation by the attacker-controlled host. i) spacial: where the attacker uses the non-overlaid part of the screen to influence the user, and ii) temporal: where the attacker may influence the user previously (in different webpage or application before) that leads to change of user input.
+In the previous sections, we provide mechanisms to provide output integrity. Note that the output integrity is crucial to ensure input integrity as the untrusted host may show arbitrary information to the user (via the untrusted part of the display space) that may influence the user. Hence, it is necessary for \name to provide a visual cue to the user so that they can distinguish the secure overlay of the screen from the insecure part of the screen. There are two aspects of UI manipulation by the attacker-controlled host. i) spacial: where the attacker uses the non-overlaid part of the screen to influence the user, and ii) temporal: where the attacker may influence the user previously (in different webpage or application before) that leads to change of user input.
 
-\myparagraph{Our solution} We propose to dimmed out non-overlaid part of the scree (all the screen area excluding the overlaid mouse pointer and the overlaid UI). Highlighting the sensitive part of the screen by dimming out the rest is a known security mechanism~\cite{huang2012clickjacking} used in the context of clickjacking attack. There are two ways to activate such mechanisms. Both have their pros and cons.
+\myparagraph{Our solution} We propose to dimmed out non-overlaid part of the screen (all the screen area excluding the overlaid mouse pointer and the overlaid UI). Highlighting the sensitive part of the screen by dimming out the rest is a known security mechanism~\cite{huang2012clickjacking} used in the context of the clickjacking attack. There are two ways to activate such mechanisms. Both have their pros and cons.
 
 
 \subsubsection{\bfseries Automated activation}
 \label{sec:systemDesign:userAttention:automated}
 
-This method can be triggered dimming out the non overlaid part of the screen automatically in specific situations, e.g., when the user moves her mouse pointer over the overlaid UI, or start moving mouse after a brief pause (like 5 seconds). One advantage of the automated trigger is that the user does not need to remember to trigger the mechanism, hence the system is resilient from the situation where the user needs to trigger it. However, dimming out a large portion of the scene frequently can diminish user experience significantly.   
+This method can be triggered dimming out the non-overlaid part of the screen automatically in specific situations, e.g., when the user moves her mouse pointer over the overlaid UI, or start moving the mouse after a brief pause (like 5 seconds). One advantage of the automated trigger is that the user does not need to remember to trigger the mechanism. Hence the system is resilient from the situation where the user needs to trigger it. However, dimming out a large portion of the scene frequently can diminish user experience significantly.   
 
 \subsubsection{\bfseries Secure Attention Sequence}
 \label{sec:systemDesign:userAttention:sas}
