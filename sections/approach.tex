@@ -12,7 +12,7 @@
 \end{figure}
 
 
-In this section, we present an overview of \name: our proposed solution. \name provides a trusted path between the user IO device and the remote server by utilizing a trusted embedded device (our approach fall into the category B1 in Figure~\ref{fig:relatedWorksTree}) as a mediator between all the IO devices and the untrusted host. We call this device: \device. The approach, on the high-level, uses the concept of the \emph{bump in the wire}~\cite{McCPerRei2006} to provide integrity and confidentiality to the user IO actions.  %The server also adds a small JavaScript snippet that allows the \device and the remote server to communicate. This eliminates any need for additional hardware/software aids.
+In this section, we present an overview of our solution: \name. \name, on the high-level, uses the concept of the \emph{bump in the wire}~\cite{McCPerRei2006} to provide integrity and confidentiality to the user IO{}s between the IO devices and the remote server. \name achieves this by utilizing a trusted embedded device as a mediator between all the IO devices and the untrusted host. Hence, our approach fall into the category \textbf{B1} (external HW) in Figure~\ref{fig:relatedWorksTree}. We call this trusted intermediary \device for the rest of this paper.   %The server also adds a small JavaScript snippet that allows the \device and the remote server to communicate. This eliminates any need for additional hardware/software aids.
 
 We first define the system and attacker model, then outline the challenges and the brief outline of our proposed solution.
 
