@@ -1,6 +1,16 @@
 \section{\name Approach Overview}
 \label{sec:approach}
 
+In this section, we present an overview of our solution: \name. \name, on the high-level, uses the concept of the \emph{bump in the wire}~\cite{McCPerRei2006} to provide integrity and confidentiality to the user IO{}s between the IO devices and the remote server. \name achieves this by utilizing a trusted embedded device as a mediator between all the IO devices and the untrusted host. Hence, our approach fall into the category \textbf{B1} (external HW) in Figure~\ref{fig:relatedWorksTree}. We call this trusted intermediary \device for the rest of this paper.   %The server also adds a small JavaScript snippet that allows the \device and the remote server to communicate. This eliminates any need for additional hardware/software aids.
+
+We first define the system and attacker model, then outline the challenges and the brief outline of our proposed solution.
+
+%Given the problem statement discussed in Section~\ref{sec:problemStatement}, we first define the attacker model we consider in our proposed system.
+
+
+\subsection{System and Attacker Model}
+\label{sec:approach:systemAttackerModel}
+
 
 \begin{figure}[t]
 \centering
@@ -11,16 +21,6 @@
 \centering
 \end{figure}
 
-
-In this section, we present an overview of our solution: \name. \name, on the high-level, uses the concept of the \emph{bump in the wire}~\cite{McCPerRei2006} to provide integrity and confidentiality to the user IO{}s between the IO devices and the remote server. \name achieves this by utilizing a trusted embedded device as a mediator between all the IO devices and the untrusted host. Hence, our approach fall into the category \textbf{B1} (external HW) in Figure~\ref{fig:relatedWorksTree}. We call this trusted intermediary \device for the rest of this paper.   %The server also adds a small JavaScript snippet that allows the \device and the remote server to communicate. This eliminates any need for additional hardware/software aids.
-
-We first define the system and attacker model, then outline the challenges and the brief outline of our proposed solution.
-
-%Given the problem statement discussed in Section~\ref{sec:problemStatement}, we first define the attacker model we consider in our proposed system.
-
-
-\subsection{System and Attacker Model}
-\label{sec:approach:systemAttackerModel}
 
 We consider a system model where the user wants to sends the input to a safety-critical remote end-system. The model is depicted in Figure~\ref{fig:approachOverview} that shows the untrusted host, remote server and the user IO devices. 
 
@@ -62,7 +62,7 @@ The second strawman solution is to use a trusted external device that contains a
 \subsubsection{\bfseries Strawman solution III}
 \label{sec:approach:strawman:3}
 
-\begin{figure}[t]
+\begin{figure}[h]
 \centering
 \includegraphics[trim={0 13.5cm 11.5cm 0}, clip, width=\linewidth]{uiDetect_2.pdf}
 \caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. The external device captures and sends two screenshots to the server. \one when the user sets the slider to the intended position to make sure that the host manipulate the value, and \two the user clicks the \texttt{OK} button to conforms her action.}
