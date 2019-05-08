@@ -127,30 +127,23 @@ This proof is also trivial. As we describe in the Definition~\ref{def:inputInteg
 \subsection{Proof of Integrity}
 \label{sec:securityAnalysis:integrity}
 
-From the theorem that are described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server can not be manipulated by the host. Also the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides IO integrity as long as we assume that the user can isolate the secure overlay from the rest of the screen (Discussed in Section~\ref{sec:securityAnalysis:modelling:user}).    
+From the theorem that are described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server can not be manipulated by the host. Also the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides IO integrity as long as we assume that the user does not get influenced by any information shown in the non-overlaid part of the screen (Discussed in Section~\ref{sec:securityAnalysis:modelling:user}). \name additionally protects against replay attack as the form also contains nonce to ensure freshness.  
 
-\myparagraph{Attack on the mouse pointer tracking and overlay} The attacker may try to defeat \name mouse pointer tracking and overlay mechanism that is described in Section~\ref{sec:systemDesign:analysis} by introducing a mouse pointer that is visually more detectable by the user. Note that the \device overlaid mouse pointer is quite prominent and hard to miss. One can visualize it as an arms race between the attacker and the \device to grab the attention of the user. But, we can argue that this is a suboptimal strategy for the attacker as both of the pointers will be visible on the screen that can cause suspicion by the user.
+\myparagraph{Attack on the mouse pointer tracking and overlay} The attacker may try to defeat \name mouse pointer tracking and overlay mechanism that is described in Section~\ref{sec:systemDesign:analysis} by introducing a mouse pointer that is visually more detectable by the user. Note that the \device overlaid mouse pointer is quite prominent and hard to miss. One can visualize it as an arms race between the attacker and the \device to grab the attention of the user. But, we can argue that this is a suboptimal strategy for the attacker as both of the pointers will be visible on the screen that can cause suspicion by the user. Hence, we can conclude that executing clickjacking-like attacks are not possible in \name.
 
 \subsection{Proof of Confidentiality}
 The host shows a fake form mimicking the overlay of the device. If the user forgets SAS, he sends all information to the host (e.g., payment details, or votes!), so the confidentiality is lost. However, the integrity should remain, the device signs only data that user has typed.
 
+\myparagraph{Side-channel leakages} Even though, the \device ensures that no mouse, keyboard data reach to the untrusted host when the user executes some operation over the overlaid UI, one can not rule out side-channel leakages. One example could be the amount of time that user user spends or the entry/exit position of the mouse pointer may reveal some information about the input. 
+
 \subsection{Fast-switching}
 The attacker can show QR-code, so the device renders the overlay. The host removes QR-code (and the device removes the overlay), then device shows a fake render that mimics the one from the device to show some malicious views. This can be repeated many times.
-
-\subsection{Form manipulation}
-The attacker can try to add, change or remove elements into the form rendered by the device. E.g., if you have 4 candidates to vote, it wants to show only one. This should be prevented by the signature.
-
-\subsection{Clickjacking}
-The host shows a second mouse shifted with x pixels from the real one and wants to trick the user into clicking the 'Yes' button on the overlay instead of 'No'. Clickjacking should not be possible on the overlay, because the host cursor is not visible.
 
 \subsection{Hover activity}
 The attacker wants to learn what button did the user click by tracking the cursor movement. This should be prevented if the device does not send any event to the host when inside the overlay.
 
 \subsection{Timing attacks on keystrokes}
 This should be ruled out by design because the device does not send any event to the host when user is typing to the protected elements.
-
-\subsection{Replay Attack}
-What if the user sends a payment once, and the attacker replays same encrypted data multiple times?
 
 
 
