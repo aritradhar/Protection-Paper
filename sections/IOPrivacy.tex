@@ -16,32 +16,6 @@
 
 In the previous sections, we describe how the \name \js and the \device together ensure the integrity of the IO. We now augment the design of \name achieve IO confidentiality alongside of the IO integrity. One of the major components for achieving IO confidentiality is to establish a secure channel (i.e., a \tls channel) between the remote server and the \device. \tls ensures that all the IO data from/to the user is hidden from the untrusted host.  
 
-\subsection{Establishing \tls}
-\label{sec:confidentiality:tls}
-
-\begin{figure}[t]
-\centering
-%\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.85\linewidth]{keyExchange.pdf}
-\includegraphics[trim={0 10cm 17cm 0}, clip, width=0.85\linewidth]{keyExchange_1.pdf}
-\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
-\spacesave
-\label{fig:keyExchange}
-\centering
-\end{figure} 
-
-Note that as described in the system model (see Section~\ref{sec:approach:systemAttackerModel}), the \device lacks any network capability. Hence the \device relies on the untrusted host as the communication channel. Remember that the \device and the remote server already has a bidirectional channel. The downstream channel is the encoded UI specification (see Section~\ref{sec:systemDesign:transformation}) sent by the server and the \name \js provides the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}). 
-When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also decide if the user has a \device. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
-
-\begin{mylist}
-  \item[\one] The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
-  \item[\two] The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it. If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
-  \item[\three] \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server.
-  \item[\four] The remote server gets the signed certificate from the \device,. If the verification is successful, the server derives the shared secret.
- 
-\end{mylist}
-
-After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ is the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}=(g^x)^y=(g^y)^x$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}. In the case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that do not involve \device for their operation.
-
 
 \subsection{IO Operations}
 \label{sec:confidentiality:io}
@@ -76,7 +50,7 @@ After this, both the device and the remote server have each other's public certi
 \centering
 \end{figure}
 
-After the server and the \device establish the \tls channel, \name is ready to provide IO confidentiality.
+After the server and the \device establish the \tls channel (we describe the technical details of the \tls channel in the next section, Section~\ref{sec:confidentiality:tls}), \name is ready to provide IO confidentiality.
 
 \myparagraph{Output confidentiality} Output confidentiality ensures that no information sent from the remote server is visible to the host. To enable output confidentiality, the UI overlay mechanism that is described in Section~\ref{sec:systemDesign:transformation} is modified slightly. Here we \name does not require \name JS to transform all the UI elements to QR code specification. A small server-side module that is very similar to \name JS transforms the UI elements to the UI specification (one such specification is provided in Specification~\ref{snippet:UISpecification}) and encrypt the specification with the \tls session key (Section~\ref{sec:confidentiality:tls}). The \device decodes the QR code from the intercepted HDMI frames, decrypts the specification and overlays the UI on the HDMI frames. One example is provided in the HTML Snippet~\ref{snippet:encryptedHTML}. The corresponding UI is illustrated in Figure~\ref{fig:activityPrivacy}. The \texttt{<encrypted>} tag contains the encrypted UI specification from the server. The \name JS (inside \texttt{<script>} tag) encodes this encrypted UI specification to a QR code.
 
@@ -85,5 +59,30 @@ After the server and the \device establish the \tls channel, \name is ready to p
 \myparagraph{SAS for confidentiality} The secure attention sequence or SAS (see Section~\ref{sec:systemDesign:userAttention:sas}) is more crucial in IO confidentiality then it is in integrity. As the untrusted host can trick the user into putting her sensitive information on a forged form. Hence, the user needs to remember the SAS to distinguish if the sensitive UI is \device generated or rendered by the host. Note that the automated activation (Section~\ref{sec:systemDesign:userAttention:automated}) is insufficient as any given time, the host can also emulate the automated activation to trick the user into providing sensitive information to a illegitimate UI. When the user moves her mouse over the overlaid UI, the \device dimmed out rest of the part of the screen and it stayed dimmed till the user submits the data or move her mouse out of the overlay.
 
 
+\subsection{Establishing \tls}
+\label{sec:confidentiality:tls}
+
+\begin{figure}[t]
+\centering
+%\includegraphics[trim={0 8cm 18cm 0}, clip, width=0.85\linewidth]{keyExchange.pdf}
+\includegraphics[trim={0 10cm 17cm 0}, clip, width=0.85\linewidth]{keyExchange_1.pdf}
+\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
+\spacesave
+\label{fig:keyExchange}
+\centering
+\end{figure} 
+
+Note that as described in the system model (see Section~\ref{sec:approach:systemAttackerModel}), the \device lacks any network capability. Hence the \device relies on the untrusted host as the communication channel. Remember that the \device and the remote server already has a bidirectional channel. The downstream channel is the encoded UI specification (see Section~\ref{sec:systemDesign:transformation}) sent by the server and the \name \js provides the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}). 
+When the user opens up a webpage that supports \name mechanism, key exchange is the first step that is executed by the \device. Also, the key exchange phase is crucial as the remote server also decide if the user has a \device. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange mechanism of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
+
+\begin{mylist}
+  \item[\one] The remote web server serves the web page that shows a QR code that encodes the signed public key of the remote server (server hello in TLS). This page has a $5$ seconds timeout.
+  \item[\two] The device captures the frames and looks for a QR code. As soon as the device finds one, the device decodes the QR code and verifies it. If the verification is successful, the device emulates itself as a keyboard device to the host system. The device then encodes its signed public certificate to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
+  \item[\three] \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server.
+  \item[\four] The remote server gets the signed certificate from the \device,. If the verification is successful, the server derives the shared secret.
  
+\end{mylist}
+
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculates the shared secret using the authenticated Diffie-Hellman protocol~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ is the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}=(g^x)^y=(g^y)^x$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}. In the case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, \name JavaScript snippet concludes that the user does not have a \device. This allows the webpage to fallback to conventional web UIs that do not involve \device for their operation.
+
 
