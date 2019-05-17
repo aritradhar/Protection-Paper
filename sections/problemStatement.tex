@@ -91,12 +91,12 @@ not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
 neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 ]]
     \node[neutral, xshift=10pt](root) {Trusted path}
-    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {A. Transaction\\ confirmation Device}}  
-    child { node[neutral, yshift=8pt, xshift=80pt] (td) {B. Trusted intermediary}
-        child { node[neutral, yshift=0pt, xshift=-40pt] (hw) {B1. External\\ HW}}
-        child { node[neutral, yshift=0pt, xshift=-30pt] (tee) {B2. TEE}}
-      child { node[neutral, yshift=0pt, xshift=-20pt] (br) {B3. Browser\\ Based}}   
-     child { node[neutral, yshift=0pt, xshift=-5pt] (hv) {B4. Hypervisor\\ Based}} 
+    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {\textbf{A.} Transaction\\ confirmation Device}}  
+    child { node[neutral, yshift=8pt, xshift=80pt] (td) {\textbf{B.} Trusted intermediary}
+        child { node[neutral, yshift=0pt, xshift=-40pt] (hw) {\textbf{B1.} External\\ HW}}
+        child { node[neutral, yshift=0pt, xshift=-30pt] (tee) {\textbf{B2.} TEE}}
+      child { node[neutral, yshift=0pt, xshift=-20pt] (br) {\textbf{B3.} Browser\\ Based}}   
+     child { node[neutral, yshift=0pt, xshift=-5pt] (hv) {\textbf{B4.} Hypervisor\\ Based}} 
     }    ; 
       
 
@@ -156,11 +156,11 @@ In the above, we discussed several solutions and research works that solve the p
 The general goals of this paper are the following:
 
 \begin{mylist}
-  \item  \textbf{Rich set of IO security features.} Most of the existing trusted path solutions focus on a minimal set of feature (e.g., only support for keyboard). The primary goal of \name is to be compatible with generic IO device (such as a keyboard, mouse, touch screen, display, etc. in x86 architecture), and to provide a rich set of IO security (such as IO integrity and confidentiality). 
+  \item  \textbf{Rich set of IO security features.} Most of the existing trusted path solutions focus on a minimal set of feature (e.g., only support for keyboard). The primary goal of \name is to be compatible with generic IO device (such as a keyboard, mouse, touch screen, display, etc. in x86 architecture), and to provide integrity and confidentiality to all IO. 
   
   \item  \textbf{Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption that does not rely on a specialized hypervisor or a trusted OS. %Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
   
-  \item \textbf{Easy to deploy.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device which is compatible with any platform (OS, processor architecture, etc.). 
+  \item \textbf{Easy to deploy.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device that uses off-the-shelf components and the solution is compatible with any platform (OS, processor architecture, etc.). 
   
   \item \textbf{Usage safety.} Moreover, our goal is not to change the way users interacts with UI elements and imposing no or minimal cognitive load such as eliminating the need to see an external device to confirm a transaction, looking to a security indicator and confirming actions, etc. By doing so, we do not risk user habituation. 
 
