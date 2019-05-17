@@ -3,7 +3,7 @@
 
 In this section, we motivate our work in the context of securing user's IO to remote servers. We also describe selected existing literature that tackles the relevant problem, and we discuss how those works lack proper solution and how our solution is different from them. Lastly, we explain the goals of our work.
 
-\subsection{Motivation: IO for Remote Data and Safety-critical System}
+\subsection{Motivation: Secure IO with Remote Safety-critical System}
 
 A user communicates with a remote server through a host, which gives the host access to the plaintext IO data that is exchanged between the user and the remote server. The host consists of large and complex system software such as the modern operating systems, device drivers, etc., applications such as browser, and diverse set of hardware components expose the host to a large attack surface. An adversary that controls the user's host can alter user intentions, i.e., it can perform arbitrary actions on behalf of the user, modify the input parameters, or show wrong information to the user. Such an adversary is very powerful and difficult to be detected or prevented by a remote server. The consequences of such attacks might be severe when safety-critical applications are targeted. The attacker can pass the wrong input to a remote safety-critical system such as a medical device, power plant, etc.
 
