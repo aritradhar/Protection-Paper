@@ -70,59 +70,6 @@ In this section, we analyze the security of \name by modeling the interaction be
 
 Correctly understanding the user behaviour is critical as \name focuses to secure user interaction with the remote server. In Section~\ref{sec:systemDesign:userAttention}, we explain secure attention sequence (SAS) (Section~\ref{sec:systemDesign:userAttention:sas}) that \name uses to provide visual cues. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. This is achieved by dimming out the screen except the pointer and the UI overlay. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
 
-\subsubsection{Interaction Protocol} 
-The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
-%Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
-In this model, we simplify the user input by assuming that the \user only provides an input $I$ only after observing a message transformation $[m]$. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue until \user finishes her input. After every input \host hands over new message transformation to \user (either result of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
-
-We also define two functions:
-\begin{align*}
-\texttt{Input()}&:[m]\rightarrow I \\
-\texttt{Transform()}&:m,I\rightarrow [m'],\ \exists i\in I:i=\phi
-\end{align*}
-Both of them are \emph{bijective}.
-
-One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
-
-\begin{definition}{\textbf{Input integrity}}
-\label{def:inputIntegrity}
-
-Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. The host changes the message transformation to $[m']$ where $[m']\neq [m]$. We also define correct \user input to be $I$ when \host sends a correct message transformation $[m]$ to \user. We define input integrity as the property where the \server does not accept input $I'$ where $I'\neq I$from \user if the \host changes the message transformation.
-\end{definition}
-
-\begin{definition}{\textbf{Output integrity}}
-\label{def:outputIntegrity}
-Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. Output integrity defines that in all circumstances, \user receives the correct message transformation $[m]$ from \host.
-\end{definition}
-
-\myparagraph{Verification process} \server checks $\forall i=1\ldots n$ $$[m']_i = \texttt{Transform}(m_{i-1}, I_{i-1})$$ where $I_0=\phi$.
-
-\begin{theorem}
-\label{theorem:th1}
-If \user does not send all the transformations till $[m']_i$ corresponding to the input $I_i$, input integrity can not be achieved. 
-\end{theorem}
-
-\begin{proof}
-If \user does not attach all the transformation till $[m']_i$, i.e., $[m']_1, [m']_2, \ldots, [m']_{i-1}, [m']_i$  corresponding to inputs $I_1, I_2,\ldots, I_{i-1}, I_i$, then the server can not verify all the transformations corresponding to the input. \host could modify a specific $[m]_x$ to influence \user input.
-\end{proof}
-
-\begin{theorem}
-\label{theorem:th2}
-If the channel from \user and \server is not authenticated, input integrity is not achievable. But the channel from \server to \user does not require to be secure as long a \user provides the message transformation $[m']_i$ corresponding to every input $I_i$.
-\end{theorem}
-
-\begin{proof}
-The proof is trivial. If the channel from \user to \server is not authenticated, any input provided by \user can be manipulated by \host without a trace. Hence input integrity is not achievable. As long as \user sends message transformation along with the input, a manipulated message transformation bt \host would be detectable by \server (see Theorem~\ref{theorem:th1}).
-\end{proof}
-
-\begin{theorem}
-\label{theorem:th3}
-Ensuring output integrity also ensures input integrity provided there is an authenticated channel from \user to \server.
-\end{theorem}
-
-\begin{proof}
-This proof is also trivial. As we describe in the Definition~\ref{def:inputIntegrity} and~\ref{def:outputIntegrity}, if all the message transform from \host $[m']=[m]$, and \host always executes \texttt{transform()} properly, the input integrity is preserved. As \name ensures output integrity and all the input from the user is signed by the \device, \name preserves input integrity. 
-\end{proof}
 
 \subsection{Proof of Integrity}
 \label{sec:securityAnalysis:integrity}
