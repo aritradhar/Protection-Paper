@@ -68,7 +68,67 @@ In Table~\ref{tab:relatedWorks} we summarize the existing research work based on
 
 
 \section*{Proof for Input Integrity}
+\label{appendix:security}
 
+
+
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}[scale=0.15]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (66,-23.1) circle (3);
+\draw (66,-23.1) node {\server};
+\draw [black] (66,-23.1) circle (2.4);
+\draw [black] (45.2,-23.1) circle (3);
+\draw (45.2,-23.1) node {\host};
+\draw [black] (26.9,-23.1) circle (3);
+\draw (26.9,-23.1) node {\user};
+\draw [black] (47.743,-21.516) arc (116.95563:63.04437:17.332);
+\fill [black] (47.74,-21.52) -- (48.68,-21.6) -- (48.23,-20.71);
+\draw (55.6,-19.13) node [above] {$m$};
+\draw [black] (29.352,-21.382) arc (118.8302:61.1698:13.89);
+\fill [black] (29.35,-21.38) -- (30.29,-21.43) -- (29.81,-20.56);
+\draw (36.05,-19.16) node [above] {$[m']$};
+\draw [black] (42.565,-24.526) arc (-66.78269:-113.21731:16.527);
+\fill [black] (42.57,-24.53) -- (41.63,-24.38) -- (42.03,-25.3);
+\draw (36.05,-26.36) node [below] {$(I,[m'])$};
+\draw [black] (63.369,-24.535) arc (-65.91058:-114.08942:19.034);
+\fill [black] (63.37,-24.53) -- (62.43,-24.4) -- (62.84,-25.32);
+\draw (55.6,-26.69) node [below] {$(I,[m'])$};
+\end{tikzpicture}
+\end{center}
+\caption{Finite state machine that depicts the interaction between the user (\user), host (\host) and the server (\server).}
+\label{fig:fsm}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\tikzset{
+  every picture/.append style={
+    transform shape,
+    scale=0.8
+  }
+ }
+\begin{sequencediagram}
+\newinst{u}{\user}
+\newinst[3]{h}{\host}
+\newinst[3]{s}{\server}
+\mess{s}{$m$}{h}
+\mess{h}{$[m']_1$}{u}
+\mess{u}{$I_1,[m']_1$}{h}
+%\mess{h}{$[m']_2$}{u}
+%\mess{u}{$I_2,[m']_2$}{h}
+\mess{h}{...}{u}
+\mess{u}{...}{h}
+\mess{h}{$[m']_n$}{u}
+\mess{u}{$I_n,[m']_n$}{h}
+\mess{h}{$I_1,I_2,...,I_n$}{s}
+\mess{h}{$[m']_1,[m']_2,...,[m']_n$}{s}
+\end{sequencediagram}
+\end{center}
+\caption{Protocol transcript between the \server, \user and \host that shows one trace from the FSM depicted in Figure~\ref{fig:fsm}.}
+\label{fig:protocol}
+\end{figure}
 
 \subsection{Interaction Protocol} 
 
