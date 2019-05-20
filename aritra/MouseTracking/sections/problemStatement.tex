@@ -111,7 +111,7 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     
     \end{tikzpicture}
     
-   \caption{\textbf{Summarization of existing trusted path solutions} by their approach. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:sec:summaryResearch}.}\spacesave
+   \caption{\textbf{Summarization of existing trusted path solutions} by their approach. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch}.}\spacesave
      \label{fig:relatedWorksTree}
 \end{figure}
 }
@@ -151,9 +151,7 @@ VButton~\cite{li2018vbutton} leverages ARM TrustZone to overlay buttons on the m
 \subsection{Goals}
 \label{sec:problemStatement:goals}
 
-In the above, we discussed several solutions and research works that solve the problem of constructing a trusted path in different ways. What makes our solution different from them is the specific attacker model and the end goals that it targets.
-%We do not assume trust in the OS, particular drivers, TEEs, hypervisors, etc. As all of these techniques as mentioned earlier require trust on a large code base. Instead, our proposed solution solves the problem of building an efficient, trusted path using an off-the-shelf microcontroller and single board computers that require a bare-minimum trust assumption. The most distinguishing factor is the type of IOs our proposed system targets to protect, namely mouse/touch inputs and sophisticated user interfaces. Existing research works primarily targets character-based input devices such as keyboards, and the methods cannot be trivially applied to mouse/touch-based inputs or complex UI elements. 
-The general goals of this paper are the following:
+The existing solutions and their drawbacks provide the scope of our paper where we targets the following goals:
 
 \begin{mylist}
   \item  \textbf{Rich set of IO security features.} Most of the existing trusted path solutions focus on a minimal set of feature (e.g., only support for keyboard). The primary goal of \name is to be compatible with generic IO device (such as a keyboard, mouse, touch screen, display, etc. in x86 architecture), and to provide integrity and confidentiality to all IO. 
