@@ -59,23 +59,29 @@ The first strawman solution is to use an external trusted device that is physica
 
 The second strawman solution uses the concept of bump-in-the-wire, i.e., a trusted external device that contains a small program that signs all the user input and sends the signed input to the remote server. The device works as the second factor for input integrity as the remote server can verify if the signed input matched with the user input that is sent by the browser running on the untrusted host. IntegriKey~\cite{IntegriKey} provides such a solution that uses \webusb to send the signed input to the remote server. However, as the external device is completely oblivious to the display information that the untrusted host renders, it is vulnerable to a sophisticated UI manipulation attack. One such example could be, user's correct input is $100$ that she typed on a text box. However the host shows her $10$, thinking that she mistyped, the user types another $0$ that makes the recorded input from the user $1000$. This attack violates input integrity as the host can now submit $1000$ to the remote server as the external trusted device also signs $1000$ as the correct input received from the user.  
 
+
 \subsubsection{\bfseries Strawman solution III}
 \label{sec:approach:strawman:3}
 
+This strawman solution is identical to Fidelius~\cite{Fidelius} where an external device sits between all the IO device and overlays on the textbox to achieve input confidentiality. As the device does not look into the output on the screen, the attacker can always manipulate the UI (such as changing the unit of the input or add some malicious instruction) to break the integrity of the user data.
+
+\subsubsection{\bfseries Strawman solution IV}
+\label{sec:approach:strawman:4}
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 13.5cm 11.5cm 0}, clip, width=\linewidth]{uiDetect_2.pdf}
+\caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. The external device captures and sends two screenshots to the server. \one when the user sets the slider to the intended position to make sure that the host manipulate the value, and \two the user clicks the \texttt{OK} button to conforms her action.}\spacesave
+%\caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. This strawman solution uses image/text analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from a lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
+\label{fig:uiDetect}
+\centering
+\end{figure}
 
 
 This strawman solution augments the previous by adding the information that the user sees on display to prevent UI manipulation attack. As previous, the external trusted device sits between all the IO devices and the host. This enables the device to intercept the HDMI interface. As soon as the user executes an action, e.g., clicking the mouse, the device takes a snapshot of the screen, signs the snapshot and it to the server along with the signed input. The signed snapshot the device could reveal if the untrusted host manipulates the UI. On the remote server's side, the server uses image/text analysis to extract the information from the UI elements. Such as the label on a button or the markers on a slider, etc. In Figure~\ref{fig:uiDetect} we illustrate an example scenario where the device sends two screenshots of the user interaction \one inputting the value via the slider, and \two confirming the action by pressing the \texttt{OK} button.
 %This involves the \device to take a screen-shot from the HDMI frame and use image analysis to understand user action. E.g., in Figure~\ref{fig:uiDetect}, \one the user first drags along the slider UI to set a value (\texttt{35}) and then \two the user clicks on the \texttt{OK}. The \device uses character recognition technique to extract the label and the data from the UI. 
 This example shows the apparent complexity of this mechanism that does not scale with all UI. Further investigation and prototype implementation shows several drawbacks of this solution:
 
-\begin{figure}[h]
-\centering
-\includegraphics[trim={0 13.5cm 11.5cm 0}, clip, width=\linewidth]{uiDetect_2.pdf}
-\caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. The external device captures and sends two screenshots to the server. \one when the user sets the slider to the intended position to make sure that the host manipulate the value, and \two the user clicks the \texttt{OK} button to conforms her action.}
-%\caption{\textbf{Strawman solution III: Text/Image Analysis of the UIs}. This strawman solution uses image/text analysis to detect the UI element leveraging edge detection and optical character recognition (to extract the labels on the UI element). The solution suffers from a lack of robustness where the \device sometime fails to correctly classify the UI elements/labels due to mouse position or colors.}
-\label{fig:uiDetect}
-\centering
-\end{figure}
 
 \begin{mylist}
   \item This method does not capture spatiotemporal user context. That implies that the attacker may show some information on the screen to influence user input that may not be captured by the screenshot. Also, the attacker may influence user on a separate webpage or application.
@@ -113,6 +119,8 @@ Apart from these functional challenges for implementation, there exist multiple 
 %\myparagraph{Components} \name assumes that IO devices (mouse, keyboard, and display) are connected to a trusted component called \device. This setup allows the trusted \device to receive raw inputs from the user and show overlays on display. The goal of \name is to keep the code running on the \device minimal and at the same time support a wide variety of applications. Thus, we avoid running any application, such as browsers, on the trusted component to keep the TCB very small.
 
 \myparagraph{Key idea} %\red{The key idea of \name is to introduce \emph{root-of-trust} for the IO devices that provide a trusted path to remote servers. This is achieved by the \device that provide proof for integrity and confidentiality for all user IO. Thus making the IO devices trustworthy to the users. }
+The strawman solutions in the previous section provides the intuition for the design of our solution \name. All the exiting trusted path solution failed to achieve input integrity as it can not be achieved without the output integrity. Output integrity ensures that the user receives all the information from the remote server on her output devices as it was originally intended by the server. The design of \name is build upon this idea of ensuring the output integrity.   
+
 The goal of the \device is to guarantee the security %the integrity (and the confidentiality when required) 
 of the user interaction with a sensitive application on the remote server. Our system configuration provides the \device with two capabilities: i) intercept the raw inputs generated by the user, and ii) render UI objects on the HDMI frame that is displayed on the screen. 
 The first capability guarantees that the user inputs arrive directly to a trusted component (\device); therefore, the compromised host cannot manipulate them. However, as described in the strawman solution I (see Section~\ref{sec:approach:strawman}) this functionality alone cannot assure the security of the user inputs. The second capability allows the \device to render trusted objects on the screen such as input elements, or data sent from the remote server. 
