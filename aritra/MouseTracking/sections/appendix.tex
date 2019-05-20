@@ -1,9 +1,5 @@
-\section{}
-\label{appendix:sec}
-
-
-\subsection{Summary of Existing Trusted Path Research}
-\label{appendix:sec:summaryResearch}
+\section*{Summary of Existing Trusted Path Research}
+\label{appendix:summaryResearch}
 
 
 \begin{table*}[t]
@@ -12,57 +8,121 @@
 %\bgroup
 %\def\arraystretch{1.2}
 \resizebox{\textwidth}{!}{
-  \begin{tabular}{l | l | c  c  c  c | c  c  c  c | c} 
+  \begin{tabular}{l | l | c  c  c  c | c  c  c  c | c c} 
    \multirow{3}{*}{Category}
-   & &\multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c| }{IO Protection} & Usability\\  \cline{3-11}
-   & &\multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c|}{Output} & \\  \cline{3-11}
+   & &\multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c| }{IO Security Features} & \multicolumn{2}{c} {Usability}\\  \cline{3-12}
+   & &\multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c|}{Output} & \\  \cline{3-10}
    %\rowcolor{Gray}
-   \cellcolor{white} & & Requires & \multicolumn{1}{c|}{External} & Isolated & Hypervisor/ & \multirow{2}{*}{Keyboard} & \multirow{2}{*}{Pointer} & \multicolumn{1}{c|}{\multirow{2}{*}{Touch}} & \multirow{2}{*}{Display} & Sec\\
-   \cellcolor{white} & & TEE & \multicolumn{1}{c|}{trusted HW} & API/Drivers & OS & & & \multicolumn{1}{c|}{} & & ind \\
+   \cellcolor{white} & & Requires & \multicolumn{1}{c|}{External} & Isolated & Hypervisor/ & \multirow{2}{*}{Keyboard} & \multirow{2}{*}{Pointer} & \multicolumn{1}{c|}{\multirow{2}{*}{Touch}} & \multirow{2}{*}{Display} & \multirow{2}{*}{SI} & \multirow{2}{*}{PnP}\\
+   \cellcolor{white} & & TEE & \multicolumn{1}{c|}{trusted HW} & API/Drivers & OS & & & \multicolumn{1}{c|}{} & & &\\
    \hline
-    &Browser-based~\cite{ye2005trusted}			 & \no 		& \no  	& \yes 		& \yes 	& \no 			& \no 	& \no 		& \yesNope & \yes\\
+    &Browser-based~\cite{ye2005trusted}			 & \no 		& \no  	& \yes 		& \yes 	& \no 			& \no 	& \no 		& \yesNope & \yes &\\
     \rowcolor{Gray}
-   	\cellcolor{white} & InContext~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \yes 	& \no 		& \no & \yes\\
-    & Overshadow~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \no 	& \no 		& \no &\yes\\
+   	\cellcolor{white} & InContext~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \yes 	& \no 		& \no & \yes  &\\
+    & Overshadow~\cite{Overshadow} 				 & \no 		& \no 	& \no 	  	& \yes 	& \no 			& \no 	& \no 		& \no &\yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no &\yes\\
-    &TrustVisor~\cite{mccune2010trustvisor} 		 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no &\yes\\
+    \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no &\yes &\\
+    &TrustVisor~\cite{mccune2010trustvisor} 		 & \no 		& \no 	& \no 		& \yes 	& \no 			& \no 	& \no 		& \no &\yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}&Inktag~\cite{hofmann2013inktag} 			 & \no 		& \no 	& \no 		& \yes 	& \no			 & \no 	& \no 		& \no & \yes\\
-    &Splitting interfaces~\cite{ta2006splitting}  & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \yes &\yes\\
+    \cellcolor{white}&Inktag~\cite{hofmann2013inktag} 			 & \no 		& \no 	& \no 		& \yes 	& \no			 & \no 	& \no 		& \no & \yes &\\
+    &Splitting interfaces~\cite{ta2006splitting}  & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \yes &\yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no &\yes\\
-    &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	& \no 	& \yes 	& \yes	& \yes 			& \no 	& \no 		& \no &\yes\\
+    \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 & \no 		& \no 	& \no 		& \yes 	& \yes 			& \no 	& \no 		& \no &\yes &\\
+    &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	& \no 	& \yes 	& \yes	& \yes 			& \no 	& \no 		& \no &\yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \no 	& \yes 	& \no 			& \no 	& \no 		& \yes &\yes\\
-    &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	& \no  	& \no 		& \no 	& \yes 			& \no 	& \no 		& \no &\yes\\
+    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	& \no  & \no 	& \yes 	& \no 			& \no 	& \no 		& \yes &\yes &\\
+    &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	& \no  	& \no 		& \no 	& \yes 			& \no 	& \no 		& \no &\yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope & \no  	& \no 		& \no 	& \no 			& \no 	& \no 		& \no &\yes\\
-    &TrustOTP~\cite{sun2015trustotp}			     & \yes 	& \no  	& \no 		& \no 	& \yes		 	& \no 	& \no 		& \yesNope &\yes\\
+    \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope & \no  	& \no 		& \no 	& \no 			& \no 	& \no 		& \no &\yes &\\
+    &TrustOTP~\cite{sun2015trustotp}			     & \yes 	& \no  	& \no 		& \no 	& \yes		 	& \no 	& \no 		& \yesNope &\yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}&VeriUI~\cite{liu2014veriui}				     & \yes 	& \no  & \yes 		& \no 	& \yesNope 		& \no 	& \no 		& \yesNope &\yes\\
-	&AdAttester~\cite{li2015adattester}			 & \yes 	& \no  & \yes 		& \no 	& \no 			& \no & \yesNope 	& \yesNope &\yes\\
+    \cellcolor{white}&VeriUI~\cite{liu2014veriui}				     & \yes 	& \no  & \yes 		& \no 	& \yesNope 		& \no 	& \no 		& \yesNope &\yes &\\
+	&AdAttester~\cite{li2015adattester}			 & \yes 	& \no  & \yes 		& \no 	& \no 			& \no & \yesNope 	& \yesNope &\yes &\\
 	\rowcolor{Gray}
-	\cellcolor{white}&TruZ-Droid~\cite{ying2018truz}			     & \yes 	& \no  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope &\yes\\
-	&TrustUI~\cite{li2014building}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \yesNope 		& \yesNope &\yes\\
+	\cellcolor{white}&TruZ-Droid~\cite{ying2018truz}			     & \yes 	& \no  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope &\yes &\\
+	&TrustUI~\cite{li2014building}			     & \yes 	& \no  & \yesNope 	& \no 	& \no 			& \no 	& \yesNope 		& \yesNope &\yes &\\
 	\rowcolor{Gray}
-	\cellcolor{white}&VButton~\cite{li2018vbutton}			     & \yes 	& \no  & \yes 	& \no 	& \yesNope 			& \no 	& \yes 		& \yes &\yes\\
-    &CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	& \no 		& \no 	& \no 			& \no 	& \no 		& \no & \no\\
+	\cellcolor{white}&VButton~\cite{li2018vbutton}			     & \yes 	& \no  & \yes 	& \no 	& \yesNope 			& \no 	& \yes 		& \yes &\yes &\\
+    &CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	& \no 		& \no 	& \no 			& \no 	& \no 		& \no & \no &\\
     \rowcolor{Gray}
-    \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	& \no 	& \yes 			& \no 	& \no 		& \no &\no\\
-     \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope & \yes\\
+    \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	& \no 	& \yes 			& \no 	& \no 		& \no &\no &\\
+     \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		& \no 	& \yes 			& \no 	& \no 		& \yesNope & \yes &\\
     \rowcolor{Gray}
-    \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}		 & \no 		& \yes  & \no 		& \no 	& \yes 			& \no 	& \no 		& \yes & \yes\\
-    &IntegriKey~\cite{IntegriKey}				 & \no 		& \yes  & \yesNope 	& \no 	& \yesNope 		& \no 	& \no 		& \no & \no\\ 
+    \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}		 & \no 		& \yes  & \no 		& \no 	& \yes 			& \no 	& \no 		& \yes & \yes &\\
+    &IntegriKey~\cite{IntegriKey}				 & \no 		& \yes  & \yesNope 	& \no 	& \yesNope 		& \no 	& \no 		& \no & \no &\\ 
     \rowcolor{Gray}
-    \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no &\yes\\   
+    \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     & \no 		& \yes  & \yesNope 	& \no 	& \no 			& \no 	& \no 		& \no &\yes &\\   
     
 	\rowcolor{HGray}
-	\cellcolor{white}&\textbf{\name}	    			& \no 		& \yes  & \no 		& \no 	& \yes 			& \yes 	& \yes 		& \yes & \no\\
+	\cellcolor{white}&\textbf{\name}	    			& \no 		& \yes  & \no 		& \no 	& \yes 			& \yes 	& \yes 		& \yes & \no & \yes\\
     \hline
     \multicolumn{10}{c}{\small\yes~requires/supports \hspace{1cm} \no~not requires/supports \hspace{1cm} \yesNope ~partially requires/supports}  
   \end{tabular}
   }
-  \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions and security features. Note that a lower trust assumption and a high number of security features are desired from a generic trusted path solution}
+  \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions, security features, and usability. Note that a lower trust assumption, a high number of security features and high usability are desired from a generic trusted path solution}
   \label{tab:relatedWorks}
 \end{table*}
+
+
+In Table~\ref{tab:relatedWorks} we summarize the existing research work based on their trust assumptions, IO security features and usability. Note that it is desirable to have a lower trust assumption, higher security features and higher usability.  
+
+
+\section*{Proof for Input Integrity}
+
+
+\subsection{Interaction Protocol} 
+
+The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
+%Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
+In this model, we simplify the user input by assuming that the \user only provides an input $I$ only after observing a message transformation $[m]$. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue until \user finishes her input. After every input \host hands over new message transformation to \user (either result of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
+
+We also define two functions:
+\begin{align*}
+\texttt{Input()}&:[m]\rightarrow I \\
+\texttt{Transform()}&:m,I\rightarrow [m'],\ \exists i\in I:i=\phi
+\end{align*}
+Both of them are \emph{bijective}.
+
+One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
+
+\begin{definition}{\textbf{Input integrity}}
+\label{def:inputIntegrity}
+
+Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. The host changes the message transformation to $[m']$ where $[m']\neq [m]$. We also define correct \user input to be $I$ when \host sends a correct message transformation $[m]$ to \user. We define input integrity as the property where the \server does not accept input $I'$ where $I'\neq I$from \user if the \host changes the message transformation.
+\end{definition}
+
+\begin{definition}{\textbf{Output integrity}}
+\label{def:outputIntegrity}
+Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. Output integrity defines that in all circumstances, \user receives the correct message transformation $[m]$ from \host.
+\end{definition}
+
+\myparagraph{Verification process} \server checks $\forall i=1\ldots n$ $$[m']_i = \texttt{Transform}(m_{i-1}, I_{i-1})$$ where $I_0=\phi$.
+
+\begin{theorem}
+\label{theorem:th1}
+If \user does not send all the transformations till $[m']_i$ corresponding to the input $I_i$, input integrity can not be achieved. 
+\end{theorem}
+
+\begin{proof}
+If \user does not attach all the transformation till $[m']_i$, i.e., $[m']_1, [m']_2, \ldots, [m']_{i-1}, [m']_i$  corresponding to inputs $I_1, I_2,\ldots, I_{i-1}, I_i$, then the server can not verify all the transformations corresponding to the input. \host could modify a specific $[m]_x$ to influence \user input.
+\end{proof}
+
+\begin{theorem}
+\label{theorem:th2}
+If the channel from \user and \server is not authenticated, input integrity is not achievable. But the channel from \server to \user does not require to be secure as long a \user provides the message transformation $[m']_i$ corresponding to every input $I_i$.
+\end{theorem}
+
+\begin{proof}
+The proof is trivial. If the channel from \user to \server is not authenticated, any input provided by \user can be manipulated by \host without a trace. Hence input integrity is not achievable. As long as \user sends message transformation along with the input, a manipulated message transformation bt \host would be detectable by \server (see Theorem~\ref{theorem:th1}).
+\end{proof}
+
+\begin{theorem}
+\label{theorem:th3}
+Ensuring output integrity also ensures input integrity provided there is an authenticated channel from \user to \server.
+\end{theorem}
+
+\begin{proof}
+This proof is also trivial. As we describe in the Definition~\ref{def:inputIntegrity} and~\ref{def:outputIntegrity}, if all the message transform from \host $[m']=[m]$, and \host always executes \texttt{transform()} properly, the input integrity is preserved. As \name ensures output integrity and all the input from the user is signed by the \device, \name preserves input integrity. 
+\end{proof}
+
+
