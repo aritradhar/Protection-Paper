@@ -91,17 +91,17 @@ not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
 neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 ]]
     \node[neutral, xshift=10pt](root) {Trusted path}
-    child { node[neutral, yshift=8pt, xshift=10pt] (tc) {\textbf{A.} Transaction\\ confirmation Device}}  
-    child { node[neutral, yshift=8pt, xshift=80pt] (td) {\textbf{B.} Trusted intermediary}
-        child { node[neutral, yshift=0pt, xshift=-40pt] (hw) {\textbf{B1.} External\\ HW}}
-        child { node[neutral, yshift=0pt, xshift=-30pt] (tee) {\textbf{B2.} TEE}}
-      child { node[neutral, yshift=0pt, xshift=-20pt] (br) {\textbf{B3.} Browser\\ Based}}   
-     child { node[neutral, yshift=0pt, xshift=-5pt] (hv) {\textbf{B4.} Hypervisor\\ Based}} 
+    child { node[neutral, yshift=8pt, xshift=10pt, yshift=7pt] (tc) {\textbf{A.} Transaction\\ confirmation Device}}  
+    child { node[neutral, yshift=8pt, xshift=80pt, yshift=7pt] (td) {\textbf{B.} Trusted intermediary}
+        child { node[neutral, yshift=0pt, xshift=-40pt, yshift=7pt] (hw) {\textbf{B1.} External\\ HW}}
+        %child { node[neutral, yshift=0pt, xshift=-30pt, yshift=7pt] (tee) {\textbf{B2.} TEE}}
+      child { node[neutral, yshift=0pt, xshift=-20pt, yshift=7pt] (br) {\textbf{B2.} Browser\\ Based}}   
+     child { node[neutral, yshift=0pt, xshift=-5pt, yshift=7pt] (hv) {\textbf{B3.} Hypervisor\\ Based}} 
     }    ; 
       
 
     \node[below=0cm of hw](gurdion) {\textbf{\name}};
-    \node[below=0cm of tee] {VButton~\cite{li2018vbutton}};
+    %\node[below=0cm of tee] {VButton~\cite{li2018vbutton}};
     \node[below=0cm of tc] {Uni-dir~\cite{filyanov2011uni}};
     \node[below=0cm of hv](os) {Overshadow~\cite{Overshadow}};
     \node[below=0cm of os] {SGXIO~\cite{weiser2017sgxio}};
@@ -140,14 +140,13 @@ Systems such as ZTIC~\cite{weigold2011secure} uses external device with display 
 %None of these works looked into complex user interactions such as mouse movement or complex user interfaces. 
 
 
-\myparagraph{B2. Trusted Execution Environments} TEEs specifically system TEEs such as ARM TrustZone is used in the literature to implement a trusted path between the IO devices and the users. %Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality.  
-VButton~\cite{li2018vbutton} leverages ARM TrustZone to overlay buttons on the mobile device to confirm if the user taps on a specific button. Our solution is fundamentally different from VButtion as i) VButtion is specifically tuned for mobile devices, employing ARM TrustZone whereas our solution is more generic and targets specifically PCs, and ii) mouse input is significantly different than touch-based input as mouse input involves continuous movement where the touch or taps are discrete events. In this paper, we concentrate on the non-specialized hardware platform where compatible TEE technologies such as ARM TrustZone may not be available, e.g., x86 architecture. 
+%\myparagraph{B2. Trusted Execution Environments} TEEs specifically system TEEs such as ARM TrustZone is used in the literature to implement a trusted path between the IO devices and the users. VButton~\cite{li2018vbutton} leverages ARM TrustZone to overlay buttons on the mobile device to confirm if the user taps on a specific button. Our solution is fundamentally different from VButtion as i) VButtion is specifically tuned for mobile devices, employing ARM TrustZone whereas our solution is more generic and targets specifically PCs, and ii) mouse input is significantly different than touch-based input as mouse input involves continuous movement where the touch or taps are discrete events. In this paper, we concentrate on the non-specialized hardware platform where compatible TEE technologies such as ARM TrustZone may not be available, e.g., x86 architecture. 
 %Intel SGX based trusted path such as BastionSGX~\cite{BASTION-SGX} implements a trusted Bluetooth application inside an Intel SGX enclave to establish a trusted path between the keyboard and mouse and the SGX. But lack of output integrity makes the system unreliable as the paper failed to address how to transfer the mouse data reliably to the user and the remote server. 
 
-\myparagraph{B3. Browser-based solutions} InContext~\cite{huang2012clickjacking} presents different clickjacking attacks variants and their solution by ensuring context (both temporal and visual) and pointer integrity. The trust model is significantly different from our work as it assumes that the browser and the OS are trusted. This makes the InConext i) not directly compatible with the attacker model that \name targets, and ii) targets a specific attack scenario (clickjacking vs. generic trusted path).
+\myparagraph{B2. Browser-based solutions} InContext~\cite{huang2012clickjacking} presents different clickjacking attacks variants and their solution by ensuring context (both temporal and visual) and pointer integrity. The trust model is significantly different from our work as it assumes that the browser and the OS are trusted. This makes the InConext i) not directly compatible with the attacker model that \name targets, and ii) targets a specific attack scenario (clickjacking vs. generic trusted path).
 
 
-\myparagraph{B4. Trusted hypervisor-based solutions} Trusted hypervisors and secure micro-kernels are also alternatives to achieve Trusted path. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Solutions such as SGXIO~\cite{weiser2017sgxio}  combine a TEE and a hypervisor to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations are handled by the OS). One major drawback of such solutions is the trust assumption that involves a full hypervisor. One can argue that a hypervisor that provides a rich set of functionalities has code base size of an OS. Second, most of the minimal hypervisor also does not offer common usable features such as rich IO, UI, etc., making them impractical for day-to-day usage in consumer devices. %\name avoids such extensive trust assumptions and assumes that the entire host is in control of the attacker.
+\myparagraph{B3. Trusted hypervisor-based solutions} Trusted hypervisors and secure micro-kernels are also alternatives to achieve Trusted path. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Solutions such as SGXIO~\cite{weiser2017sgxio}  combine a TEE and a hypervisor to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations are handled by the OS). One major drawback of such solutions is the trust assumption that involves a full hypervisor. One can argue that a hypervisor that provides a rich set of functionalities has code base size of an OS. Second, most of the minimal hypervisor also does not offer common usable features such as rich IO, UI, etc., making them impractical for day-to-day usage in consumer devices. %\name avoids such extensive trust assumptions and assumes that the entire host is in control of the attacker.
 
 %There exist several works that use TEE and hypervisor simultaneously to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations are handled by the OS). Existing research such as SGXIO~\cite{weiser2017sgxio} requires the IO drives to be implemented inside the TEE or using trusted hypervisor that extends the size of the TCB significantly. Moreover, TEE requires trust assumption on the processors and additional code bases. One such example is Intel SGX where the trust model includes the physical processor package, SGX SDK, quoting enclave, launch enclave and Intel attestation service. Our proposed solution avoids such extensive trust assumptions and assumes that the entire platform is in control of the attacker.
 
