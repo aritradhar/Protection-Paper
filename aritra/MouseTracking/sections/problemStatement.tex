@@ -87,12 +87,13 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     \centering
     \begin{tikzpicture}[
 solved/.style={rectangle,draw,fill=purple!40, rounded corners, align=center},
-not/.style={rectangle, draw,fill=orange!60, rounded corners, align=center},
+not/.style={rectangle, fill=white, align=center},
 neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 ]]
-    \node[neutral, xshift=10pt](root) {Trusted path}
-    child { node[neutral, yshift=8pt, xshift=10pt, yshift=7pt] (tc) {\textbf{A.} Transaction\\ confirmation Device}}  
-    child { node[neutral, yshift=8pt, xshift=80pt, yshift=7pt] (td) {\textbf{B.} Trusted intermediary}
+  \node[not](empty) {};
+    \node[neutral, right=3cm of empty](root) {Trusted path}
+    child { node[neutral, yshift=8pt, xshift=-70pt, yshift=7pt] (tc) {\textbf{A.} Transaction\\ confirmation Device}}  
+    child { node[neutral, yshift=8pt, xshift=10pt, yshift=7pt] (td) {\textbf{B.} Trusted intermediary}
         child { node[neutral, yshift=0pt, xshift=-40pt, yshift=7pt] (hw) {\textbf{B1.} External\\ HW}}
         %child { node[neutral, yshift=0pt, xshift=-30pt, yshift=7pt] (tee) {\textbf{B2.} TEE}}
       child { node[neutral, yshift=0pt, xshift=-20pt, yshift=7pt] (br) {\textbf{B2.} Browser\\ Based}}   
