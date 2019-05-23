@@ -20,6 +20,20 @@
 \label{fig:screenshot_1}
 \end{figure}
 
+
+\begin{table}[t]
+%\scriptsize
+\centering
+\begin{tabular}{l | c}
+\textbf{Operation} & \textbf{Average time} \\\hline
+Detection QR code & 23 ms\\
+Decoding QR code + Overlay & 6 ms\\
+Mouse latency & 250 $\mu$s\\
+Keyboard latency & 170 $\mu$s\\\hline
+\end{tabular} 
+\caption{Performance numbers}\spacesave
+\end{table}
+
 \subsection{Performance}
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. The delay to forward keystrokes is: \red{x ms} and frames is \red{x ms}. (This could be summarized in the end if numbers are very low.)
