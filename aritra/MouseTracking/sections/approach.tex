@@ -111,7 +111,7 @@ Apart from these functional challenges for implementation, there exist multiple 
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 8cm 15cm 0}, clip, width=\linewidth]{overlayScreenShot_new.pdf}
-\caption{\textbf{\device generated UI overlay} The figure shows the \name high-level approach. \one shows the non-protected part of the screen where the UI is rendered by the untrusted host. \two shows the \device generated protected UI overlay that is hidden from the host. The protected part of the screen provides integrity and confidentiality of all user IO. The last image shows that the \device backs our rest of the part of the screen when the user moves her mouse pointer over the protected region.}
+\caption{\textbf{\device generated UI overlay} The figure shows the \name high-level approach. \one The host only sees the non-protected UI elements and the protect elements are encoded (in our case its the QR code). \two shows the non-protected part of the screen where the UI is rendered by the untrusted host. \three shows the \device generated protected UI overlay that is hidden from the host. The protected part of the screen provides integrity and confidentiality of all user IO. \four shows that the \device dims out rest of the part of the screen when the user moves her mouse pointer over the protected region.}
 \spacesave
 \label{fig:screenshot_1}
 \end{figure}
