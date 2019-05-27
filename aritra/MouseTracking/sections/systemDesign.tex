@@ -102,7 +102,7 @@ Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystr
 %\subsubsection{Mouse pointer overlay} The mouse-pointer overlay also employs SAS. When the user press \texttt{ctrl} key on her keyboard, the \device dims all the portion of the screen except the overlaid UI and the overlaid mouse pointer. This allows the user to determine the legitimate pointer and the overlaid UI. For additional user attention, the mouse pointer also changes the out border color (\textcolor{red}{red} to \textcolor{green}{green}) when the user enters inside the overlaid UI. This also works as an indicator for the user if the browser/host impersonates an overlaid UI to trick the user into providing some critical security data.
  
 
-\subsection{Transmit User Input}
+\subsection{Protected User Interaction}
 \label{sec:systemDesign:commit}
 
 When the user finishes providing her input over the input device (mouse and keyboard), the \device sends these values (with signature to ensure integrity) to the remote server. Sending these signed input values to the server requires an upstream channel from the \device to the server.
