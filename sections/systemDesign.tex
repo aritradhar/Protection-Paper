@@ -143,6 +143,16 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 \end{figure}
 
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 9.5cm 15cm 0}, clip, width=0.85\linewidth]{SequencDiagram.pdf}
+\caption{\textbf{Flow of the \name main protocol.} The figure shows the high-level protocol flow and the main messages that are exchanged between the remote server, host, \device, and the Io devices.}
+\spacesave
+\label{fig:sequence}
+\centering
+\end{figure}
+
+
 In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol by putting these components together. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are the as the following:
 
 
