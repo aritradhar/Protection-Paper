@@ -158,7 +158,7 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 \item As the mouse pointer is not protected, Fidelius is vulnerable to clickjacking attack where the attacker can spawn multiple mouse pointers and trick the user into following a wrong mouse pointer while the real mouse pointer is on the sensitive text field. This allows the attacker to trick the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field.
 \item The design of Fidelius is strictly limited to text fields only. As Fidelius does not provide output integrity of the forms, it can not provide confidentiality to other UI elements such as radio buttons, drop-down menus, etc.
 \item Recent microarchitectural attacks on SGX~\cite{van2018foreshadow} increase the attack surface on the systems such as Fidelius that rely on SGX for security against malicious OS and applications. 
-\item The cost of deployment of such system is high as the system requires the user to familiarize with the overlaid bar that provides information about the selected text field and the LEDs on the external device that indicates a secure channel from the keyboard to the SGX enclave. 
+\item \red{The cost of deployment of such system is high as the system requires the user to familiarize with the overlaid bar that provides information about the selected text field and the LEDs on the external device that indicates a secure channel from the keyboard to the SGX enclave. Even with such high deployment cose, the system may still suffers from errors that originate from user habituation.}
 \end{mylist}
 
 \subsection{Goals}
@@ -171,9 +171,11 @@ The existing solutions and their drawbacks provide the scope of our paper where 
   
   \item  \textbf{Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption that does not rely on a specialized hypervisor or a trusted OS  or TEEs such as Intel SGX. %Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
   
-  \item \textbf{Easy to deploy.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device that uses off-the-shelf components and the solution is compatible with any platform (OS, processor architecture, etc.). 
+
   
-  \item \textbf{Low cognitive load.} Moreover, our goal is not to change the way users interacts with UI elements and imposing no or minimal cognitive load such as eliminating the need to see an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation.
+  \item \textbf{Low cognitive load.} \red{Moreover, our goal is not to change the way users interacts with UI elements and imposing no or minimal cognitive load such as eliminating the need to see an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover such designs requires heavy user training that makes the system deployment hard and costly.}
+  
+    \item \textbf{Easy to deploy.} Our goal is also to provide a solution that comes with low deployment overhead such as a plug-and-play device that uses off-the-shelf components and the solution is compatible with any platform (OS, processor architecture, etc.). \red{Also our goal is to reduce the deployment cost by eliminating any design choices that requires user training.}
 
 \end{mylist}
 
