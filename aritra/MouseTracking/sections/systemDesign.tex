@@ -130,7 +130,7 @@ Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieved the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs.
 
 
-\subsection{Main Protocol}
+\subsection{Sequence of Events}
 \label{sec:systemDesign:mainProtocol}
 
 \begin{figure}[t]
