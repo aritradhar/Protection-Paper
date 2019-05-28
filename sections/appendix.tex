@@ -67,6 +67,36 @@
 In Table~\ref{tab:relatedWorks}, we summarize the existing research work based on their trust assumptions, IO security features, and usability. Note that it is desirable to have a lower trust assumption, higher security features, and higher usability. The trust assumption is further refined into hardware trust assumption that includes TEE and external trusted hardware, and software trust assumption, which includes isolated device drivers/APIs and trusted hypervisor/OS. The IO security features involve input that includes keyboard, pointer and touch input, and output that only includes the display. Lastly, the usability aspect is divided into two, the requirement of security indicator (SI), and if the solution supports plug-and-play (PnP). PnP implies that the solution can be integrated into the existing system without introducing any major changes into them and supports different architectures and OS out of the box.  
 
 
+\subsection{Sequence of Events}
+\label{appendix:protocol}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 6.5cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
+\caption{\textbf{Flow of the \name main protocol.} The figure shows the high-level protocol flow and the main messages that are exchanged between the remote server, host, \device, and the Io devices.}
+\spacesave
+\label{fig:systemDesign}
+\centering
+\end{figure}
+
+
+Now in this Section, we describe the flow of \name protocol by putting these components together. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are the as the following:
+
+
+\begin{mylist}
+  \item[\one] The browser renders the webpage that comes with \name JS. As described in Section~\ref{sec:systemDesign:transformation}, \name JS transforms the UI elements to a QR code that contains the equivalent UI specification.
+  \item[\two] The graphics driver sends the rendered frame to the \device over the HDMI channel.
+  \item[\three] The \device intercepts the HDMI signal and decode the QR code to retrieve the UI specification. After the decoding of the QR code, the \device renders the bitmap corresponding to the specification as described in Section~\ref{sec:systemDesign:transformation}.
+  \item[\four] The \device send the HDMI frame with the UI overlay to the display device.
+  \item[\five] After observing the HDMI frame and the overlaid UI, the user passes her input to the \device via the keyboard/mouse that is connected to the \device over the \usb interface.
+  \item[\six] The \device uses raw mouse data and the HDMI frames to interpolate the mouse pointer using the method described in Section~\ref{sec:systemDesign:analysis}. This ensures pointer integrity. \device also overlays a mouse pointer on the HDMI frames.
+  \item[\seven] When the user input her data to the host, the \device records her input data (Record phase in Section~\ref{sec:systemDesign:commit:send}).
+  \item[\eight] The \name JavaScript snippet also acts as a upstream channel from the \device to the remote server (refer to Section~\ref{sec:systemDesign:commit:upload}). Via this channel, the \device sends the signed user action to the remote server. This signed user action can be seen as the second factor for the integrity of the user input data. (Commit phase in Section~\ref{sec:systemDesign:commit:send})
+  \item [\nine] The server verifies the data from the two channels that are submitted by the host and the \device. (Section~\ref{sec:systemDesign:commit:verification})
+\end{mylist}
+
+
 \section*{Proof for Input Integrity}
 \label{appendix:security}
 

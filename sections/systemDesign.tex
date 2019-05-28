@@ -136,6 +136,7 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 \subsection{Sequence of Events}
 \label{sec:systemDesign:mainProtocol}
 
+\iffalse
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 6.5cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
@@ -144,7 +145,7 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 \label{fig:systemDesign}
 \centering
 \end{figure}
-
+\fi
 
 \begin{figure}[t]
 \centering
@@ -158,7 +159,7 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 
 In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol by putting these components together. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are the as the following:
 
-
+\iffalse
 \begin{mylist}
   \item[\one] The browser renders the webpage that comes with \name JS. As described in Section~\ref{sec:systemDesign:transformation}, \name JS transforms the UI elements to a QR code that contains the equivalent UI specification.
   \item[\two] The graphics driver sends the rendered frame to the \device over the HDMI channel.
@@ -170,3 +171,4 @@ In the previous Sections, we explain the basic components of \name. Now in this 
   \item[\eight] The \name JavaScript snippet also acts as a upstream channel from the \device to the remote server (refer to Section~\ref{sec:systemDesign:commit:upload}). Via this channel, the \device sends the signed user action to the remote server. This signed user action can be seen as the second factor for the integrity of the user input data. (Commit phase in Section~\ref{sec:systemDesign:commit:send})
   \item [\nine] The server verifies the data from the two channels that are submitted by the host and the \device. (Section~\ref{sec:systemDesign:commit:verification})
 \end{mylist}
+\fi
