@@ -150,6 +150,18 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 
 %Detailed description of the related research is described in Table~\ref{tab:relatedWorks} in Appendix~\ref{sec:summaryResearch}.
 
+
+\begin{figure}[t]
+\centering
+%\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
+\includegraphics[trim={0 10cm 22cm 0}, clip, width=0.85\linewidth]{clickJacking.pdf}
+\caption{\textbf{Click jacking attack on Fidelius.}}
+\spacesave
+\label{fig:trustedPath}
+\centering 
+\end{figure}
+
+
 \myparagraph{B3. External hardware-based solution} Several existing works propose trusted path that utilizes an external trusted device. One of the recent solution is Fidelius~\cite{Fidelius} that provides the most comprehensive solution. Fidelius uses an external trusted device and Intel SGX to create a secure channel between the user IO devices and a remote server. Fidelius provides secure input and display for the character-based device - keyboard. It uses overlays on the text fields to hide the keyboard input from the compromised host so that the input is only visible to the user. A small bar on display is also overlaid by the device that shows the remote server's identity and the text field that is currently selected. However, Fidelius suffers from the following security and functionality issues: 
 \vspace{-0.5em}
 \begin{mylist}
