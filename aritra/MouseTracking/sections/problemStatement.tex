@@ -48,7 +48,7 @@ A \emph{Trusted path} provides confidentiality and integrity to the IO data exch
 
 
 
-\subsection{Existing Solutions and their drawbacks}
+\subsection{Existing and Strawman Solutions and their drawbacks}
 \label{sec:problemStatement:existingSolution}
 
 \iffalse
@@ -142,38 +142,52 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 
 %There exist several works that use TEE and hypervisor simultaneously to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations are handled by the OS). Existing research such as SGXIO~\cite{weiser2017sgxio} requires the IO drives to be implemented inside the TEE or using trusted hypervisor that extends the size of the TCB significantly. Moreover, TEE requires trust assumption on the processors and additional code bases. One such example is Intel SGX where the trust model includes the physical processor package, SGX SDK, quoting enclave, launch enclave and Intel attestation service. Our proposed solution avoids such extensive trust assumptions and assumes that the entire platform is in control of the attacker.
 
-
-
-%In summary, even though, there exist several research works that look into the problem of the trusted path, none of them provide a complete, secure, practical and usable trusted path solution. In our knowledge, \name incorporates all the features together for the first time: complex user interactions and UI elements, generic IO devices and low overhead on the user interactions. All of these are achieved in the smallest trust assumption.  
-
 %Note that the majority of the previous works achieve some form of trusted path specifically for keyboard-based input. However supporting mouse and touch-based input, complex and generic user interfaces and protected users' action (such as the movement of the mouse pointer, gestures, etc.) in a security-sensitive application (such as e-voting) is not a trivial task. Without proper analysis of every frame that the host system produces, it is not possible to track user intention. In our knowledge, our proposed solution is the first to provide such security properties including the confidentiality of user input (e.g., mouse movement). Moreover, we want to achieve this in the absence of any TEE as the trust model of our scenario is significantly different.
 
 %Detailed description of the related research is described in Table~\ref{tab:relatedWorks} in Appendix~\ref{sec:summaryResearch}.
+
+\myparagraph{B3. External hardware-based solution} Several existing works propose trusted path that utilizes an external trusted device. IntegriKey~\cite{IntegriKey} uses a trusted external device that contains a small program that signs all the user input and sends the signed input to the remote server. The device works as the second factor for input integrity as the remote server can verify if the signed input matched with the user input that is sent by the browser running on the untrusted host. However, as the external device is completely oblivious to the display information that the untrusted host renders, it is vulnerable to a sophisticated UI manipulation attack. E.g., assume that the user's correct input is $100$. However, the host shows her $10$ on the text field. Thinking that she may have mistyped, the user types another $0$ that makes the recorded input from the user $1000$. This attack violates input integrity as the host can now submit $1000$ to the remote server as the external trusted device also signs $1000$ as the correct input received from the user.  
 
 
 \begin{figure}[t]
 \centering
 %\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
-\includegraphics[trim={0 10cm 22cm 0}, clip, width=0.85\linewidth]{clickJacking.pdf}
-\caption{\textbf{Click jacking attack on Fidelius.}}
+\includegraphics[trim={0 9cm 22cm 0}, clip, width=0.85\linewidth]{clickJacking.pdf}
+\caption{\textbf{Early form submission and click jacking attack on Fidelius.}}
 \spacesave
-\label{fig:trustedPath}
+\label{fig:clickJack}
 \centering 
 \end{figure}
 
 
-\myparagraph{B3. External hardware-based solution} Several existing works propose trusted path that utilizes an external trusted device. One of the recent solution is Fidelius~\cite{Fidelius} that provides the most comprehensive solution. Fidelius uses an external trusted device and Intel SGX to create a secure channel between the user IO devices and a remote server. Fidelius provides secure input and display for the character-based device - keyboard. It uses overlays on the text fields to hide the keyboard input from the compromised host so that the input is only visible to the user. A small bar on display is also overlaid by the device that shows the remote server's identity and the text field that is currently selected. However, Fidelius suffers from the following security and functionality issues: 
+One of the recent solution is Fidelius~\cite{Fidelius} that provides the most comprehensive solution. Fidelius uses an external trusted device and Intel SGX to create a secure channel between the user IO devices and a remote server. Fidelius provides secure input and display for the character-based device - keyboard. It uses overlays on the text fields to hide the keyboard input from the compromised host so that the input is only visible to the user. A small bar on display is also overlaid by the device that shows the remote server's identity and the text field that is currently selected. However, Fidelius suffers from the following security and functionality issues: 
 \vspace{-0.5em}
 \begin{mylist}
 \item Fidelius only overlays the text fields and the character inputs into those text fields. This allows the attacker to modify the instruction on the UI, such as changing the unit of the input (mentioned in the label of the text field) that results in an incorrect input. Fidelius solely relies on the static overlay region and the LEDs on the external device to ensure the integrity and confidentiality of the input. This introduces a high cognitive load on the users as the user needs to check for three security indicators simultaneously before filling up one text field. Existing research works~\cite{egelman2008you,sobey2008exploring} show that in real-world, passive security indicators that require the users to observe multiple markers on the screen (and also on an external device) do not provide adequate security and the systems that implement them suffer from user habituation. Reliance on the user to check the security indicators makes Fidelius as unsafe as transaction confirmation devices (\textbf{A}). 
 The cost of deployment of such system is high as the system requires the user to familiarize with the aforementioned security indicators 
 \item As Fidelius does not support the integrity of the mouse pointer and its interaction with UI elements, this allows the OS to trigger a mouse click on the submit button on the form and force sending incomplete data to the server. Thus, the OS could compromise the integrity of the input data. 
-\item As the mouse pointer is not protected, Fidelius is vulnerable to clickjacking attack where the attacker can spawn multiple mouse pointers and trick the user into following a wrong mouse pointer while the real mouse pointer is on the sensitive text field. This allows the attacker to trick the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicator consistently even when she is not doing any security-sensitive task which is not a realistic assumption. 
+\item As the mouse pointer is not protected, Fidelius is vulnerable to clickjacking attack where the attacker can spawn multiple mouse pointers and trick the user into following a wrong mouse pointer while the real mouse pointer is on the sensitive text field. One such instance of this attack is illustrated in Figure~\ref{fig:clickJack}. This allows the attacker to trick the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicator consistently even when she is not doing any security-sensitive task which is not a realistic assumption. 
 \item The design of Fidelius is strictly limited to text fields only. As Fidelius does not provide output integrity of the forms, it can not provide confidentiality to other UI elements such as radio buttons, drop-down menus, etc.
 \item Recent microarchitectural attacks on SGX~\cite{van2018foreshadow} increase the attack surface on the systems such as Fidelius that rely on SGX for security against malicious OS and applications. 
 \end{mylist}
 
-\subsection{Goals}
+
+
+\myparagraph{Strawman solution I: Full-fledged isolated system} The first strawman solution uses an external trusted device that runs a full operating system with a browser and is physically isolated from the attacker-controlled host. From the security point of view, this solution does not provide any security benefits - the external device as the same attack surface as the untrusted host due to its huge TCB, making it as vulnerable as the host.
+
+\myparagraph{Strawman solution II: Capturing screenshot} This strawman solution uses a trusted devices that takes screenshot when the user executes any actione.g., clicking the mouse to submit a form on a webpage. The device then signs the snapshot and transmits it to the server along with the signed input. The signed snapshot by the device could reveal if the untrusted host manipulates the UI. The remote server verifies the signature and then uses image/text analysis to extract the information from the UI elements such as labels on buttons or markers of a slider, etc. However this solution suffers from the following fundamental problems:
+%In Figure~\ref{fig:uiDetect} we illustrate an example scenario where the device sends two screenshots of the user interaction \one inputting the value via the slider, and \two confirming the action by pressing the \texttt{OK} button.
+%This involves the \device to take a screen-shot from the HDMI frame and use image analysis to understand user action. E.g., in Figure~\ref{fig:uiDetect}, \one the user first drags along the slider UI to set a value (\texttt{35}) and then \two the user clicks on the \texttt{OK}. The \device uses character recognition technique to extract the label and the data from the UI. 
+%This example shows the apparent complexity of this mechanism that does not scale with all UI. Further investigation and prototype implementation shows several drawbacks of this solution:
+\begin{mylist}
+  \item This method does not capture spatiotemporal user context. That implies that the attacker may show some spacial information on the screen to influence user input that may not be captured by the screenshot. The temporal user context implies that taking the snapshot may not capture user intention as for a very short fraction of time the attacker may change the output of the display.
+  \item One way to mitigate the previous problem is to capture a video of user interaction. But such as method requires the host to seend a large amount of data to the server and video processing is both time and CPU intensive. 
+  \item Adversarial machine learning techniques~\cite{eykholt2017robust,sitawarin2018rogue} could make the image/text recognition technique insecure.
+  \item Taking the screenshot also reveal other applications that the user is operating which can be a threat to privacy.
+\end{mylist}
+
+
+\subsection{Requirements of Security Properties}
 \label{sec:problemStatement:goals}
 
 The lack of security properties and features in the existing solutions provide the scope of our paper where we targets the following goals:
