@@ -70,7 +70,6 @@ As we have seen in the strawman solution described in Section~\ref{sec:approach:
 %\subsubsection{\bfseries \device generated UI overlay} \label{sec:systemDesign:transformation:overlay}
  
 This approach requires a JavaScript code snippet that we call \name JS, that executes on the host. The \name JS snippet that is served with the webpage transforms the UI elements that require IO integrity protection. Note that \name JS runs on the browser and is not trusted in our system model. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. The entire process has two phases: (i) UI $\rightarrow$ encoded specification generation, and (ii) Encoded specification $\rightarrow$ Overlay.
-\red{JavaScript is implementation dependent. Here we can use a component/library/code.}
 
 
 \begin{mylist}
