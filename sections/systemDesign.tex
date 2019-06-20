@@ -166,7 +166,12 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 \end{figure}
 
 
-In the previous Sections, we explain the basic components of \name. Now in this Section, we describe the flow of \name protocol by putting these components together. The outline of \name is illustrated in Figure~\ref{fig:systemDesign}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are the as the following:
+In the previous Sections, we explain the basic components of \name. Here we
+summarize the overall flow of the system. The sequence diagram of \name is
+illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example
+sequences: mouse movement and filling up a web-form.
+%Now in this Section, we describe the flow of \name protocol by putting these
+% components together. The outline of \name is illustrated in Figure~\ref{fig:sequence}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are the as the following:
 
 \iffalse
 \begin{mylist}
