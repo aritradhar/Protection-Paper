@@ -29,7 +29,7 @@ Protecting the integrity of the mouse actions (move, drag, and click), also know
 \subsubsection{\bfseries Detection of pointer} The \device ensures pointer integrity by tracking the mouse movements using the HDMI frames and the raw mouse data. Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea: 
 
 \begin{mylist}
-\item[]\one shows raw mouse data that sends the displacements ($(\Delta x, \Delta y)$) over $x$ and $y$ axis that we over time series $t_1,\ldots t_n$. Note that the initial mouse position is known to the \device from pointer calibration (refer to Section~\ref{sec:systemDesign:analysis:calibration}) where $(x_0, y_0) = (0, 0)$.  
+\item[]\one shows raw mouse data that sends the displacements $(\Delta x, \Delta y)$ over $x$ and $y$ axis that we over time series $t_1,\ldots t_n$. Note that the initial mouse position is known to the \device from pointer calibration (refer to Section~\ref{sec:systemDesign:analysis:calibration}) where $(x_0, y_0) = (0, 0)$.  
 \item[]\two shows the HDMI frames $f_1,\ldots f_n$ where the \device expects the mouse pointer to be found. For efficiency, the \device only scans over a small portion of the HDMI frames ($50 \times 50$ square pixels) that is enough to cover a mouse pointer. \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions; otherwise, it stops all the communications and shows an error on display
 \end{mylist}
 
@@ -159,7 +159,9 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 9.5cm 15cm 0}, clip, width=0.85\linewidth]{SequencDiagram.pdf}
-\caption{\textbf{Flow of the \name main protocol.} The figure shows the high-level protocol flow and the main messages that are exchanged between the remote server, host, \device, and the Io devices.}
+\caption{\textbf{Flow of the \name main protocol.} The figure shows the
+sequence of events for two example scenarios: mouse movement and filling up a
+web-form.}
 \spacesave
 \label{fig:sequence}
 \centering
