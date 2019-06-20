@@ -145,7 +145,7 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 %Note that the majority of the previous works achieve some form of trusted path specifically for keyboard-based input. However supporting mouse and touch-based input, complex and generic user interfaces and protected users' action (such as the movement of the mouse pointer, gestures, etc.) in a security-sensitive application (such as e-voting) is not a trivial task. Without proper analysis of every frame that the host system produces, it is not possible to track user intention. In our knowledge, our proposed solution is the first to provide such security properties including the confidentiality of user input (e.g., mouse movement). Moreover, we want to achieve this in the absence of any TEE as the trust model of our scenario is significantly different.
 
 %Detailed description of the related research is described in Table~\ref{tab:relatedWorks} in Appendix~\ref{sec:summaryResearch}.
-\myparagraph{B3. External hardware-based solution} Several existing works propose trusted path that utilizes an external trusted device. IntegriKey~\cite{IntegriKey} uses a trusted external device that contains a small program that signs all the user input and sends the signed input to the remote server. The device works as the second factor for input integrity as the remote server can verify if the signed input matched with the user input that is sent by the browser running on the untrusted host. However, as the external device is completely oblivious to the display information that the untrusted host renders, it is vulnerable to a sophisticated UI manipulation attack. E.g., assume that the user's intended input to a textbox is $100$. However, the host shows her $10$ on the screen by not rendering the last zero. Thinking that she may have mistyped, the user types another $0$ that makes the recorded input from the user $1000$. This attack violates input integrity as the host can now submit $1000$ to the remote server and the external trusted device also signs $1000$ as the correct input received from the user. \red{Is the example confusing?} 
+\myparagraph{B3. External hardware-based solution} Several existing works propose trusted path that utilizes an external trusted device. IntegriKey~\cite{IntegriKey} uses a trusted external device that contains a small program that signs all the user input and sends the signed input to the remote server. The device works as the second factor for input integrity as the remote server can verify if the signed input matched with the user input that is sent by the browser running on the untrusted host. However, as the external device is completely oblivious to the display information that the untrusted host renders, it is vulnerable to a sophisticated UI manipulation attack. E.g., assume that the user's intended input to a textbox is $100$. However, the host shows her $10$ on the screen by not rendering the last zero. Thinking that she may have mistyped, the user types another $0$ that makes the recorded input from the user $1000$. This attack violates input integrity as the host can now submit $1000$ to the remote server and the external trusted device also signs $1000$ as the correct input received from the user.
 
 
 \begin{figure}[t]
@@ -153,7 +153,11 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 %\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
 %\includegraphics[trim={0 9cm 22cm 0}, clip, width=0.85\linewidth]{clickJacking.pdf}
 \includegraphics[trim={0 10.3cm 24.7cm 0}, clip, width=0.8\linewidth]{earlyFormSubmission.pdf} 
-\caption{\textbf{Early form submission attack.} The figure shows an early form submission attack that Fidelius~cite{Fidelius} is susceptible to. The user selects and edits the field \texttt{offset} while the OS triggers \texttt{Update} button, causing misconfiguration of a remote safety-critical PLC.}
+\caption{\textbf{Early form submission attack.} The figure shows an early form
+submission attack that Fidelius~cite{Fidelius} is susceptible to. The user
+selects and edits the field \texttt{offset} while the OS triggers
+\texttt{Update} button, causing misconfiguration of a remote safety-critical PLC
+(Control by Web X-600M).}
 \spacesave
 \label{fig:clickJack}
 \centering 
@@ -163,11 +167,27 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 One of the recent solution is Fidelius~\cite{Fidelius} that provides the most comprehensive solution. Fidelius uses an external trusted device and Intel SGX to create a secure channel between the user IO devices and a remote server. Fidelius provides secure input and display for the character-based device - keyboard. It uses overlays on the text fields to hide the keyboard input from the compromised host so that the input is only visible to the user. A small bar on display is also overlaid by the device that shows the remote server's identity and the text field that is currently selected. However, Fidelius suffers from the following security and functionality issues: 
 \vspace{-0.5em}
 \begin{mylist}
-\item Fidelius only overlays the text fields and the character inputs into those text fields. This allows the attacker to modify the instruction on the UI, such as changing the unit of the input (mentioned in the label of the text field) that results in an incorrect input. Fidelius solely relies on the static overlay region and the LEDs on the external device to ensure the integrity and confidentiality of the input. This introduces a high cognitive load on the users as the user needs to check for three security indicators simultaneously before filling up one text field. Existing research works~\cite{egelman2008you,sobey2008exploring} show that in real-world, passive security indicators that require the users to observe multiple markers on the screen (and also on an external device) do not provide adequate security and the systems that implement them suffer from user habituation. Reliance on the user to check the security indicators makes Fidelius as unsafe as transaction confirmation devices (\textbf{A}). 
-\red{Why is this true?}
-The cost of deployment of such system is high as the system requires the user to familiarize with the aforementioned security indicators.
-\red{Reformulate.}
-\item As Fidelius does not support the integrity of the mouse pointer and its interaction with UI elements, this allows the OS to trigger a mouse click on the submit button on the form and force sending incomplete data to the server as illustrated in Figure~\ref{fig:clickJack}. Thus, the OS could compromise the integrity of the input data. 
+\item Fidelius only overlays the text fields and the character inputs into those
+text fields. This allows the attacker to modify the instruction on the UI, such
+as changing the unit of the input (mentioned in the label of the text field)
+that results in an incorrect input. Fidelius solely relies on the static overlay
+region and the LEDs on the external device to ensure the integrity and
+confidentiality of the input. This introduces a high cognitive load on the users
+as the user needs to check for three security indicators simultaneously before
+filling up one text field. Existing research
+works~\cite{egelman2008you,sobey2008exploring} show that in real-world, passive
+security indicators that require the users to observe multiple markers on the
+screen (and also on an external device) do not provide adequate security and the
+systems that implement them suffer from user habituation similar to the
+transaction confirmation devices (\textbf{A} in
+Figure~\ref{fig:relatedWorksTree}). Furthermore, the deployment is costly as the users require training to get familiarize with the
+system (such as different security indicators).
+\item As Fidelius does not support the integrity of the mouse pointer and its
+interaction with UI elements, this allows the OS to trigger a mouse click on the
+submit button on the form and force sending incomplete data to the server -
+early form submission attack as illustrated in Figure~\ref{fig:clickJack}. Thus,
+not supporting the mouse causes the integrity violation of the keyboard input.
+
 
 Moreover, Fidelius is vulnerable to clickjacking attack where the attacker can spawn a fake mouse pointers and trick the user into following it while the real mouse pointer is on the sensitive text field. 
 %One such instance of this attack is illustrated in Figure~\ref{fig:clickJack}. 
