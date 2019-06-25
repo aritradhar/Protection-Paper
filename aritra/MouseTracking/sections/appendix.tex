@@ -67,7 +67,7 @@
 In Table~\ref{tab:relatedWorks}, we summarize the existing research work based on their trust assumptions, IO security features, and usability. Note that it is desirable to have a lower trust assumption, higher security features, and higher usability. The trust assumption is further refined into hardware trust assumption that includes TEE and external trusted hardware, and software trust assumption, which includes isolated device drivers/APIs and trusted hypervisor/OS. The IO security features involve input that includes keyboard, pointer and touch input, and output that only includes the display. Lastly, the usability aspect is divided into two, the requirement of security indicator (SI), and if the solution supports plug-and-play (PnP). PnP implies that the solution can be integrated into the existing system without introducing any major changes into them and supports different architectures and OS out of the box.  
 
 
-\subsection{Sequence of Events}
+\section*{\name Sequence of Events}
 \label{appendix:protocol}
 
 
@@ -97,10 +97,10 @@ Now in this Section, we describe the flow of \name protocol by putting these com
 \end{mylist}
 
 
-\section*{Proof for Input Integrity}
+\section*{Formal Proof for IO Integrity}
 \label{appendix:security}
 
-
+In this section we provide a formal proof for the security properties of \name. Namely,  without protecting both input and output integrity, none of them can be achieved. To simplify the proof, we model the interaction between the user, the host and the remote server as a final state automate (FSA).
 
 \begin{figure}[h]
 \begin{center}
@@ -161,6 +161,8 @@ Now in this Section, we describe the flow of \name protocol by putting these com
 \end{figure}
 
 \subsection{Interaction Protocol} 
+\label{appendix:security:protocol}
+
 
 The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
 %Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
@@ -177,7 +179,6 @@ One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. A
 
 \begin{definition}{\textbf{Input integrity}}
 \label{def:inputIntegrity}
-
 Assume that \server handed a message $m$ to \host where the proper message transformation is $[m]$. The host changes the message transformation to $[m']$ where $[m']\neq [m]$. We also define correct \user input to be $I$ when \host sends a correct message transformation $[m]$ to \user. We define input integrity as the property where the \server does not accept input $I'$ where $I'\neq I$from \user if the \host changes the message transformation.
 \end{definition}
 
