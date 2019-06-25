@@ -14,7 +14,7 @@ Trusted execution environments (TEEs) enable remote trust into the code executin
 \centering
 %\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
 \includegraphics[trim={0 15cm 18cm 0}, clip, width=0.9\linewidth]{systemModel_all.pdf}
-\caption{\textbf{Trusted path.} The figures shows the system and the attacker model of the trusted path. We generally consider two trusted path scenarios, \one trusted path to a remote server, and \two trusted path to a trusted execution environment (TEE) such as the Intel SGX. \red{Remove display from server icon.}}
+\caption{\textbf{Trusted path.} The figures shows the system and the attacker model of the trusted path. We generally consider two trusted path scenarios, \one trusted path to a remote server, and \two trusted path to a trusted execution environment (TEE) such as the Intel SGX.}
 \spacesave
 \label{fig:trustedPath}
 \centering 
@@ -177,7 +177,7 @@ One of the recent solution is Fidelius~\cite{Fidelius} that provides the most co
 
 Moreover, Fidelius is vulnerable to clickjacking attack where the attacker can spawn a fake mouse pointers and trick the user into following it while the real mouse pointer is on the sensitive text field. This allows the attacker to trick the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicator consistently even when she is not doing any security-sensitive task which is not a realistic assumption. 
 \item The design of Fidelius is strictly limited to text fields only. As Fidelius does not provide output integrity of the forms, it can not provide confidentiality to other UI elements such as radio buttons, drop-down menus, etc.
-\item Recent microarchitectural attacks on SGX~\cite{van2018foreshadow} increase the attack surface on the systems such as Fidelius that rely on SGX for security against malicious OS and applications.\footnote{\red{Note: Fidelius provides confidentiality of inputs, integrity is compromised because neither output security, nor pointer integrity are considered.}}
+\item Recent microarchitectural attacks on SGX~\cite{van2018foreshadow} increase the attack surface on the systems such as Fidelius that rely on SGX for security against malicious OS and applications.\footnote{\red{Note: Fidelius provides confidentiality of inputs, integrity is compromised because neither output integrity, nor pointer integrity are considered.}}
 \end{mylist}
 
 
@@ -203,9 +203,9 @@ The lack of security properties and features in the existing solutions provide t
 
 
 \begin{mylist}
-  \item \textbf{Inter-dependency between input and output.} The main lesson that we learn from the previous papers are that input and output integrity and confidentiality can not be ensured in isolation, rather, they are needed to be secured simultaneously.  
+  \item \textbf{Inter-dependency between input and output.} The main lesson that we learn from the previous papers are that input and output integrity and confidentiality can not be ensured in isolation. Rather, they are needed to be secured simultaneously as the output and the input influences each other.  
 
-  \item \textbf{Inter-dependency between all input modalities.} If there exists multiple input sources (e.g., keyboard and mouse), all of them are needed to be protected simultaneously as these input sources influence each other. For example, in web application scenario, protecting the integrity of only the keyboard input does not provide any meaningful security as an attacker-controlled host can always execute an early form submission attack.
+  \item \textbf{Inter-dependency between all input modalities.} If there exists multiple input sources (e.g., keyboard and mouse), all of them are needed to be protected simultaneously as these input sources influence each other. For example, in web application scenario, protecting the integrity of only the keyboard input in does not provide any meaningful security in the web-application scenario as an attacker-controlled host can always execute an early form submission attack.
 
   
   \item \textbf{Low cognitive load for integrity.} Output integrity protection can eliminate the actions that leads to high cognitive loads to the user.  Such as using an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover such designs requires heavy user training that makes the system deployment hard and costly.
