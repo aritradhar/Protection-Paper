@@ -24,6 +24,10 @@ In traditional settings, a \emph{Trusted path} provides a secure channel between
 %But practically establishing a trusted path in general IO devices is a nontrivial problem specifically if one considers the plethora of complex UI objects and input methods as well as different security and functional properties that a solution should satisfy. 
 In this paper, we primarily target the trusted path problem to a remote server (such as a remote PLC, web server or remotely accessible medical device, etc.) that is being accessed from a browser running on a commodity $x86$ host.
 
+
+\myparagraph{Attacker model and capabilities} The primary motivation of this paper is to establish a trusted path in a setting where the host is attacker-controlled (OS, installed applications and hardware). The attacker also controls the network
+The attacker can intercept, drop or modify the user IO data to and from the remote server. On top of it, the host can launch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer, changing the layout of the UI elements (changing the position, size, adding, deleting or replacing UI elements, adding fraudulent instruction/information on the screen, changing labels of the UI elements, e.g., changing units of the input parameters, changing behaviour of the UI elements, etc.) to trick the user into providing sensitive data, tricking the user into moving the mouse to the wrong location and click there, manipulate input data, etc.
+
 \iffalse
 \subsection{Security Properties}
 
@@ -154,7 +158,7 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 %\includegraphics[trim={0 9cm 22cm 0}, clip, width=0.85\linewidth]{clickJacking.pdf}
 \includegraphics[trim={0 10.3cm 24.7cm 0}, clip, width=0.8\linewidth]{earlyFormSubmission.pdf} 
 \caption{\textbf{Early form submission attack.} The figure shows an early form
-submission attack that Fidelius~cite{Fidelius} is susceptible to. The user
+submission attack that Fidelius~\cite{Fidelius} is susceptible to. The user
 selects and edits the field \texttt{offset} while the OS triggers
 \texttt{Update} button, causing misconfiguration of a remote safety-critical PLC
 (Control by Web X-600M).}
