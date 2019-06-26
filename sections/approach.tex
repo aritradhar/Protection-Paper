@@ -1,3 +1,12 @@
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.85\linewidth]{approachOverview.pdf}
+\caption{\textbf{High-level approach overview of our solution.}  The \device connects the IO devices and the attacker-controlled host. We also assume that the network is also attacker-controlled.}
+\spacesave
+\label{fig:approachOverview}
+\centering
+\end{figure}
+
 \section{Solution Overview \& Main Techniques}
 \label{sec:approach}
 
@@ -10,17 +19,6 @@ We first define the system and attacker model, then outline the challenges and t
 
 \subsection{System Model}
 \label{sec:approach:systemAttackerModel}
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 8.5cm 17cm 0}, clip, width=0.85\linewidth]{approachOverview.pdf}
-\caption{\textbf{High-level approach overview of our solution.}  The \device connects the IO devices and the attacker-controlled host. We also assume that the network is also attacker-controlled.}
-\spacesave
-\label{fig:approachOverview}
-\centering
-\end{figure}
-
 
 We consider a system model where the user wants to sends the input to a safety-critical remote end-system. The model is depicted in Figure~\ref{fig:approachOverview} that shows the untrusted host, remote server and the user IO devices. 
 We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted.
