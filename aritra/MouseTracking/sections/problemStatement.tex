@@ -12,7 +12,7 @@ Trusted execution environments (TEEs) enable remote trust into the code executin
 \begin{figure}[t]
 \centering
 %\includegraphics[trim={0 14cm 17cm 0}, clip, width=0.9\linewidth]{systemModel.pdf}
-\includegraphics[trim={0 15cm 18cm 0}, clip, width=0.9\linewidth]{systemModel_all.pdf}
+\includegraphics[trim={0 15cm 18cm 0}, clip, width=0.85\linewidth]{systemModel_all.pdf}
 \caption{\textbf{Trusted path.} The figures shows the system and the attacker model of the trusted path. We generally consider two trusted path scenarios, \one trusted path to a remote server, and \two trusted path to a trusted execution environment (TEE) such as the Intel SGX.}
 \spacesave
 \label{fig:trustedPath}
@@ -24,7 +24,7 @@ In traditional settings, a \emph{Trusted path} provides a secure channel between
 In this paper, we primarily target the trusted path problem to a remote server (such as a remote PLC, web server or remotely accessible medical device, etc.) that is being accessed from a browser running on a commodity $x86$ host.
 
 
-\myparagraph{Attacker model and capabilities} Our attacker model assumes that the host is attacker-controlled (OS, installed applications, and hardware). The attacker also controls the network. The attacker can intercept, drop, or modify the user IO data to and from the remote server. On top of it, the host can launch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer, changing the layout of the UI elements (changing the position, size, adding, deleting or replacing UI elements, adding fraudulent instruction/information on the screen, changing labels of the UI elements, e.g., changing units of the input parameters, changing behaviour of the UI elements, etc.) to trick the user into providing sensitive data, tricking the user into moving the mouse to the wrong location and click there, manipulate input data, etc. \red{Revise.}
+\myparagraph{Attacker model and capabilities} Our attacker model assumes that the host is attacker-controlled (OS, installed applications, and hardware). The attacker also controls the network. The attacker can intercept, drop, or modify the user IO data to and from the remote server. On top of it, the host can launch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer and clicking on a wrong UI element, changing the layout of the UI elements (changing the position, size, adding, deleting or replacing UI elements, adding fraudulent instruction/information on the screen, changing labels of the UI elements, e.g., changing units of the input parameters, changing behaviour of the UI elements, etc.) to trick the user into providing sensitive data, manipulate input data, etc. \red{Revise.}
 
 \iffalse
 \subsection{Security Properties}
@@ -93,9 +93,7 @@ There exist two broad categories of existing solutions that address the problem 
 
 \myparagraph{A. Transaction confirmation devices} In their paper, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. Systems such as ZTIC~\cite{weigold2011secure} use an external device with display and smartcard attachment to confirm user inputs. Android OS also provides similar mechanism to confirm protected transactions~\cite{android_confirm}. 
 
-\textbf{$\bullet$ Observation:} The transaction confirmation suffers from three significant drawbacks. The first drawback is the risk of \emph{user habituation}~\cite{anderson2016warning}. Transaction confirmation devices introduce significant cognitive load to the user and may push the user to confirm their actions without even looking to the input data. The second drawback is \emph{usability}, i.e., interacting with a small device can be cumbersome. 
-%Such user action makes the transaction confirmation device impractical in day-to-day interactions. 
-Finally, only \emph{simple UI} can be supported, i.e., transaction confirmation is not practical/suitable for complex interaction, rather simple text-based inputs.\footnote{\red{Take-aways for this are: user habituation and usability. Third can be omitted in my opinion.}}
+\textbf{$\bullet$ Observation:} The transaction confirmation suffers from three significant drawbacks. i) The risk of \emph{user habituation}~\cite{anderson2016warning}. Transaction confirmation devices introduce significant cognitive load to the user and may push the user to confirm their actions without even looking to the input data. ii) \emph{Usability}, i.e., interacting with a small device can be cumbersome. iii) Only \emph{simple UI} can be supported, i.e., transaction confirmation is not practical/suitable for complex interaction, rather simple text-based inputs.
 
 %In contrary, \name supports generic input devices and supports complex user interfaces and user interactions. Moreover, the complete automated nature of \name does not introduce any cognitive load on the user, making the system less susceptible to user error.
 
@@ -144,14 +142,12 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 %can enforce no JS can draw objects on top of it. 
 Clickjacking Revisited~\cite{akhawe2014clickjacking} evaluates such security measures in the context of a trusted browser. 
 
-\textbf{$\bullet$ Observations:} The browser-based solutions assume that the browser is fully trusted. Hence, these solutions incur higher TCB. And in a compromised host scenario, such mechanisms do not work.
-\red{This does not look like a valid observation, maybe we can say element annotation or lightbox is shown to be helpful.}
-%The trust model is significantly different from our work as it assumes that the browser and the OS are trusted. This makes the InConext i) not directly compatible with the attacker model that \name targets, and ii) targets a specific attack scenario (clickjacking vs. generic trusted path).
+\noindent\textbf{$\bullet$ Observations:} The browser-based solutions provides many useful techniques (details in Section~\ref{sec:systemDesign:userAttention}) to focus user attention to a sensitive UI. As our trust model assumes that the host is untrusted, adapting most of these technique is non-trivial.
 
 
 \myparagraph{B2. Trusted hypervisor-based solutions} Trusted hypervisors and secure micro-kernels are also alternatives to achieve Trusted path. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Solutions such as SGXIO~\cite{weiser2017sgxio}  combine a TEE and a hypervisor to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations being handled by the OS).
 
-\textbf{$\bullet$ Observation:} One major drawback of such solutions is the trust assumption that involves a full hypervisor. One can argue that a hypervisor that provides a rich set of functionalities has code base size of an OS. Second, most of the minimal hypervisors do not offer common usable features such as rich IO or UI making them impractical for day-to-day usage in consumer devices. TEEs such as SGX also open up new attack surfaces such as microarchitectural attacks~\cite{van2018foreshadow}.
+\noindent\textbf{$\bullet$ Observation:} One major drawback of such solutions is the trust assumption that involves a full hypervisor. One can argue that a hypervisor that provides a rich set of functionalities has code base size of an OS. Second, most of the minimal hypervisors do not offer common usable features such as rich IO or UI making them impractical for day-to-day usage in consumer devices. TEEs such as SGX also open up new attack surfaces such as microarchitectural attacks~\cite{van2018foreshadow}.
 
 %There exist several works that use TEE and hypervisor simultaneously to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations are handled by the OS). Existing research such as SGXIO~\cite{weiser2017sgxio} requires the IO drives to be implemented inside the TEE or using trusted hypervisor that extends the size of the TCB significantly. Moreover, TEE requires trust assumption on the processors and additional code bases. One such example is Intel SGX where the trust model includes the physical processor package, SGX SDK, quoting enclave, launch enclave and Intel attestation service. Our proposed solution avoids such extensive trust assumptions and assumes that the entire platform is in control of the attacker.
 
@@ -185,14 +181,14 @@ Moreover, Fidelius is vulnerable to clickjacking attack where the attacker can s
 \item Recent microarchitectural attacks on SGX~\cite{van2018foreshadow} increase the attack surface on the systems such as Fidelius that rely on SGX for security against malicious OS and applications.
 \end{mylist}
 
-\textbf{$\bullet$ Observation:} The main observation from the existing works concerning external devices are that i) \emph{lack of output integrity} compromises input integrity, ii) if \emph{both output and input integrity} are not protected simultaneously, not of them can be achieved, and iii) if not \emph{all the modalities of inputs} are secured simultaneously, none of them could be secure. 
+\noindent\textbf{$\bullet$ Observation:} The main observation from the existing works concerning external devices are that i) \emph{lack of output integrity} compromises input integrity, ii) if \emph{both output and input integrity} are not protected simultaneously, not of them can be achieved, and iii) if not \emph{all the modalities of inputs} are secured simultaneously, none of them could be secure. 
 
 
 \myparagraph{Strawman solution I: Full-fledged isolated system} The first strawman solution uses an external trusted device that runs a full operating system with a browser and is physically isolated from the attacker-controlled host. From the security point of view, this solution does not provide any security benefits - the external device has the same attack surface as the untrusted host due to its huge TCB, making it as vulnerable as the host.
 
 \myparagraph{Strawman solution II: Capturing screenshot} This strawman solution uses a trusted device that takes a screenshot when the user executes an action, e.g., mouse click to submit a form on a webpage. The device then signs the snapshot and transmits it to the server along with the signed input. The signed snapshot by the device could reveal if the untrusted host manipulates the UI. The remote server verifies the signature and then uses image/text analysis to extract the information from the UI elements such as labels on buttons or markers of a slider, etc. 
 
-\textbf{$\bullet$ Observations:} This solution suffers from the following fundamental problems:
+\noindent\textbf{$\bullet$ Observations:} This solution suffers from the following fundamental problems:
 \begin{mylist}
   \item This method does not capture spatiotemporal user context. That implies that the attacker may show some spacial information on the screen to influence user input that may not be captured by the screenshot. The temporal user context implies that taking the snapshot may not capture user intention as for a very short fraction of time the attacker may change the output of the display.
   \item One way to mitigate the previous problem is to capture a video of user interaction. But such a method requires the host to send large amounts of data to the server, and video processing is both time and CPU intensive. 
