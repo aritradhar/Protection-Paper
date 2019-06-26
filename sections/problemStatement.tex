@@ -24,7 +24,7 @@ In traditional settings, a \emph{Trusted path} provides a secure channel between
 In this paper, we primarily target the trusted path problem to a remote server (such as a remote PLC, web server or remotely accessible medical device, etc.) that is being accessed from a browser running on a commodity $x86$ host.
 
 
-\myparagraph{Attacker model and capabilities} Our attacker model assumes that the host is attacker-controlled (OS, installed applications, and hardware). The attacker also controls the network. The attacker can intercept, drop, or modify the user IO data to and from the remote server. On top of it, the host can launch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer and clicking on a wrong UI element, changing the layout of the UI elements (changing the position, size, adding, deleting or replacing UI elements, adding fraudulent instruction/information on the screen, changing labels of the UI elements, e.g., changing units of the input parameters, changing behaviour of the UI elements, etc.) to trick the user into providing sensitive data, manipulate input data, etc. \red{Revise.}
+\myparagraph{Attacker model and capabilities} Our attacker model assumes that the host (OS, installed applications, and hardware) and the network are attacker-controlled. The attacker can intercept, drop, or modify the user IO data to and from the remote server. On top of it, the host can launch complex UI-based attacks. Such includes spawning multiple mouse pointer to trick the user into following the wrong mouse pointer and clicking on a wrong UI element, changing the layout of the UI elements (changing the position, size, adding, deleting or replacing UI elements, adding fraudulent instruction/information on the screen, changing labels of the UI elements, e.g., changing units of the input parameters, changing behaviour of the UI elements, etc.) to trick the user into providing sensitive data, manipulate input data, etc. 
 
 \iffalse
 \subsection{Security Properties}
@@ -200,7 +200,7 @@ Moreover, Fidelius is vulnerable to clickjacking attack where the attacker can s
 \subsection{Requirements of Security Properties}
 \label{sec:problemStatement:goals}
 
-The lack of security properties and features in the existing solutions provides the necessary security requirements for IO integrity and confidentiality. We can not summarize the observations that we derived from the literature and the strawman solutions as the following:
+The lack of security properties and features in the existing solutions provides the necessary security requirements for IO integrity and confidentiality. We can not summarize the observations that we derived from the literature and the strawman solutions (refer to Section~\ref{sec:problemStatement:existingSolution}) as the following:
 
 
 \begin{mylist}
