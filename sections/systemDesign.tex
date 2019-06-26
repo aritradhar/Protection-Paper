@@ -42,6 +42,27 @@ This approach requires a JavaScript code snippet that we call \name JS, that exe
 
 %\subsubsection{Integrity of the user input} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different than a standard UI, making the user habituation seamless. The UI specification encodes the behavior of all the generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. One example of the proof-of-action is depicted in Figure~\ref{fig:transformation} that shows the payload that the \device sends to the server. Along with the keyboard data that is provided by the user, the \device also attaches the proof that the user indeed clicked on the \texttt{OK} button that leads to the action. A detailed description of how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
 
+
+\subsection{Focusing User Attention}
+\label{sec:systemDesign:userAttention}
+
+In the previous sections, we provide mechanisms to provide output integrity. Note that the output integrity is crucial to ensure input integrity as the untrusted host may show arbitrary information to the user (via the untrusted part of the display space) that may influence the user. Hence, it is necessary for \name to provide a visual cue to the user so that they can distinguish the secure overlay of the screen from the insecure part of the screen. There are two aspects of UI manipulation by the attacker-controlled host. i) spacial: where the attacker uses the non-overlaid part of the screen to influence the user, and ii) temporal: where the attacker may influence the user previously (in different webpage or application before) that leads to change of user input.
+
+\myparagraph{Our solution} We propose to dimmed out non-overlaid part of the screen (all the screen area excluding the overlaid mouse pointer and the overlaid UI). Highlighting the sensitive part of the screen by dimming out the rest is a known security mechanism~\cite{huang2012clickjacking} used in the context of the clickjacking attack. There are two ways to activate such mechanisms. Both have their pros and cons.
+
+
+\subsubsection{\bfseries Automated activation}
+\label{sec:systemDesign:userAttention:automated}
+
+This method can be triggered dimming out the non-overlaid part of the screen automatically in specific situations, e.g., when the user moves her mouse pointer over the overlaid UI, or start moving the mouse after a brief pause (like 5 seconds). One advantage of the automated trigger is that the user does not need to remember to trigger the mechanism. Hence the system is resilient from the situation where the user needs to trigger it. However, dimming out a large portion of the scene frequently can diminish user experience significantly.   
+
+\subsubsection{\bfseries Secure Attention Sequence}
+\label{sec:systemDesign:userAttention:sas}
+
+Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential.} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location and adapts it into the system. 
+
+\myparagraph{SAS policy} The remote server can set configurable SAS policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute this. One example policy could be \texttt{Ctrl+d:5}, which denotes that user needs to press key `\texttt{Ctrl+d}' to unlock the UI overlay. Pressing this key also trigger the \device to back out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). 
+
 \subsection{Continuous Tracking of Mouse Pointer in the HDMI Frame}
 \label{sec:systemDesign:analysis}
 
@@ -69,14 +90,6 @@ Protecting the integrity of the mouse actions (move, drag, and click), also know
 \end{mylist}
 
 
-\iffalse
-Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea of the host system's HDMI frame analysis. To match the mouse polling rate with the display frame rate, the \device only queries the input device with the frequency of $30$ Hz. We assume that over the HDMI channel the host system sends frames at the rate of $30$ fps.
-
-Our detection of the mouse pointer does not require to analyze the entire resolution of the HDMI frame, but rather a small area of the frame which is efficient. We define the mouse trace as the time series $(\Delta x_i = |x_{t_{i-1}} - x_{t_{i}}|, \Delta y_i=|y_{t_{i-1}} - y_{t_{i}}|)$ delta co-ordinates: $\{(\Delta x_1, \Delta y_1), (\Delta x_2, \Delta y_2), \ldots, (\Delta x_n, \Delta y_n)\}$ from time $\{t_1, t_2, \ldots, t_n\}$. $x_{t_{i}}$ and $y_{t_{i}}$ denote the pixel position of the mouse pointer on the screen at time $t_i$. At the time of initialization, i.e., the first time the \device turns on after the host boots up, the \device pushes the mouse at the left-upper corner of the screen, hence the initial mouse pointer position is set to $(x_0, y_0) = (0, 0)$.  
-Note that a mouse only provides displacement of over $x$ and $y$ coordinates. This corresponds that at time $t_i$ the mouse reported $(\Delta x_i, \Delta y_i)$ displacement to the \device. Assume that the frames coming from the host system to the \device are: $\{f_1, f_2, \ldots, f_n\}$ over the same time interval $(t_1, t_2,\ldots t_n)$. At the time $t_i$, the \device looks into the frame $f_i$ and draws a square centered at $(x_i, y_i)$ with sides of length $X$ (which is enough to cover a mouse cursor on the screen\footnote{In our evaluation, we notice that a 50 $\times$ 50 square pixels can cover the default mouse pointer provided by Ubuntu.}). Then the \device checks if there exists a mouse inside this square or not. In case there exists a mouse cursor, the \device allows further user interactions; otherwise, it stops all the communications and shows an error on display. The implementation detail is provided in Section~\ref{sec:prototype:impl:mouse}.\red{This description is mainly technical}
-\fi
-
-
 \subsubsection{\bfseries Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming out the rest of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds). Note that as long as the \device is connected to the host, it always detect and overlay the mouse pointer irrespective of the application that is running on the host. In Section~\ref{sec:securityAnalysis:integrity} we provide the security analysis of the mouse pointer tracking and the overlay mechanism.
 
 
@@ -85,34 +98,6 @@ Note that a mouse only provides displacement of over $x$ and $y$ coordinates. Th
 
 \subsubsection{\bfseries Handling different mouse cursors} The \device is preloaded with the template images of the mouse cursor for identification. For our \name prototype implementation, we use the default cursors provided by the Ubuntu OS. This allows the \device to identify the cursor when it changes on the screen, e.g., from pointer to a hand when the user hovers her mouse over a link on the browser. 
 
-
-\subsection{Focusing User Attention}
-\label{sec:systemDesign:userAttention}
-
-In the previous sections, we provide mechanisms to provide output integrity. Note that the output integrity is crucial to ensure input integrity as the untrusted host may show arbitrary information to the user (via the untrusted part of the display space) that may influence the user. Hence, it is necessary for \name to provide a visual cue to the user so that they can distinguish the secure overlay of the screen from the insecure part of the screen. There are two aspects of UI manipulation by the attacker-controlled host. i) spacial: where the attacker uses the non-overlaid part of the screen to influence the user, and ii) temporal: where the attacker may influence the user previously (in different webpage or application before) that leads to change of user input.
-
-\myparagraph{Our solution} We propose to dimmed out non-overlaid part of the screen (all the screen area excluding the overlaid mouse pointer and the overlaid UI). Highlighting the sensitive part of the screen by dimming out the rest is a known security mechanism~\cite{huang2012clickjacking} used in the context of the clickjacking attack. There are two ways to activate such mechanisms. Both have their pros and cons.
-
-
-\subsubsection{\bfseries Automated activation}
-\label{sec:systemDesign:userAttention:automated}
-
-This method can be triggered dimming out the non-overlaid part of the screen automatically in specific situations, e.g., when the user moves her mouse pointer over the overlaid UI, or start moving the mouse after a brief pause (like 5 seconds). One advantage of the automated trigger is that the user does not need to remember to trigger the mechanism. Hence the system is resilient from the situation where the user needs to trigger it. However, dimming out a large portion of the scene frequently can diminish user experience significantly.   
-
-\subsubsection{\bfseries Secure Attention Sequence}
-\label{sec:systemDesign:userAttention:sas}
-
-Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential.} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location and adapts it into the system. 
-
-\myparagraph{SAS policy} The remote server can set configurable SAS policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute this. One example policy could be \texttt{Ctrl+d:5}, which denotes that user needs to press key `\texttt{Ctrl+d}' to unlock the UI overlay. Pressing this key also trigger the \device to back out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). 
-
-%\name provides a mechanism for SAS where the user forces the \device to highlight the overlaid UI and the mouse pointer location. SAS eliminates any possibility that the attacker either i) creates any malicious UI in the screen that tricks the user into submitting sensitive information, or ii) spawns a fake mouse pointer to trick the user into clicking into a different location, i.e., clickjacking. To protect against such scenarios, \device also provides SAS using which the user can highlight the overlaid UIs and the mouse pointer on display. 
-%This can be activated explicitly by the user by pressing \texttt{ctrl} button.
-%As the \device overlays on the HDMI frames, the attacker can not manipulate any overwriting by rendering anything on top of them. 
-%There are two SAS mechanisms that \name employs. One is intrinsic to the user action. When the user moves her mouse, the \device briefly outlines the overlay UI. The other SAS mechanism is when the user presses a button on the \device, the \device dims the rest of the part of the display except the legitimate mouse pointer and the overlaid UIs. By doing so, the user can easily discriminate the secure UIs and the legitimate mouse pointer. 
-
-
-%\subsubsection{Mouse pointer overlay} The mouse-pointer overlay also employs SAS. When the user press \texttt{ctrl} key on her keyboard, the \device dims all the portion of the screen except the overlaid UI and the overlaid mouse pointer. This allows the user to determine the legitimate pointer and the overlaid UI. For additional user attention, the mouse pointer also changes the out border color (\textcolor{red}{red} to \textcolor{green}{green}) when the user enters inside the overlaid UI. This also works as an indicator for the user if the browser/host impersonates an overlaid UI to trick the user into providing some critical security data.
  
 
 \subsection{Protected User Interaction}
