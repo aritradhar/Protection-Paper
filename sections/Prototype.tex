@@ -72,39 +72,6 @@ In this section, we describe our prototype implementation of \name as an auxilia
 \myparagraph{Our realization of \name} \name in principle can work with generic host and application. In our prototype of \name, we implement a version of \name that works with web applications running on the browser. Our implementation of \name is realized by a low-TCB auxiliary device that acts as a hub for all IO devices. This also eliminates any need for additional software that acts as a communication channel between the \device and the host. The server and the \device communicate with QR codes (as the example screenshot shown in Figure~\ref{fig:screenshot_1}). We use QR code a a mean of a communication as it does not require any additional software to communicate and QR code is very efficient to decode as the \device recives image frame from the host. As the host renders the QR code on the screen, the \device decodes the QR code from the HDMI channel. One such example is illustrated in Figure~\ref{fig:screenshot_1} where the server sends a QR code that encodes a sensitive input form. The \device first intercepts the HDMI frames, then decodes the QR code in that frame and overlay the decoded form on the display that can be seen only by the user. Our realization of \name achieves the goals that we mentioned in Section~\ref{sec:problemStatement:goals}. \name supports generic IO devices and provides IO integrity and confidentiality (\textbf{goal 1}).The \device is implemented using a low-TCB embedded device that minimizes trust assumption (\textbf{goal 2}) and the \device is plug-and-play and requires minimum user habituation (\textbf{goal 3}). In the following, we provide the implementation details of the \name components.
 
 
-\lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
-
-\begin{figure}[t]
-\begin{lstlisting}[mathescape=true]
-{ "formId": "form1",
-  "formName": "form1",
-  "domain": "secure_site.io",
-  "dim": "400*400",
-  "SAS": "ctrl+d:5",
-  "ui": [{"id":"textbox_1",
-  	"type":"textbox",
-	"label":"Sensitive field 1",
-	"text":"secret data 1",
-	"size": 40},
-	{"id":"textbox_2",
-	"type":"textbox",
-	"label":"Sensitive field2 ",
-	"text":"secret data 2",
-	"size": 40},
-	{"id":"b1",
-	"type":"button",
-	"label":"OK",
-	"trigger":"true",
-	"size": 10},	
-	{"id":"b2",
-	"type":"button",
-	"label":"Cancel",
-	"trigger":"true",
-	"size": 10}],
-  "signature": "0x45565AB246..."}
-\end{lstlisting}
-\end{figure}
-
 \subsubsection{\bfseries QR code generation \& UI specification}
 \label{sec:prototype:impl:qr}
 

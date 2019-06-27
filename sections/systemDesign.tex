@@ -1,12 +1,3 @@
-\section{\name for IO Integity}
-\label{sec:systemDesign}
-
-
-In this section, we provide the technical details of \name integrity protection for IO devices. 
-
-\myparagraph{\device setup} We assume that the \device manufacturer issues a certificate for each of the deployed \device{}s . The \device maintains a whitelist for the remote servers along with their public certificates. This allows the \device to verify messages signed by those remote servers. It is also possible to establish a conventional \tls channel between the \device and the server using the HDMI signal as downstream channel and keystrokes from the \device as the upload channel. Note that IO integrity does not require a \tls between the \device and the remote server. Such a \tls channel is strictly necessary to provide IO confidentiality that is discussed later in Section~\ref{sec:confidentiality}.  For now, we only focus on IO integrity in this section.
-
-
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4.8cm 0 0}, clip, width=0.8\linewidth]{formTransform.pdf}
@@ -15,6 +6,15 @@ In this section, we provide the technical details of \name integrity protection 
 \spacesave
 \label{fig:transformation}
 \end{figure*}
+
+
+\section{\name for IO Integrity}
+\label{sec:systemDesign}
+
+In this section, we provide the technical details of \name integrity protection for IO devices. 
+
+\myparagraph{\device setup} We assume that the \device manufacturer issues a certificate for each of the deployed \device{}s . The \device maintains a whitelist for the remote servers along with their public certificates. This allows the \device to verify messages signed by those remote servers. It is also possible to establish a conventional \tls channel between the \device and the server using the HDMI signal as downstream channel and keystrokes from the \device as the upload channel. Note that IO integrity does not require a \tls between the \device and the remote server. Such a \tls channel is strictly necessary to provide IO confidentiality that is discussed later in Section~\ref{sec:confidentiality}.  For now, we only focus on IO integrity in this section.
+
 
 
 \subsection{\device Overlay of UI Elements}
@@ -33,6 +33,8 @@ This approach requires a JavaScript code snippet that we call \name JS, that exe
 \item \textbf{UI $\rightarrow$ encoded specification generation.} In our implementation of \name, we use the QR code as the intermediate representation of the UI elements that the \name JS generates and the \device interprets. The developers annotates the sensitive UIs in the HTML source (as \texttt{protect=``true''}) that the \name \js parses and convert to a intermediate representation that \device understands. The idea is similar to the developer's annotation if security-critical UIs that is recommended in W3C UI security policy~\cite{w3c_spec}. Note that \name is agnostic of the type of intermediate representation. We use the QR code as it is efficient and can be represented as an image in the HDMI stream that the \device intercepts. Figure~\ref{fig:transformation} shows this transformation between the step \one and \two. The \name JS also attaches the digital signature of the generated specification (\texttt{signature} attribute in the \texttt{form}). The server generates this signature by generating the specification statically from the webpage. \name \js then encodes this specification into a QR code and attaches it into the \texttt{dom} tree of the webpage. Note that the user never sees the QR code as it gets decoded and overlaid by the \device. The UI specification describes the UI elements that the \device interprets and uses to generate the UI bitmap that is used for the overlay. One such concrete example of the UI specification is provided in Specification~\ref{snippet:UISpecification}. Section~\ref{sec:prototype:impl:qr} provides detailed implementation details of how the \name JS generates the encoded UI specification. 
 
 \item \textbf{Encoded specification $\rightarrow$ Overlay.} Overlay is the next phase where the encoded specification (QR code) that embeds the UI specification is interpreted by the \device and overlaid on the HDMI stream. The overlay faithfully recreates the UI to prevent any alteration in the user experience. The \device overlay is depicted in \three in Figure~\ref{fig:transformation}. The \device come with a small interpreter routine that converts the UI specifications to bitmaps that are then overlaid on the HDMI stream. The specification also contains the location and the size details (omitted from the Specification~\ref{snippet:UISpecification}). The \device uses this information to determine the specific UI element over which the user has her mouse pointer. As the \device parses all the HDMI frames for the QR code, the overlay does not get interrupted by scrolling. As the specification sent by the server is signed (\texttt{signature} attribute in the UI specification mentioned in the Specification~\ref{snippet:UISpecification}), the \device-generated UI overlay ensures the integrity and the authenticity of the UI elements on the web page. Note that the \device always draws on top of the frames that are rendered by the compromised host. This way, the overlaid UI is always visible by the user on display, and the host can not manipulate the overlays. Hence \emph{output integrity} is ensured.
+
+
 
 \end{mylist}
 
