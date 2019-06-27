@@ -118,7 +118,7 @@ When user enters input data in the rendered overlay UI elements (such as textbox
 Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 \end{align*}
 
-\item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}).  When user clicks the \texttt{OK} button, the device signs the record. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
+\item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}), e.g, a submit button on a web-form.  When user clicks the \texttt{OK} button, the device signs the record. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
 \end{mylist} 
 
 \subsubsection{\bfseries Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if an input field is annotated as \texttt{protect=``true''}, the server does not accept any input without the \device signature. This prevents the attacker-controlled host to submit data. 
