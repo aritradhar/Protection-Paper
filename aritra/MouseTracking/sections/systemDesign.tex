@@ -1,19 +1,55 @@
 \begin{figure*}[t]
 \centering
 \includegraphics[trim={0 4.8cm 0 0}, clip, width=0.8\linewidth]{formTransform.pdf}
-%\caption{\textbf{Transformation of UI elements: UI $\rightarrow$ QR code $\rightarrow$ \device generated UI overlay.} Automated transformation of the UI elements (\one) by the \name JavaScript snippets that detects the presence of the device. The corresponding \html source shows the UI elements that require integrity/privacy protection. These UI elements are transformed into a QR code (\two). The QR code encodes a UI specification that recreates the transformed UI. Specification~\ref{snippet:UISpecification} shows the corresponding UI specification that is created by the \name \js code. The QR code is then decoded and overlaid (\three) on the HDMI stream by the \device. Upon the user's action on the overlaid UI elements, the device signs all the input data and send them to the remote server. As the rendered UI is generated and overlaid by the \device, it also ensures the integrity of the UI elements. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \caption{\textbf{Transformation of UI elements: UI $\rightarrow$ encoded specification $\rightarrow$ \device generated UI overlay.} \one The actual webpage and the corresponding \html source shows the UI elements that requires integrity protection. \two These UI elements are transformed into an encoded UI specification (our \name prototype uses QR code that encodes a UI specification, e.g., Specification~\ref{snippet:UISpecification}) by the \name JS. The QR code. \three AThe QR code decoded and overlaid on the HDMI stream by the \device. \four Upon the user's action on the overlaid UI elements, the device signs all the input data. \five The \device sends these signed input data them to the remote server. Note that the intermediate QR code transformation (\two) is not visible by the user as it is decoded instantaneously by the device.}
 \spacesave
 \label{fig:transformation}
 \end{figure*}
 
-
 \section{\name for IO Integrity}
 \label{sec:systemDesign}
+
+
+
+\lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
+
+\begin{figure}[t]
+\begin{lstlisting}[mathescape=true]
+{ "formId": "form1",
+  "formName": "form1",
+  "domain": "secure_site.io",
+  "dim": "400*400",
+  "SAS": "ctrl+d:5",
+  "ui": [{"id":"textbox_1",
+  	"type":"textbox",
+	"label":"Sensitive field 1",
+	"text":"secret data 1",
+	"size": 40},
+	{"id":"textbox_2",
+	"type":"textbox",
+	"label":"Sensitive field2 ",
+	"text":"secret data 2",
+	"size": 40},
+	{"id":"b1",
+	"type":"button",
+	"label":"OK",
+	"trigger":"true",
+	"size": 10},	
+	{"id":"b2",
+	"type":"button",
+	"label":"Cancel",
+	"trigger":"false",
+	"size": 10}],
+  "signature": "0x45565AB246..."}
+\end{lstlisting}
+\end{figure}
 
 In this section, we provide the technical details of \name integrity protection for IO devices. 
 
 \myparagraph{\device setup} We assume that the \device manufacturer issues a certificate for each of the deployed \device{}s . The \device maintains a whitelist for the remote servers along with their public certificates. This allows the \device to verify messages signed by those remote servers. It is also possible to establish a conventional \tls channel between the \device and the server using the HDMI signal as downstream channel and keystrokes from the \device as the upload channel. Note that IO integrity does not require a \tls between the \device and the remote server. Such a \tls channel is strictly necessary to provide IO confidentiality that is discussed later in Section~\ref{sec:confidentiality}.  For now, we only focus on IO integrity in this section.
+
+
+
 
 
 
@@ -120,7 +156,7 @@ When user enters input data in the rendered overlay UI elements (such as textbox
 Record = & (textbox\_1, Data\_1);(textbox\_2,Data\_2)
 \end{align*}
 
-\item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}), e.g, a submit button on a web-form.  When user clicks the \texttt{OK} button, the device signs the record. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
+\item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}), e.g, a submit button on a web-form. A trigger element can change the state of the overlaid form, e.g., submit the data of the form to the remote server or reset it. More details are provided in the implementation of \name in Section~\ref{sec:prototype:impl:qr}. When user clicks the \texttt{OK} button, the device signs the record. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
 \end{mylist} 
 
 \subsubsection{\bfseries Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if an input field is annotated as \texttt{protect=``true''}, the server does not accept any input without the \device signature. This prevents the attacker-controlled host to submit data. 
