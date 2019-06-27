@@ -93,7 +93,7 @@ There exist two broad categories of existing solutions that address the problem 
 
 \myparagraph{A. Transaction confirmation devices} In their paper, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. Systems such as ZTIC~\cite{weigold2011secure} use an external device with display and smartcard attachment to confirm user inputs. Android OS also provides similar mechanism to confirm protected transactions~\cite{android_confirm}. 
 
-\textbf{$\bullet$ Observation:} The transaction confirmation suffers from three significant drawbacks. i) The risk of \emph{user habituation}~\cite{anderson2016warning}. Transaction confirmation devices introduce significant cognitive load to the user and may push the user to confirm their actions without even looking to the input data. ii) \emph{Usability}, i.e., interacting with a small device can be cumbersome. iii) Only \emph{simple UI} can be supported, i.e., transaction confirmation is not practical/suitable for complex interaction, rather simple text-based inputs.
+\noindent\textbf{$\bullet$ Observation:} The transaction confirmation suffers from three significant drawbacks. i) The risk of \emph{user habituation}~\cite{anderson2016warning}. Transaction confirmation devices introduce significant cognitive load to the user and may push the user to confirm their actions without even looking to the input data. ii) \emph{Usability}, i.e., interacting with a small device can be cumbersome. iii) Only \emph{simple UI} can be supported, i.e., transaction confirmation is not practical/suitable for complex interaction, rather simple text-based inputs.
 
 %In contrary, \name supports generic input devices and supports complex user interfaces and user interactions. Moreover, the complete automated nature of \name does not introduce any cognitive load on the user, making the system less susceptible to user error.
 
@@ -142,7 +142,7 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 %can enforce no JS can draw objects on top of it. 
 Clickjacking Revisited~\cite{akhawe2014clickjacking} evaluates such security measures in the context of a trusted browser. 
 
-\noindent\textbf{$\bullet$ Observations:} The browser-based solutions provides many useful techniques (details in Section~\ref{sec:systemDesign:userAttention}) to focus user attention to a sensitive UI. As our trust model assumes that the host is untrusted, adapting most of these technique is non-trivial.
+\noindent\textbf{$\bullet$ Observations:} The browser-based solutions provide many useful techniques (details in Section~\ref{sec:systemDesign:userAttention}) to focus user attention to a sensitive UI. As our trust model assumes that the host is untrusted, adapting most of these technique is non-trivial.
 
 
 \myparagraph{B2. Trusted hypervisor-based solutions} Trusted hypervisors and secure micro-kernels are also alternatives to achieve Trusted path. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Solutions such as SGXIO~\cite{weiser2017sgxio}  combine a TEE and a hypervisor to mitigate the shortcomings of TEEs like SGX (i.e., the IO operations being handled by the OS).
@@ -206,7 +206,7 @@ The lack of security properties and features in the existing solutions provides 
 \begin{mylist}
   \item \textbf{Inter-dependency between input and output.} The main lessons that we learn from the previous papers are that input and output integrity, and confidentiality cannot be ensured in isolation. Rather, they are needed to be secured simultaneously as the output, and the input influences each other.  
 
-  \item \textbf{Inter-dependency between all input modalities.} If there exist multiple input sources (e.g., keyboard and mouse), all of them are needed to be protected simultaneously as these input sources influence each other. For example, in web application scenario, protecting the integrity of only the keyboard input in does not provide any meaningful security in the web-application scenario as an attacker-controlled host can always execute an early form submission attack.
+  \item \textbf{Inter-dependency between all input modalities.} If there exist multiple input sources (typically keyboard and mouse), all of them are needed to be protected simultaneously as these input sources influence each other. For example, in web application scenario, protecting the integrity of only the keyboard input in does not provide any meaningful security in the web-application scenario as an attacker-controlled host can always execute an early form submission attack.
 
   
   \item \textbf{Low cognitive load for integrity.} Output integrity protection can eliminate the actions that leads to high cognitive loads to the user.  Such as using an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover, such designs require heavy user training that makes the system deployment hard and costly.
