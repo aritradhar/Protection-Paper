@@ -169,6 +169,15 @@ One of the recent solutions is Fidelius~\cite{Fidelius} which provides a more us
 A small bar on display is also overlaid by the device that shows the remote server's identity and the text field that is currently selected. 
 %However, Fidelius suffers from the following security and functionality issues: 
 
+
+ \noindent\emph{$\rightarrow$ Observation 2:} The second observation is that if \emph{both output and input integrity} are not protected simultaneously, none of them can be achieved.
+
+Fidelius does not support the integrity of the mouse pointer and its interaction with UI elements. The OS can arbitrarily trigger a mouse click on the submit button of the form and send incomplete data to the server - early form submission attack as illustrated in Figure~\ref{fig:clickJack}.
+Moreover, Fidelius is vulnerable to clickjacking attacks where the attacker can spawn a fake mouse pointers and trick the user into following it while the real mouse pointer is on a sensitive text field protected by the system. This allows the attacker to fool the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicators continuously even when she is not doing any security-sensitive task, which is a very strong assumption. 
+Thus, not supporting the mouse causes the integrity violation of the keyboard input.
+
+\noindent\emph{$\rightarrow$ Observation 3:} The third observation is that if not \emph{all the modalities of inputs} are secured simultaneously, none of them can be fully secured. 
+
 %Fidelius solely relies on the static overlay bar and the LEDs on the external device to ensure the integrity and confidentiality of the input. 
 Fidelius introduces a high cognitive load to the users as they need to monitor multiple security indicators simultaneously before filling up one text field. Previous research works~\cite{egelman2008you,sobey2008exploring, anderson2016warning} have shown that systems that require users to observe multiple security indicators %that require the users to observe multiple markers on the screen (and also on an external device) 
 do not guarantee security in practice.
@@ -177,15 +186,9 @@ Also, in specific scenarios the user training to properly explain these indicato
 Fidelius overlays only user inputs on the screen and keeps them isolated from the host. However, the rest of the screen is rendered by the untrusted host.
 %the text fields and the character inputs into those text fields. 
 This allows the attacker to modify the instructions on the UI, such as changing the unit of the input (described in the label of the text field) that result in an incorrect input.
-%similar to the transaction confirmation devices (\textbf{A} in Figure~\ref{fig:relatedWorksTree}).  
 
-\noindent\emph{$\rightarrow$ Observation 2:} The second observation is that if \emph{both output and input integrity} are not protected simultaneously, none of them can be achieved.
+\noindent\emph{$\rightarrow$ Observation 4:} The fourth observation is that user habituation with security indicators compromised input integrity. 
 
-Fidelius does not support the integrity of the mouse pointer and its interaction with UI elements. The OS can arbitrarily trigger a mouse click on the submit button of the form and send incomplete data to the server - early form submission attack as illustrated in Figure~\ref{fig:clickJack}.
-Moreover, Fidelius is vulnerable to clickjacking attacks where the attacker can spawn a fake mouse pointers and trick the user into following it while the real mouse pointer is on a sensitive text field protected by the system. This allows the attacker to fool the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicators continuously even when she is not doing any security-sensitive task, which is a very strong assumption. 
-Thus, not supporting the mouse causes the integrity violation of the keyboard input.
-
-\noindent\emph{$\rightarrow$ Observation 3:} The third observation is that if not \emph{all the modalities of inputs} are secured simultaneously, none of them can be fully secured. 
 
 Finally, the design of Fidelius is strictly limited to text-based fields only. As Fidelius does not provide output integrity of the forms, it cannot provide confidentiality to other UI elements such as radio buttons, drop-down menus, sliders, etc.
 Microarchitectural attacks on Intel SGX increase significantly the attack surface of the system also~\cite{van2018foreshadow}.
