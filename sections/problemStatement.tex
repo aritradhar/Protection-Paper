@@ -1,7 +1,7 @@
 \section{Problem Statement}
 \label{sec:problemStatement}
 
-In this section, we motivate our work in the context of ensuring the integrity and confidentiality of user's IO data to/from remote servers. We also describe selected existing research works that tackle the relevant problem, and we discuss how those works lack a proper solution. Lastly, we present the goals of \name that we derive from the drawbacks of existing literature.
+In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also describe selected existing research works that tackle the relevant problem, and we discuss how those works lack a proper solution. Lastly, we present the goals of \name that we derive from the drawbacks of existing literature.
 
 \subsection{Motivation: Secure IO with Remote Safety-critical System}
 
@@ -111,9 +111,9 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     child { node[neutral, yshift=10pt, xshift=-70pt, yshift=10pt] (tc) {\textbf{A.} Transaction\\ confirmation Device}}  
     child { node[neutral, yshift=10pt, xshift=10pt, yshift=15pt] (td) {\textbf{B.} Trusted intermediary}       
         %child { node[neutral, yshift=0pt, xshift=-30pt, yshift=7pt] (tee) {\textbf{B2.} TEE}}
-      child { node[neutral, yshift=2pt, xshift=-50pt, yshift=7pt] (br) {\textbf{B1.} Browser-based}}   
-     child { node[neutral, yshift=2pt, xshift=-25pt, yshift=7pt] (hv) {\textbf{B2.} Hypervisor-based}} 
-     child { node[neutral, yshift=2pt, xshift=0pt, yshift=7pt] (hw) {\textbf{B3.} External HW}}
+      %child { node[neutral, yshift=2pt, xshift=-50pt, yshift=7pt] (br) {\textbf{B1.} Browser-based}}   
+     child { node[neutral, yshift=9pt, xshift=-25pt] (hv) {\textbf{B1.} Hypervisor-based}} 
+     child { node[neutral, yshift=9pt, xshift=0pt] (hw) {\textbf{B2.} External HW}}
     } ; 
       
 
@@ -123,13 +123,13 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
     \node[below=0cm of hv](os) {Overshadow~\cite{Overshadow}};
     \node[below=0cm of os] {SGXIO~\cite{weiser2017sgxio}};
     \node[below=0cm of gurdion] {Fidelius~\cite{Fidelius}};
-     \node[below=0cm of br](ic) {InContext~\cite{blake1998authenticated}};
-     \node[below=0cm of ic] {W3C UI security policy~\cite{w3c_spec}};
+     %\node[below=0cm of br](ic) {InContext~\cite{blake1998authenticated}};
+     %\node[below=0cm of ic] {W3C UI security policy~\cite{w3c_spec}};
 
     
     \end{tikzpicture}
     
-   \caption{\textbf{Existing trusted path solutions} by their approach. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch}.\red{Todo: Update}}\spacesave
+   \caption{\textbf{Existing trusted path solutions} by their approach. A detailed description of the related works is discussed in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch}.}\spacesave
      \label{fig:relatedWorksTree}
 \end{figure}
 
