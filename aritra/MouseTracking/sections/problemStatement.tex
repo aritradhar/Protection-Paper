@@ -1,7 +1,7 @@
 \section{Problem Statement}
 \label{sec:problemStatement}
 
-In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also analyze existing research works that tackle the relevant problem, and we explain how these works lack a proper solution. Lastly, we present the goals of \name that we derive from the drawbacks of existing literature.
+In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also analyze existing research works that tackle the relevant problem. We explain how these works lack a proper solution and the observations we derive from them. Lastly, we present the required security properties of \name that we derive from the drawbacks of existing literature.
 
 \subsection{Motivation: Secure IO with Remote Safety-critical System}
 
@@ -18,7 +18,7 @@ A user communicates with a remote server through a \emph{host} system that is ty
 In this paper, we primarily target the trusted path problem to a remote server (such as a remote PLC, web server or remotely accessible medical device, etc.) that is being accessed from a browser running on a commodity $x86$ host.
 
 
-\subsection{\red{Analysis of} Existing and Strawman Solutions and their drawbacks}
+\subsection{Analysis of Existing and Strawman Solutions}
 \label{sec:problemStatement:existingSolution}
 
 
