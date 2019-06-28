@@ -27,15 +27,14 @@ In Appendix~\ref{appendix:security:protocol}, we model \name as a finite state m
 
 \myparagraph{Not rendering QR code} The host may deny sending the QR code over the HDMI channel. This considers as a denial of service as the \device can not observe and decode the encoded UI. As the remote server only accepts signed inputs from the \device corresponding to the sensitive UI, the host can not submit arbitrary input values to the remote server.
 
+\myparagraph{Malicious instruction on the screen} The attacker may put malicious instruction/labels on the untrusted part of the screen to influence user input. When the user enters inside the overlaid UI, the lightbox or the freezing mechanisms trigger that focuses user attention inside the sensitive UI. The user attention focusing mechanisms enable the users to distinguish the trusted part of the screen from the untrusted part.
+
 \subsection{Confidentiality}
+
+\myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection attack cannot break the integrity of the input because a legitimate remote server always requires the signed input from the user. Without a valid signed QR code, the \device never signs the input value. On the other hand, redirection may compromise confidentiality as confidentiality requires the user to manually trigger the SAS to detect any sensitive UI elements that are overlaid by the \device.
 
 \myparagraph{Side-channel leakages} Even though, the \device ensures that no mouse, keyboard data reach to the untrusted host when the user executes some operation over the overlaid UI, one can not rule out side-channel leakages. One example could be the amount of time that the user spends or the entry/exit position of the mouse pointer may reveal some information about the input. However, for fixed length inputs such as the pin codes or credit card details do not leak any information about the input.
 
-\subsection{Fast-switching}
-The attacker can show QR-code, so the device renders the overlay. The host removes QR-code (and the device removes the overlay), then device shows a fake render that mimics the one from the device to show some malicious views. This can be repeated many times.
-
-\subsection{Hover activity}
-The attacker wants to learn what button did the user click by tracking the cursor movement. This should be prevented if the device does not send any event to the host when inside the overlay.
 
 \subsection{Early form submission and \red{clickjacking}}
 
