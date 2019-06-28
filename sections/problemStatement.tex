@@ -1,7 +1,7 @@
 \section{Problem Statement}
 \label{sec:problemStatement}
 
-In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also describe selected existing research works that tackle the relevant problem, and we discuss how those works lack a proper solution. Lastly, we present the goals of \name that we derive from the drawbacks of existing literature.
+In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also analyze existing research works that tackle the relevant problem, and we explain how these works lack a proper solution. Lastly, we present the goals of \name that we derive from the drawbacks of existing literature.
 
 \subsection{Motivation: Secure IO with Remote Safety-critical System}
 
@@ -44,7 +44,7 @@ A \emph{Trusted path} provides confidentiality and integrity to the IO data exch
 
 
 
-\subsection{Existing and Strawman Solutions and their drawbacks}
+\subsection{\red{Analysis of} Existing and Strawman Solutions and their drawbacks}
 \label{sec:problemStatement:existingSolution}
 
 \iffalse
@@ -82,7 +82,9 @@ neutral/.style={rectangle, draw, rounded corners, align=center, fill=black!5}
 
 
 
-There are two broad categories of existing solutions that address the problem of trusted paths for IO devices in the presence of a compromised host as illustrated in Figure~\ref{fig:relatedWorksTree}: \textbf{A.}~Solutions where unprotected user interaction first happens and then a trusted component (transaction confirmation device) is used to double check that manipulation did not happen, and \textbf{B.}~Solutions where a trusted component captures user's input/output and then securely mediates them to the destination. The trusted component can a hypervisor, or an external hardware, etc. %But all of these solutions targeted for different problem settings and models. 
+There are two broad categories of existing solutions that address the problem of trusted paths for IO devices in the presence of a compromised host as illustrated in Figure~\ref{fig:relatedWorksTree}: \textbf{A.}~Solutions where unprotected user interaction first happens and then a trusted component (transaction confirmation device) is used to double check that manipulation did not happen, and \textbf{B.}~Solutions where a trusted component captures user's input/output and then securely mediates them to the destination. The trusted component can a hypervisor, or an external hardware, etc. 
+\red{Refer to the table in appendix.}
+%But all of these solutions targeted for different problem settings and models. 
 %Figure~\ref{fig:relatedWorksTree} provides a board classification of the related works and illustrates where our proposed work stands concerning them. %We can generally classify the work into two broad categories based on the trusted path approaches transaction confirmation device and existence of other trusted components.
 
 \myparagraph{A.~Transaction confirmation devices} In their paper, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. Systems such as ZTIC~\cite{weigold2011secure} use an external device with display and smartcard attachment to ensure the integrity of the user inputs. Android OS also provides similar mechanism to confirm protected transactions~\cite{android_confirm}. 
@@ -199,7 +201,7 @@ Microarchitectural attacks on Intel SGX increase significantly the attack surfac
 
 %\myparagraph{Strawman solution I: Full-fledged isolated system} The first strawman solution uses an external trusted device that runs a full operating system with a browser and is physically isolated from the attacker-controlled host. From the security point of view, this solution does not provide any security benefits - the external device has the same attack surface as the untrusted host due to its huge TCB, making it as vulnerable as the host.
 
-\myparagraph{Strawman solution I: Capturing screenshot} This strawman solution uses a trusted device that takes a screenshot when the user executes an action, e.g., mouse click to submit a form. The device then signs the snapshot and transmits it to the server along with the signed input. The remote server verifies the signature and then uses image/text analysis to extract the information from the UI elements such as labels on buttons or markers of a slider, etc. Therefore the server would detect if the host has manipulated UI elements when presented to the user.
+\myparagraph{Strawman solution: Capturing screenshot} This strawman solution uses a trusted device that takes a screenshot when the user executes an action, e.g., mouse click to submit a form. The device then signs the snapshot and transmits it to the server along with the signed input. The remote server verifies the signature and then uses image/text analysis to extract the information from the UI elements such as labels on buttons or markers of a slider, etc. Therefore the server would detect if the host has manipulated UI elements when presented to the user.
 
 This method is vulnerable to attacks because it does not capture spatio-temporal user context. This implies that the attacker may show some spacial information on the screen to influence the user that may not be captured by the snapshot\footnote{Taking full-screen snapshot could reveal also private information of the user from other applications visible on the screen.}. Similarly, taking a snapshot does not guarantee that a specific UI has been presented on the screen as the attacker may render the legitimate UI shortly before the device captures the snapshot.
 One way to mitigate this problem is to capture a video of user interaction. But such a method requires the host to send large amounts of data to the server, and video processing is both time and CPU intensive. 
