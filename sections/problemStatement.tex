@@ -24,11 +24,7 @@ In this paper, we primarily target the trusted path problem to a remote server (
 
 
 There are two broad categories of existing solutions that address the problem of trusted paths for IO devices in the presence of a compromised host as illustrated in Figure~\ref{fig:relatedWorksTree}: \textbf{A.}~Solutions where unprotected user interaction first happens and then a trusted component (transaction confirmation device) is used to ensure input integrity,
-% to double check that manipulation did not happen, 
-and \textbf{B.}~Solutions where a trusted component captures user's input/output and then securely mediates them to the destination. The trusted component can be a hypervisor, or an external hardware, etc. 
-\red{Refer to the table in appendix.}
-%But all of these solutions targeted for different problem settings and models. 
-%Figure~\ref{fig:relatedWorksTree} provides a board classification of the related works and illustrates where our proposed work stands concerning them. %We can generally classify the work into two broad categories based on the trusted path approaches transaction confirmation device and existence of other trusted components.
+and \textbf{B.}~Solutions where a trusted component captures user's input/output and then securely mediates them to the destination. The trusted component can be a hypervisor, or an external hardware, etc. Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch} provides a comprehensive analysis is trusted path literature.
 
 \myparagraph{A.~Transaction confirmation devices} In their paper, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. Systems such as ZTIC~\cite{weigold2011secure} use an external device with display and smartcard attachment to ensure the integrity of the user inputs. Android OS also provides similar mechanism to confirm protected transactions~\cite{android_confirm}. 
 However, these approaches suffer from three significant drawbacks: i) the risk of \emph{user habituation} -- users confirming transactions without looking to the actual data~\cite{anderson2016warning},
@@ -106,7 +102,7 @@ However, we observe a number of security and functional issues in Fidelius that 
 The text fields and the character inputs into those text fields, but the rest of the screen is rendered by the untrusted host.
 This allows the attacker to modify the instructions on the UI, such as changing the unit of the input (described in the label of the text field) that result in an incorrect input.
 
- \noindent\emph{$\rightarrow$ Observation 2:} If \emph{both output and input integrity} are not protected simultaneously, none of them can be achieved. \red{The proof backs this statement.}
+ \noindent\emph{$\rightarrow$ Observation 2:} If \emph{both output and input integrity} are not protected simultaneously, none of them can be achieved.
 
 Fidelius does not support the integrity of the mouse pointer and its interaction with UI elements. Therefore, the OS can arbitrarily trigger a mouse click on the submit button of a form and send incomplete data to the server - early form submission attack (see Figure~\ref{fig:clickJack}).
 Moreover, Fidelius is vulnerable to clickjacking attacks where the attacker can spawn a fake mouse pointers and trick the user into following it while the real mouse pointer is on a sensitive text field protected by the system. This allows the attacker to fool the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicators continuously even when she is not doing any security-sensitive task, which is a very strong assumption. 
@@ -161,4 +157,6 @@ The first and third observation of the existing solutions show that the output a
   \item[]  \textbf{R4. Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption that does not rely on a specialized hypervisor or a trusted OS  or TEEs such as Intel SGX. %Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
 
 \end{mylist}
+
+We tabulate the related research works on trusted path, alongside with their security and functional properties in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch}.  
 %In the following section, what follows is the \name's design and how \name achieves these goals.
