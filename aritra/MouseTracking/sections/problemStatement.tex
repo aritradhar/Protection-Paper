@@ -102,7 +102,7 @@ However, we observe a number of security and functional issues in Fidelius that 
 The text fields and the character inputs into those text fields, but the rest of the screen is rendered by the untrusted host.
 This allows the attacker to modify the instructions on the UI, such as changing the unit of the input (described in the label of the text field) that result in an incorrect input.
 
- \noindent\emph{$\rightarrow$ Observation 2:} If \emph{both output and input integrity} are not protected simultaneously, none of them can be achieved.
+ \noindent\emph{$\rightarrow$ Observation 2:} If \emph{both output and input integrity} are not protected simultaneously, none of them can be achieved. %\red{The proof backs this statement.}
 
 Fidelius does not support the integrity of the mouse pointer and its interaction with UI elements. Therefore, the OS can arbitrarily trigger a mouse click on the submit button of a form and send incomplete data to the server - early form submission attack (see Figure~\ref{fig:clickJack}).
 Moreover, Fidelius is vulnerable to clickjacking attacks where the attacker can spawn a fake mouse pointers and trick the user into following it while the real mouse pointer is on a sensitive text field protected by the system. This allows the attacker to fool the user into providing (possibly incorrect) input, while the user thinks that she is interacting with a non-sensitive text field. To prevent such attacks, the user has to look at the security indicators continuously even when she is not doing any security-sensitive task, which is a very strong assumption. 
@@ -140,23 +140,26 @@ Lastly, adversarial machine learning techniques~\cite{eykholt2017robust,sitawari
 
 The lack of security properties and features in the existing solutions provides the necessary security requirements for IO integrity and confidentiality. We can now summarize the observations that we derived from the literature and the strawman solution (refer to Section~\ref{sec:problemStatement:existingSolution}) as following:
 
-\myparagraph{Inter-dependency between input and output} 
-The first and third observation of the existing solutions show that the output and input security depend on each other and they should be considered together. Otherwise, the attacker can manipulate the output to influence the user input.
+\myparagraph{R1. Inter-dependency between input and output} 
+The first and second observations from the existing solutions show that the output and input security depend on each other and they should be considered together. Otherwise, the attacker can manipulate the output to influence the user input.
 %The main lesson that we learn from the previous papers are that input and output integrity, and confidentiality cannot be considered in isolation. Rather, they are needed to be secured simultaneously as the output, and the input influence each other.  
 
-\begin{mylist}
-  \item[] \textbf{R1. Inter-dependency between input and output.} The main lesson that we learn from the previous papers are that input and output integrity, and confidentiality cannot be considered in isolation. Rather, they are needed to be secured simultaneously as the output, and the input influence each other.  
+\myparagraph{R2. Inter-dependency between all input modalities} 
+Existing web interfaces allow users to complete forms by using different modalities for the user input, namely the keyboard and the mouse.
+The third observation shows that a secure system should protect simultaneously all user input modalities to achieve input integrity (against early-form submission and clickjacking).
 
-  \item[] \textbf{R2. Inter-dependency between all input modalities.} If there exist multiple input sources (typically keyboard and mouse), all of them should be protected simultaneously as these input sources influence each other. For example, in web application scenario, protecting the integrity of only the keyboard input does not provide input integrity as an attacker-controlled host can always execute an early form submission attack.
+%If there exist multiple input sources (typically keyboard and mouse), all of them should be protected simultaneously as these input sources influence each other. For example, in web application scenario, protecting the integrity of only the keyboard input does not provide input integrity as an attacker-controlled host can always execute an early form submission attack.
 
-  \item[] \textbf{R3a. Low cognitive load for integrity.} Output integrity protection can eliminate the actions that leads to high cognitive loads to the user.  Such as using an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover, such designs require user training that makes the system hard to deployment and costly.
+\myparagraph{R3a. Minimal cognitive load for input integrity} 
+A system that protects IO operations should introduce minimal cognitive load to its users for input integrity.
+The system should guarantee output integrity of the legitimate information necessary to complete a form and avoid asking the user to interact with an external device or continuously monitor security indicators.
 
-  \item[] \textbf{R3b. Cognitive load for confidentiality.} Confidentiality requires active triggering from the user to distinguish the secure part of the screen from insuring part of the screen if the part of the output provides integrity/confidentiality protection.
+%Output integrity protection can eliminate the actions that leads to high cognitive loads to the user.  Such as using an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover, such designs require user training that makes the system hard to deployment and costly.
 
- 
-  \item[]  \textbf{R4. Small trust assumption.} Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumption that does not rely on a specialized hypervisor or a trusted OS  or TEEs such as Intel SGX. %Rather \name only trust a plug-and-play small-TCB trusted device that is made out of off-the-shelf components.  
+\myparagraph{R3b. Low cognitive load for input confidentiality} 
+Preserving the confidentiality of user inputs against a compromised host is a challenging task because the host can simply fool the user to reveal her inputs when the system is not active. Therefore, requiring users to perform a small action, e.g,. press a key, before entering confidential inputs is a valid trade-off between usability and security.
 
-\end{mylist}
+%Confidentiality requires active triggering from the user to distinguish the secure part of the screen from insuring part of the screen if the part of the output provides integrity/confidentiality protection.
 
-We tabulate the related research works on trusted path, alongside with their security and functional properties in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch}.  
-%In the following section, what follows is the \name's design and how \name achieves these goals.
+\myparagraph{R4. Small trust assumptions and deployability} 
+Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumptions that do not rely on a a trusted OS, specialized hypervisor, or TEEs such as Intel SGX. Preferably, the solution should be easy to setup for users, i.e., plug-and-play, and integrate well with the existing infrastructure.  
