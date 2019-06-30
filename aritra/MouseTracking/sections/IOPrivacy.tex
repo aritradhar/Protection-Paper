@@ -14,7 +14,7 @@
 \label{sec:confidentiality}
 
 
-In the previous sections, we describe how the \name \js and the \device together ensure the integrity of the IO. We now augment the design of \name to achieve IO confidentiality alongside of the IO integrity. One of the major components for achieving IO confidentiality is to establish a secure channel (i.e., a \tls channel) between the remote server and the \device. \tls ensures that the untrusted host does not read or modify any data exchanged between the user and the remote server.  
+In the previous sections, we describe how the \name \js and the \device together ensure the integrity of the IO. We now augment the design of \name to achieve IO confidentiality alongside the IO integrity. One of the major components for achieving IO confidentiality is to establish a secure channel (i.e., a \tls channel) between the remote server and the \device. \tls ensures that the untrusted host does not read or modify any data exchanged between the user and the remote server.  
 
 
 \subsection{IO Operations}
@@ -42,8 +42,8 @@ In the previous sections, we describe how the \name \js and the \device together
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 4cm 16.5cm 0}, clip, width=0.88\linewidth]{activityPrivacyRender.pdf}
-%\caption{\textbf{\name IO confidentiality.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
-\caption{\textbf{\name IO confidentiality.} The figure shows \one the browser render of the webpage in Specification~\ref{snippet:encryptedHTML} where the \name \js produce the encrypted QR code. \two shows the UI overlay that is decrypted and decoded by the \device. \three shows the user's view when the \device overlays the UI on the HDMI frame and the user starts to interact with the UI.}
+%\caption{\textbf{\name IO confidentiality.} The figure shows how \name achieves the confidentiality of the UI elements and the mouse pointer in the presence of a compromised host. The upper screenshot shows the host's view of the display, while the lower one shows the user's view. The host can only see a QR code where the specification is encrypted by the \tls session key between the \device and the remote server. The user saw the decoded and overlaid UI objects that are retrieved from the QR code sent by the remote server (as described in Section~\ref{sec:systemDesign:transformation}).}
+\caption{\textbf{\name IO confidentiality.} The figure shows \one the browser render of the webpage in Specification~\ref{snippet:encryptedHTML} where the \name \js produce the encrypted QR code. \two shows the UI overlay that is decrypted and decoded by the \device. \three shows the user's view when the \device overlays the UI on the HDMI frame, and the user starts to interact with the UI.}
 
 \spacesave
 \label{fig:activityPrivacy}
@@ -60,7 +60,7 @@ The encrypted specification is delivered to the client browser inside the \textt
 This feature of \name allows the remote server to send securely private information to the user in the presence of a compromised host, e.g., bank account statements, or any other confidential message. 
 
 \myparagraph{Input Confidentiality} When the user enters her mouse pointer into the overlaid UI area, the \device stops transmitting any mouse or keyboard event to the host, making it completely oblivious of any mouse movement or keystroke during that time. 
-However, the user can still see her inputs on the screen as the \device renders the paintext character on the overlaid UI elements, therefore making them visible only to the user.
+However, the user can still see her inputs on the screen as the \device renders the plaintext character on the overlaid UI elements, therefore making them visible only to the user.
 Likewise, when the user selects a UI element, for example, a radio button that is shown in Figure~\ref{fig:activityPrivacy}, the \device stores the selected value in the recorded data.
 On form submission, \device encrypts the recorded data with the \tls key and sends them to the remote server.
 %encrypts, signs the packets and sends it to the remote server making the input commands/values hidden from the attacker-controlled host.  
@@ -68,9 +68,9 @@ On form submission, \device encrypts the recorded data with the \tls key and sen
 \subsection{SAS for confidentiality} 
 \label{sec:confidentiality:SAS}
 
-Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} in Windows that allows the user to provide her credentials.} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name adapts an off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location. SAS is crucial for IO confidentiality as the untrusted host can trick the user into inputting her sensitive information on a forged form. Hence, the user needs to remember the SAS to distinguish \device generated UIs from host generated UIs. Note that the automated activation is insufficient as at any given time, the host can maliciously emulate the automated activation to trick the user into providing sensitive information to a illegitimate UI. \red{SAS is one possible way to inform the user securely about the identity of the UI on the screen, however, one could implement additional techniques such security indicator, or secret images~\cite{serverSecretImg}.}
+Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} in Windows that allows the user to provide her credentials.} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name adapts an off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location. SAS is crucial for IO confidentiality as the untrusted host can trick the user into inputting her sensitive information on a forged form. Hence, the user needs to remember the SAS to distinguish \device generated UIs from host generated UIs. Note that the automated activation is insufficient as at any given time, the host can maliciously emulate the automated activation to trick the user into providing sensitive information to an illegitimate UI. \red{SAS is one possible way to inform the user securely about the identity of the UI on the screen. However, one could implement additional techniques such as security indicator, or secret images~\cite{serverSecretImg}.}
 
-\myparagraph{SAS policy} The remote server can set \red{configurable SAS} policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute it. One example policy could be \texttt{Ctrl+d:5}, which denotes that the user needs to press key `\texttt{Ctrl+d}' to unlock the UI overlay. Pressing this key also triggers the \device to black out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). 
+\myparagraph{SAS policy} The remote server can set configurable SAS policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute it. One example policy could be \texttt{Ctrl+d:5}, which denotes that the user needs to press key `\texttt{Ctrl+d}' to unlock the UI overlay. Pressing this key also triggers the \device to black out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). 
 
 
 \subsection{Establishing \tls}
@@ -97,21 +97,15 @@ We assume that the remote server already has the \device's certificate, or some 
 \begin{mylist}
   \item[\one] The remote web server delivers the web page that encodes the signed public key of the remote server in a QR code (server hello in TLS). 
   %This page has a $5$ seconds timeout.
-  \item[\two] The device captures every frames and looks for a QR code. As soon as the \device finds one, it decodes the QR code and verifies it. 
+  \item[\two] The device captures every frame and looks for a QR code. As soon as the \device finds one, it decodes the QR code and verifies it. 
   %If the verification is successful, the device emulates itself as a keyboard device to the host system. 
-  The device then send its signed public certificate to the host which forwards it to the server.
+  \item[\three] The device then sends its signed public certificate to the host, which forwards it to the server.
   %to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
-  %\item[\three] \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the key strokes to the remote server.
-  \item[\three] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
+  %\item[\three] \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the keystrokes to the remote server.
+  \item[\four] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
  
 \end{mylist}
 
 After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculate the shared secret using the authenticated Diffie-Hellman protocol~\cite{blake1998authenticated}.
-%~\footnote{Assume that $(g^x, x)$ and $(g^y, y)$ is the public-private key pair of the remote server and the \device respectively, where $g$ being a generator of a group $G$. The remote server sends a QR code that encodes a CA-signed $g^x$. The \device transmits signed $g^y$ to the remote server. Both the remote server and the \device computes $g^{xy}=(g^x)^y=(g^y)^x$ as the shared secret. Detailed description can be found  in~\cite{blake1998authenticated}.}.
-%In the case the user does not have a \device, the step mentioned above does not take place within the $5$ seconds timeout period. In that case, the server is aware that the future interaction is not protected by the system. 
-The fallback mechanism in case the user does not have the \device is outside the scope of this work because it is specific to the policy of service providers, e.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or just allow access only to non sensitive functionalities. \red{Re-check technicalities.}
-
-%Therefore, any future interaction is considered as not protected by the system.
-%This allows the webpage to fallback to conventional web UIs that do not involve \device for their operation.
-
+The fallback mechanism, in case the user does not have the \device is outside the scope of this work because it is specific to the policy of service providers. E.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or just allow access only to nonsensitive functionalities. \red{Re-check technicalities.}
 
