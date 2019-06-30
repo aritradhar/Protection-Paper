@@ -44,6 +44,4 @@ The remote server also delivers confidential information only after creating a \
 %However, for fixed length inputs such as the pin codes or credit card details, do not leak any information about the input.
 
 
-\subsection{Attacks toward \device}
-
-In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. In our case, the \device has only two interfaces with the host. The HDMI controller on the \device does not support any bidirectional data channel. Hence, the attacker cannot exploit the HDMI interface. The \usb interface on the \device is only unidirectional (\device $\rightarrow$ host) as the \device emulates itself as an HID. Hence the attacker also cannot exploit the \usb interface.  
+\myparagraph{Attacks toward \device} In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. In our case, the \device has only two interfaces with the host. The HDMI controller on the \device does not support any bidirectional data channel. Hence, the attacker cannot exploit the HDMI interface. The \usb interface on the \device is only unidirectional (\device $\rightarrow$ host) as the \device emulates itself as an HID. Hence the attacker also cannot exploit the \usb interface.  
