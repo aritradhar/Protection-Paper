@@ -4,24 +4,16 @@
 %In this section, we analyze the security of \name by modeling the interaction between the user, host, and the remote server.
 
 
-%\subsection{Modelling the Protocol}
-%\label{sec:securityAnalysis:modelling}
+\myparagraph{Modelling the user behavior} Correctly understanding the user behavior is critical as \name focuses on securing user interaction with the remote server. In Section~\ref{sec:systemDesign:userAttention}, we explain discuss how to focus user attention using techniques such as lightbox or freezing. Note that these mechanisms are activated automatically for IO integrity by the \device when the user enters the sensitive UI. However, for IO confidentiality, as we discussed in Section~\ref{sec:confidentiality:SAS}, \name requires secure attention sequence (SAS) to be activated by the browser. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
 
-%\subsubsection{Modelling the user behavior}
-%\label{sec:securityAnalysis:modelling:user}
 
-\myparagraph{Modelling the user behavior} Correctly understanding the user behavior is critical as \name focuses on securing user interaction with the remote server. In Section~\ref{sec:systemDesign:userAttention}, we explain secure attention sequence (see SAS in Section~\ref{sec:confidentiality}) that \name uses to provide visual clues to the user. SAS enables use to i) follow the legitimate mouse pointer, and ii) recognize which part of the screen is overlaid by the \device. This is achieved by dimming out the screen except for the pointer and the UI overlay. We assume that the user behaves reasonably, hence the SAS mechanism is sufficient to isolate the trusted part of the screen (\device overlay) from the untrusted part of the screen. We also agree that system like \name may not achieve absolute security as the user may choose to ignore all visual cues made by the \device and choose to follow the untrusted notification from the host. Therefore, as long as the user does not get influenced by the information provided in the untrusted part of the screen and modifies her input, the \name remains secure.
-\red{$\leftarrow$ revise.}
- %The formal security analysis is provided in Appendix~\ref{appendix:security}.
+Next, what follows are the informal security analysis of the integrity and confidential properties of \name. Due to space constraints, we provide more formal proofs in Appendix~\ref{appendix:security}.
 
 
 \subsection{Integrity}
 \label{sec:securityAnalysis:integrity}
 
-%From the theorem that is described in Section~\ref{sec:securityAnalysis:modelling}, we can prove that \name provide input integrity. The UI overlay ensures that the user has output integrity, i.e., all the sensitive information sent by the server cannot be manipulated by the host. Also, the \device signs all the input provided by the user. From Theorem~\ref{theorem:th3}, we can conclude that \name provides IO integrity as long as we assume that the user does not get influenced by any information shown in the non-overlaid part of the screen (Discussed in Section~\ref{sec:securityAnalysis:modelling:user}). \name additionally protects against replay attack as the form also contains nonce to ensure freshness.  
-
-In Appendix~\ref{appendix:security:protocol}, we model \name as a finite state machine (FSM) as seen in Figure~\ref{fig:fsm}. Definition~\ref{def:inputIntegrity} and~\ref{def:outputIntegrity} provides the formal definition of input and output integrity respectively. In Theorem~\ref{theorem:th1}, ~\ref{theorem:th2}. and ~\ref{theorem:th3} we prove that as long as user reports everything that she sees on display to the remote server alongside her input over an authenticated channel, input integrity could be achieved. \name ensures output integrity the \device overlays the sensitive UI on the screen. By doing so, \name also ensures input integrity. 
-\red{$\leftarrow$ revise.}
+\myparagraph{Interdependency of input and output integrity} In Appendix~\ref{appendix:security:protocol}, we model \name as a finite state machine (FSM) as seen in Figure~\ref{fig:fsm}. Definition~\ref{def:inputIntegrity} and~\ref{def:outputIntegrity} provides the formal definition of input and output integrity respectively. In Theorem~\ref{theorem:th1}, ~\ref{theorem:th2}. and ~\ref{theorem:th3} we prove that as long as user reports everything that she sees on display to the remote server alongside her input over an authenticated channel, input integrity could be achieved. \name ensures output integrity the \device overlays the sensitive UI on the screen. By doing so, \name also ensures input integrity. 
 
 \myparagraph{Changing IO signals} As only the \device can interact with the overlaid UI, the attacker can not manipulate the IO signals inside the overlaid UI. Moreover, the attacker can not generate and submit input data to the remote server as the server requires all the input data to be signed by the \device.
 
