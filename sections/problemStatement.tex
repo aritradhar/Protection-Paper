@@ -135,10 +135,10 @@ One way to mitigate this problem is to capture a video of user interaction. But 
 Lastly, adversarial machine learning techniques~\cite{eykholt2017robust,sitawarin2018rogue} make the image/text recognition techniques insecure against advanced adversaries.
 
 
-\subsection{Requirements of Security Properties}
+\subsection{Requirements of Security and Functional Properties}
 \label{sec:problemStatement:goals}
 
-The lack of security properties and features in the existing solutions provides the necessary security requirements for IO integrity and confidentiality. We can now summarize the observations that we derived from the literature and the strawman solution (refer to Section~\ref{sec:problemStatement:existingSolution}) as following:
+The lack of security properties and features in the existing solutions provides the necessary security and functional requirements for a trusted path that provides IO integrity and confidentiality and is usable. We can now summarize the observations that we derived from the literature and the strawman solution (refer to Section~\ref{sec:problemStatement:existingSolution}) as following:
 
 \myparagraph{R1. Inter-dependency between input and output} 
 The first and second observations from the existing solutions show that the output and input security depend on each other and they should be considered together. Otherwise, the attacker can manipulate the output to influence the user input.
