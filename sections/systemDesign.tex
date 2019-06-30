@@ -176,8 +176,10 @@ Record = & (tb\_1, Data\_1);(tb\_2,Data\_2)
 The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieved the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs.
 
 
-\subsection{Sequence of Events}
-\label{sec:systemDesign:mainProtocol}
+\myparagraph{Sequence of Events} In the previous Sections, we explain the basic components of \name. Here we
+summarize the overall flow of the system. The sequence diagram of \name is
+illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example
+sequences: mouse movement and filling up a web-form.
 
 \iffalse
 \begin{figure}[t]
@@ -202,10 +204,7 @@ web-form.}
 \end{figure}
 
 
-In the previous Sections, we explain the basic components of \name. Here we
-summarize the overall flow of the system. The sequence diagram of \name is
-illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example
-sequences: mouse movement and filling up a web-form.
+
 %Now in this Section, we describe the flow of \name protocol by putting these
 % components together. The outline of \name is illustrated in Figure~\ref{fig:sequence}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are as the following:
 
