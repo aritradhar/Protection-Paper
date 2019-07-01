@@ -152,6 +152,7 @@ A malicious host can still show a fake pointer to trick the user into following 
 \subsubsection{\bfseries Handling different mouse cursors} The \device is preloaded with the template images of the mouse cursor for detection. For our \name prototype implementation, we use the default cursors provided by the Ubuntu OS. This allows the \device to identify the cursor when it changes on the screen, e.g., from pointer to a hand when the user hovers her mouse over a link on the browser. 
 
  
+\subsubsection{\bfseries Handling mouse acceleration} The \device uses the default mouse acceleration parameters of \texttt{libinput} to cope with the pointer acceleration. As the \device emulate itself as a keyboard, at the time of initialization, the \device sends a command to the host to set the default acceleration. In case, the host changes the mouse acceleration; the \device will fail to detect the mouse in the HDMI stream. We consider this case as a denial of service.
 
 \subsection{Protected User Interaction}
 \label{sec:systemDesign:commit}

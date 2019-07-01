@@ -98,7 +98,7 @@ Our prototype of \name does not require the user to install any additional softw
  
 For the applications that need protection \name introduces the following delays:
 
-\myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only \red{one additional ajax requst to the server} therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
+\myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only one additional \texttt{xmlHttpRequest} to the server therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
 
 \myparagraph{Frame processing for mouse} \device processes every frame of the host. This takes $1.76 ms$ which hopefully is less than the frame rate.
 
