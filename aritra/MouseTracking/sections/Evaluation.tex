@@ -3,7 +3,7 @@
 \centering
 \resizebox{\textwidth}{!}{
   \begin{tabular}{l | l | c  c  c  c | c  c  c  c | c c} 
-  	
+      
     \multicolumn{2}{c}{\multirow{2}{*}{Security Requirements} \ldelim\{{2}{-10mm}[]} & \multicolumn{4}{c}{} & \multicolumn{4}{c}{\cellcolor{Gray}\textbf{R1}} & \multicolumn{2}{c}{} \\
     %\multicolumn{2}{c}{} & \multicolumn{4}{c}{} & \multicolumn{3}{c}{} & \multicolumn{3}{c}{} \\
     %\multicolumn{2}{c}{} & \multicolumn{8}{c}{} & \multicolumn{2}{c}{} \\
@@ -15,59 +15,56 @@
     & & Requires & \multicolumn{1}{c|}{External} & Isolated & Hypervisor/ & \multirow{2}{*}{Keyboard} & \multirow{2}{*}{Pointer} & \multicolumn{1}{c|}{\multirow{2}{*}{Touch}} & \multirow{2}{*}{Display} & No & \multirow{2}{*}{PnP}\\
    \cellcolor{white} & & TEE & \multicolumn{1}{c|}{trusted HW} & API/Drivers & OS & & & \multicolumn{1}{c|}{} & & SI &\\
    \hline
-    &Browser-based~\cite{ye2005trusted}			 &  		&   	& \yes 		& \yes 	&  	 		&   	&   		& \yesNope &   &\yes\\
+    &Browser-based~\cite{ye2005trusted}             &          &       & \yes         & \yes     &               &       &           & \yesNope &   &\yes\\
     \rowcolor{Gray}
-   	\cellcolor{white} & InContext~\cite{Overshadow} 				 &  		&  	&  	  	& \yes 	&   			& \yes 	&   		&   &    &\yes\\
-    & Overshadow~\cite{Overshadow} 				 &  		&  	&  	  	& \yes 	&   			&   	&   		&   &  &  \\
+       \cellcolor{white} & InContext~\cite{Overshadow}                  &          &      &            & \yes     &               & \yes     &           &   &    &\yes\\
+    & Overshadow~\cite{Overshadow}                  &          &      &            & \yes     &               &       &           &   &  &  \\
     \rowcolor{Gray}
-    \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 &  		&  	&  		& \yes 	&   			&   	&   		&   &  & \\
-    &TrustVisor~\cite{mccune2010trustvisor} 		 &  		&  	&  		& \yes 	&  	 		&   	&   		&   &  & \\
+    \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual}      &          &      &          & \yes     &               &       &           &   &  & \\
+    &TrustVisor~\cite{mccune2010trustvisor}          &          &      &          & \yes     &               &       &           &   &  & \\
     \rowcolor{Gray}
-    \cellcolor{white}&Inktag~\cite{hofmann2013inktag} 			 &  		&  	&  		& \yes 	&  			 &   	&   		&   &   & \\
-    &Splitting interfaces~\cite{ta2006splitting}  &  		&  	&  		& \yes 	& \yes 			&   	&   		& \yes &  & \\
+    \cellcolor{white}&Inktag~\cite{hofmann2013inktag}              &          &      &          & \yes     &               &       &           &   &   & \\
+    &Splitting interfaces~\cite{ta2006splitting}  &          &      &          & \yes     & \yes             &       &           & \yes &  & \\
     \rowcolor{Gray}
-    \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 &  		&  	&  		& \yes 	& \yes 			&   	&   		&   &  & \\
-    &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	&  	& \yes 	& \yes	& \yes 			&   	&   		&   &  & \\
+    \cellcolor{white}&$SP^3$~\cite{yang2008using}                  &          &      &          & \yes     & \yes             &       &           &   &  & \\
+    &SGX IO~\cite{weiser2017sgxio}                   & \yes     &      & \yes     & \yes    & \yes             &       &           &   &  & \\
     \rowcolor{Gray}
-    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	&   &  	& \yes 	&   			&   	&   		& \yes &  &  \\
-    &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	&   	&  		&  	& \yes 			&   	&   		&   &  &\yes\\
+    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}     & \yes     &   &      & \yes     &               &       &           & \yes &  &  \\
+    &BASTION-SGX~\cite{BASTION-SGX}                 & \yes     &       &          &      & \yes             &       &           &   &  &\yes\\
     \rowcolor{Gray}
-    \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope &   	&  		&  	&   			&   	&   		&   &  & \\
-    &TrustOTP~\cite{sun2015trustotp}			     & \yes 	&   	&  		&  	& \yes		 	&   	&   		& \yesNope &  &\yes\\
+    \cellcolor{white}&Slice~\cite{azab2011sice}                     & \yesNope &       &          &      &               &       &           &   &  & \\
+    &TrustOTP~\cite{sun2015trustotp}                 & \yes     &       &          &      & \yes             &       &           & \yesNope &  &\yes\\
     \rowcolor{Gray}
-    \cellcolor{white}&VeriUI~\cite{liu2014veriui}				     & \yes 	&   & \yes 		&  	& \yesNope 		&   	&   		& \yesNope &  & \\
-	&AdAttester~\cite{li2015adattester}			 & \yes 	&   & \yes 		&  	&   			&   & \yesNope 	& \yesNope &  & \\
-	\rowcolor{Gray}
-	\cellcolor{white}&TruZ-Droid~\cite{ying2018truz}			     & \yes 	&   & \yes 		&  	& \yes 			&   	&   		& \yesNope &  &\yes\\
-	&TrustUI~\cite{li2014building}			     & \yes 	&   & \yesNope 	&  	&   			&   	& \yesNope 		& \yesNope &  &\yes\\
-	\rowcolor{Gray}
-	\cellcolor{white}&VButton~\cite{li2018vbutton}			     & \yes 	&   & \yes 	&  	& \yesNope 			&   	& \yes 		& \yes &  & \\
-    &CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	&  		&  	&   			&   	&   		&   & \yes & \\
+    \cellcolor{white}&VeriUI~\cite{liu2014veriui}                     & \yes     &   & \yes         &      & \yesNope         &       &           & \yesNope &  & \\
+    &AdAttester~\cite{li2015adattester}             & \yes     &   & \yes         &      &               &   & \yesNope     & \yesNope &  & \\
     \rowcolor{Gray}
-    \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	&  	& \yes 			&   	&   		&   &\yes &\yes\\
-     \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		&  	& \yes 			&   	&   		& \yesNope &   &  \\
+    \cellcolor{white}&TruZ-Droid~\cite{ying2018truz}                 & \yes     &   & \yes         &      & \yes             &       &           & \yesNope &  &\yes\\
+    &TrustUI~\cite{li2014building}                 & \yes     &   & \yesNope     &      &               &       & \yesNope         & \yesNope &  &\yes\\
     \rowcolor{Gray}
-    \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}		 &  		& \yes  &  		&  	& \yes 			&   	&   		& \yes &   & \\
-    &IntegriKey~\cite{IntegriKey}				 &  		& \yes  & \yesNope 	&  	& \yesNope 		&  	&  		&  & \yes &\yes\\ 
+    \cellcolor{white}&VButton~\cite{li2018vbutton}                 & \yes     &   & \yes     &      & \yesNope             &       & \yes         & \yes &  & \\
+    &CARMA~\cite{vasudevan2012carma}                 & \yes     & \yes     &          &      &               &       &           &   & \yes & \\
     \rowcolor{Gray}
-    \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     &  		& \yes  & \yesNope 	&  	&  			&   	&   		&   &  & \\ 
+    \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes         & \yes  & \yesNope     &      & \yes             &       &           &   &\yes &\yes\\
+     \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}                        & \yes     & \yes  & \yes         &      & \yes             &       &           & \yesNope &   &  \\
+    \rowcolor{Gray}
+    \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}         &          & \yes  &          &      & \yes             &       &           & \yes &   & \\
+    &IntegriKey~\cite{IntegriKey}                 &          & \yes  & \yesNope     &      & \yesNope         &      &          &  & \yes &\yes\\ 
+    \rowcolor{Gray}
+    \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}                 &          & \yes  & \yesNope     &      &              &       &           &   &  & \\ 
     \\[-1em]
-	\rowcolor{white}
-	\cellcolor{white}&\textbf{\name}	    			&  		& \yes  &  		&  	& \yes 			& \yes 	& \yes 		& \yes & \yes & \yes\\
+    \rowcolor{white}
+    \cellcolor{white}&\textbf{\name}                    &          & \yes  &          &      & \yes             & \yes     & \yes         & \yes & \yes & \yes\\
     \hline
     \multicolumn{12}{c}{\multirow{2}{*}{\yes~requires/supports \hspace{1cm} \yesNope ~partially requires/supports}} \\
   \end{tabular}
   }
-  \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions, security features, and usability. Note that a lower trust assumption, a high number of security features and high usability are desired from a generic trusted path solution. SI stands for security indicator, while PnP stands for plug and play capability. The table also categorizes the trust assumptions, IO security features and usability in-terms of the security goals that we have (refer to section~\ref{sec:problemStatement:goals}).}
+  \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions, security features, and usability. Note that a lower trust assumption, a high number of security features and high usability are desired from a generic trusted path solution. SI stands for security indicator, while PnP stands for plug and play capability. The table also categorizes the trust assumptions, IO security features and usability in-terms of the required security and functional properties that we list in Section~\ref{sec:problemStatement:goals}).}
   \label{tab:relatedWorks}
 \end{table*}
 
 
-\section{Evaluation}
+\section{Prototype Evaluation}
 \label{sec:eval}
-
-
-%\subsection{Performance}
 
 
 \begin{table}[t]
@@ -88,19 +85,19 @@ Keyboard latency & 170 $\mu$s\\\hline
 
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
-The delay to forward keystrokes is: $170\ \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second.
+The delay in forwarding keystrokes is: $170\ \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second.
 
-Our prototype of \name does not require the user to install any additional software in her machine in order to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
+Our prototype of \name does not require the user to install any additional software in her machine to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
 
-\myparagraph{\device $\rightarrow$ host} The \device transmits data (encrypted) to the host by simulating keystrokes. In our system \device sends the keystrokes in a chunk of $256$ bytes of data to the host. The keystroke has average latency of $5\ ms$.  
+\myparagraph{\device $\rightarrow$ host} The \device transmits data (encrypted) to the host by simulating keystrokes. In our system \device sends the keystrokes in a chunk of $256$ bytes of data to the host. The keystroke has an average latency of $5\ ms$.  
 
-\myparagraph{Host $\rightarrow$ \device} The host sends data to the device by encoding them into the HDMI frame. The QR-code is generated locally in the browser and displayed on the screen. For a specification of a form with two/four elements QR-code generation takes $23\ ms$. The \device detects the QR-code, decodes it and creates the overlay. This process takes $6\ ms$ for the same form considered previously.
+\myparagraph{Host $\rightarrow$ \device} The host sends data to the device by encoding them into the HDMI frame. The QR-code is generated locally in the browser and displayed on the screen. For a specification of a form with two/four elements QR-code generation takes $23\ ms$. The \device detects the QR-code, decodes it, and creates the overlay. This process takes $6\ ms$ for the same form considered previously.
  
-For the applications that need protection \name introduces the following delays:
+\name introduces the following delays in web applications:
 
 \myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only one additional \texttt{xmlHttpRequest} to the server therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
 
-\myparagraph{Frame processing for mouse} \device processes every frame of the host. This takes $1.76 ms$ which hopefully is less than the frame rate.
+\myparagraph{Frame processing for mouse} \device processes every frame of the host. This takes $1.76 ms$, which hopefully is less than the frame rate.
 
 \myparagraph{Keystroke latency} The \device intercepts all user's keystrokes and forwards them to the host or renders in the screen. When rendering on the screen, the latency is $170\ \mu s$.
 

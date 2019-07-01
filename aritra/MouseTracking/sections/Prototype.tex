@@ -34,7 +34,7 @@
 
 \begin{mylist}
  
-  \item \textbf{Computing component.} We use a Raspberry Pi 3 (\six) to implement the computing component that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing the \tls protocol, etc. Once could use an ASIC to further improve performance and reduce the code base of this component. The Pi is connected to the display over HDMI (\nine) interface. The code base of the Pi is primarily consists of Python and Java.
+  \item \textbf{Computing component.} We use a Raspberry Pi 3 (\six) to implement the computing component that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing the \tls protocol, etc. Once could use an ASIC to improve performance further and reduce the code base of this component. The Pi is connected to the display over HDMI (\nine) interface. The code base of the Pi primarily consists of Python and Java.
   
   \item \textbf{Input interceptor.} The input interceptor is composed of an Arduino Due (\three) and an Arduino Zero (\four) that is connected to the input device over \usb (\two) interface. The input interceptor has a \usb out interface that connects to the host (\five) that relays all the user inputs to the host. 
 
@@ -48,15 +48,6 @@
 
 
 In the following, we provide the implementation details of various \name components that we discussed in the previous sections.
-
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 10cm 17cm 0}, clip, width=0.85\linewidth]{keyExchange_1.pdf}
-\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server.}
-\spacesave
-\label{fig:keyExchange}
-\centering
-\end{figure} 
 
 
 \subsubsection{\bfseries QR code generation \& UI specification}
@@ -78,6 +69,15 @@ Initially, when the system boots up the \device perform the calibration phase (s
 \label{sec:prototype:impl:upstream}
 
  The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data (base64) to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 10cm 17cm 0}, clip, width=0.85\linewidth]{keyExchange_1.pdf}
+\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server.}
+\spacesave
+\label{fig:keyExchange}
+\centering
+\end{figure} 
 
 \subsubsection{\bfseries Establishing \tls}
 \label{sec:prototype:impl:tls}
