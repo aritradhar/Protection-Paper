@@ -3,42 +3,42 @@
 
 
 \begin{figure}[t]
-	\begin{center}
-		\begin{subfigure}{0.4\textwidth}
-		\centering
-			%\includegraphics[trim={0 12cm 21.7cm 0}, clip, scale=0.45]{setUpBlock.pdf}
-			\includegraphics[trim={0 13.7cm 21.7cm 0}, clip, scale=0.45]{setUpBlock_1.pdf}
-			\caption{The figure shows the basic components and connections between them in our \name prototype.}
-			\label{fig:prototypeArch}	
-		\end{subfigure}
-	\end{center}
-	
-	%\vspace{1em} 
-	
-	\begin{center}
-		\begin{subfigure}{0.4\textwidth}
-		\centering
-		\includegraphics[trim={0 5cm 21.5cm 0}, clip, scale=0.55]{setUp_1.pdf}
-		\caption{The figure shows \name prototype that employs Arduino Due and Zero microcontroller board and a Raspberry Pi 3 SBC. The highlighted numbers correspond to the labels in Figure~\ref{fig:prototypeArch}.}
-		\label{fig:prototype}
-	\end{subfigure}
-	\end{center}
-	\vspace{-1em}
-	
-	\caption{\textbf{\name prototype}. Figure~\ref{fig:prototypeArch} and~\ref{fig:prototype} shows the component diagram and a photo of the actual \name prototype respectively.} 
-	\label{fig:prototypeAll}
-	\spacesave
+    \begin{center}
+        \begin{subfigure}{0.4\textwidth}
+        \centering
+            %\includegraphics[trim={0 12cm 21.7cm 0}, clip, scale=0.45]{setUpBlock.pdf}
+            \includegraphics[trim={0 13.7cm 21.7cm 0}, clip, scale=0.45]{setUpBlock_1.pdf}
+            \caption{The figure shows the basic components and connections between them in our \name prototype.}
+            \label{fig:prototypeArch}    
+        \end{subfigure}
+    \end{center}
+    
+    %\vspace{1em} 
+    
+    \begin{center}
+        \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[trim={0 5cm 21.5cm 0}, clip, scale=0.55]{setUp_1.pdf}
+        \caption{The figure shows \name prototype that employs Arduino Due and Zero microcontroller board and a Raspberry Pi 3 SBC. The highlighted numbers correspond to the labels in Figure~\ref{fig:prototypeArch}.}
+        \label{fig:prototype}
+    \end{subfigure}
+    \end{center}
+    \vspace{-1em}
+    
+    \caption{\textbf{\name prototype}. Figure~\ref{fig:prototypeArch} and~\ref{fig:prototype} shows the component diagram and a photo of the actual \name prototype respectively.} 
+    \label{fig:prototypeAll}
+    \spacesave
 \end{figure}
 
 \myparagraph{Setup} Here, we describe our prototype implementation of \name as an auxiliary device. Figure~\ref{fig:prototypeAll} depicts the \name prototype in two parts: Figure~\ref{fig:prototypeArch} shows the block diagram of our prototype with various components and connections, and Figure~\ref{fig:prototype} shows a photo of the actual prototype that highlights all the components described in the block diagram. The prototype \device is connected to a desktop computer with 3.40 GHz Intel Core i7-6700 processor with 8 GB RAM running Ubuntu 18.04.2 LTS. The \device uses off-the-shelf devices and has the following components (we use the same numbering as shown in Figure~\ref{fig:prototypeArch} and  Figure~\ref{fig:prototype}):
 
 \begin{mylist}
  
-  \item \textbf{Compute component.} We use a Raspberry Pi 3 (\six) to implement the compute device that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing \tls protocol etc. Once could use an ASIC to further improve performance and reduce the code base of the compute component. The compute device is connected to the display over HDMI (\nine) interface. The compute component is implemented using Python and Java.
+  \item \textbf{Computing component.} We use a Raspberry Pi 3 (\six) to implement the computing component that executes all the \device logic that includes analyzing the HDMI frame, composing the overlays, executing the \tls protocol, etc. Once could use an ASIC to further improve performance and reduce the code base of this component. The Pi is connected to the display over HDMI (\nine) interface. The code base of the Pi is primarily consists of Python and Java.
   
-  \item \textbf{Input interceptor.} The input interceptor is composed of a Arduino Due (\three) and an Arduino Zero (\four) that is connected to the input device over \usb (\two) interface. The input interceptor has a \usb out interface that connects to the host (\five) that relays all the user inputs to the host. 
+  \item \textbf{Input interceptor.} The input interceptor is composed of an Arduino Due (\three) and an Arduino Zero (\four) that is connected to the input device over \usb (\two) interface. The input interceptor has a \usb out interface that connects to the host (\five) that relays all the user inputs to the host. 
 
-  \item \textbf{HDMI interceptor.} The HDMI interceptor (\seven) is implemented using a B101 HDMI to CSI-2 Bridge~\cite{b101} that takes the HDMI channel (\eight) from the host and convert it to camera input signal to the Raspberry Pi 3.  
+  \item \textbf{HDMI interceptor.} The HDMI interceptor (\seven) is implemented using a B101 HDMI to CSI-2 Bridge~\cite{b101} that takes the HDMI channel (\eight) from the host and convert it to the camera input signal to the Raspberry Pi 3.  
  
 \end{mylist}
 
@@ -47,13 +47,11 @@
 \label{sec:prototype:impl}
 
 
-%\myparagraph{Our realization of \name} \name in principle can work with generic host and application. In our prototype of \name, we implement a version of \name that works with web applications running on the browser. Our implementation of \name is realized by a low-TCB auxiliary device that acts as a hub for all IO devices. This also eliminates any need for additional software that acts as a communication channel between the \device and the host. The server and the \device communicate with QR codes (as the example screenshot shown in Figure~\ref{fig:screenshot_1}). We use QR code a a mean of a communication as it does not require any additional software to communicate and QR code is very efficient to decode as the \device receives image frame from the host. As the host renders the QR code on the screen, the \device decodes the QR code from the HDMI channel. One such example is illustrated in Figure~\ref{fig:screenshot_1} where the server sends a QR code that encodes a sensitive input form. The \device first intercepts the HDMI frames, then decodes the QR code in that frame and overlay the decoded form on the display that can be seen only by the user. 
 In the following, we provide the implementation details of various \name components that we discussed in the previous sections.
 
 \begin{figure}[t]
 \centering
 \includegraphics[trim={0 10cm 17cm 0}, clip, width=0.85\linewidth]{keyExchange_1.pdf}
-%\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
 \caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server.}
 \spacesave
 \label{fig:keyExchange}
@@ -64,17 +62,17 @@ In the following, we provide the implementation details of various \name compone
 \subsubsection{\bfseries QR code generation \& UI specification}
 \label{sec:prototype:impl:qr}
 
-QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code (we use QRCode.js, a \js library to produce QR codes). Section~\ref{sec:systemDesign:transformation} provides the high-level concept of generating the QR code from the webpage UI elements. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' additional attribute \texttt{protect=``true''} (one concrete example is illustrated in Figure~\ref{fig:transformation}). The \name JS iterate through all the HTML elements that have \texttt{protect=``true''} attribute. The JS then parses the HTML code and extracts information such as name of the label or type of UI element. \device uses preloaded size parameters to specify the size of a text field, button etc. in case the size is not explicitly mentioned in the HTML source. One important attribute for a UI element in the specification is the \texttt{trigger}. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether. The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation. 
+QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code (we use QRCode.js, a \js library to produce QR codes). Section~\ref{sec:systemDesign:transformation} provides the high-level concept of generating the QR code from the webpage UI elements. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' additional attribute \texttt{protect=``true''} (one concrete example is illustrated in Figure~\ref{fig:transformation}). The \name JS iterate through all the HTML elements that have \texttt{protect=``true''} attribute. The JS then parses the HTML code and extracts information such as the name of the label or type of UI element. \device uses preloaded size parameters to specify the size of a text field, button, etc. in case the size is not explicitly mentioned in the HTML source. One important attribute for a UI element in the specification is the \texttt{trigger}. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether. The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them, etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation. 
 
 \subsubsection{\bfseries Bitmap generation}
 \label{sec:prototype:impl:bitmap}
 
-The \device reads the QR code from the HDMI frame and generate the UI overlay bitmap from it. We have used piCamera library to intercept the HDMI frames and generate the UI on top of it. Our \name prototype implements frequently used HTML input elements~\cite{html_elements} that are the most commons in sensitive UIs. 
+The \device reads the QR code from the HDMI frame and generate the UI overlay bitmap from it. We have used the \texttt{piCamera} library to intercept the HDMI frames and generate the UI on top of it. Our \name prototype implements frequently used HTML input elements~\cite{html_elements} that are the most commons in sensitive UIs. 
 
 \subsubsection{\bfseries Detection of mouse pointer}
 \label{sec:prototype:impl:mouse}
 
-Initially, when the system boots up the \device performs the calibration phase (see Section \ref{sec:systemDesign:analysis:calibration}) in order to synchronize its coordinates of the pointer with the host. The detection of the mouse pointer is implanted partially on the raspberry pi 3 (\six in Figure~\ref{fig:prototypeAll}), while the mouse intercepting is done in the Arduino Due (\three in Figure~\ref{fig:prototypeAll}). The Due gathers the raw mouse data (in terms of displacement measurements $(\Delta x_i, \Delta y_i)$) and sends them to the Pi over \texttt{Serial} interface.  To guarantee that the \device and the host interpret displacement events likewise, the Pi performs an adjustment operation. This operation consists on the \device detecting the exact position of the host pointer in the HDMI frame by analyzing a small square of the frame (50 x 50px) around its pointer coordinates. Considering that the \device gets raw HDMI frames and pointer images are static, we use the lightweight \texttt{template matching} algorithm of the OpenCV library for the detection.
+Initially, when the system boots up the \device perform the calibration phase (see Section \ref{sec:systemDesign:analysis:calibration}) to synchronize its coordinates of the pointer with the host. The detection of the mouse pointer is implanted partially on the raspberry pi 3 (\six in Figure~\ref{fig:prototypeAll}), while the mouse intercepting is done in the Arduino Due (\three in Figure~\ref{fig:prototypeAll}). The Due gathers the raw mouse data (in terms of displacement measurements $(\Delta x_i, \Delta y_i)$) and sends them to the Pi over \texttt{Serial} interface.  To guarantee that the \device and the host interpret displacement events; likewise, the Pi performs an adjustment operation. This operation consists of the \device detecting the exact position of the host pointer in the HDMI frame by analyzing a small square of the frame (50 x 50px) around its pointer coordinates. Considering that the \device gets raw HDMI frames and pointer images are static, we use the lightweight \texttt{template matching} algorithm of the OpenCV library for the detection.
 
 \subsubsection{\bfseries Implementation of the upstream channel}
 \label{sec:prototype:impl:upstream}
@@ -88,17 +86,13 @@ For the IO confidentiality, the \device and server create a \tls channel. When t
 
 \begin{mylist}
   \item[\one] The remote web server delivers the web page that encodes the signed public key of the remote server in a QR code (server hello in TLS). 
-  %This page has a $5$ seconds timeout.
   \item[\two] The device captures every frame and looks for a QR code. As soon as the \device finds one, it decodes the QR code and verifies it. 
-  %If the verification is successful, the device emulates itself as a keyboard device to the host system. 
   \item[\three] The device then sends its signed public certificate to the host, which forwards it to the server.
-  %to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
-  %\item[\three] \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the keystrokes to the remote server.
   \item[\four] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
  
 \end{mylist}
 
 After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculate the shared secret using the authenticated Diffie-Hellman protocol~\cite{blake1998authenticated}.
-The fallback mechanism, in case the user does not have the \device is outside the scope of this work because it is specific to the policy of service providers. E.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or just allow access only to nonsensitive functionalities. 
+The fallback mechanism, i.e., the case where the user does not have the \device, is outside the scope of this work because it is specific to the policy of service providers. E.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or allow access only to nonsensitive functionalities. 
 
 
