@@ -25,7 +25,7 @@ In this paper, we primarily target the trusted path problem to a remote server (
 
 
 There are two broad categories of existing solutions that address the problem of trusted paths for IO devices in the presence of a compromised host as illustrated in Figure~\ref{fig:relatedWorksTree}: \textbf{A.}~Solutions where unprotected user interaction first happens and then a trusted component (transaction confirmation device) is used to ensure input integrity,
-and \textbf{B.}~Solutions where a trusted component captures user's input/output and then securely mediates them to the destination. The trusted component can be a hypervisor, or an external hardware, etc. Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch} provides a comprehensive analysis is trusted path literature.
+and \textbf{B.}~Solutions where a trusted component captures user's input/output and then securely mediates them to the destination. The trusted component can be a hypervisor, or an external hardware, etc. Table~\ref{tab:relatedWorks} provides a comprehensive analysis is trusted path literature.
 
 \myparagraph{A.~Transaction confirmation devices} In their paper, Filyanov et. al~\cite{filyanov2011uni} proposed transaction confirmation device that requires the user to use a separate device to confirm the input parameters. Systems such as ZTIC~\cite{weigold2011secure} use an external device with display and smartcard attachment to ensure the integrity of the user inputs. Android OS also provides similar mechanism to confirm protected transactions~\cite{android_confirm}. 
 However, these approaches suffer from three significant drawbacks: i) the risk of \emph{user habituation} -- users confirming transactions without looking to the actual data~\cite{anderson2016warning},
@@ -168,5 +168,3 @@ Preserving the confidentiality of user inputs against a compromised host is a ch
 
 \myparagraph{R4. Small trust assumptions and deployability} 
 Our goal is to provide the aforementioned rich set of IO and security features with minimal trust assumptions that do not rely on a a trusted OS, specialized hypervisor, or TEEs such as Intel SGX. Preferably, the solution should be easy to setup for users, i.e., plug-and-play, and integrate well with the existing infrastructure.  
-
-We tabulate the related research works on trusted path, alongside with their security and functional properties in Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch}. In the following section, what follows is the \name's design and how \name achieves these properties.
