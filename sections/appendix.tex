@@ -1,7 +1,16 @@
-\section*{Formal Proof for IO Integrity}
+\section*{Proof for IO Integrity}
 \label{appendix:security}
 
-\begin{figure}[h]
+In this appendix, we provide a formal proof of the following property: \emph{without protecting both input and output integrity, none of them can be achieved}. 
+
+
+\subsection{Interaction Protocol} 
+\label{appendix:security:protocol}
+
+To simplify the proof, we model the interaction between the user, the host, and the remote server as a finite state automaton (FSA).
+The interactions between the server (\server), the user (\user) and host (\host) are depicted in the FSA in Figure~\ref{fig:fsm}.
+
+\begin{figure}[h!]
 \begin{center}
 \begin{tikzpicture}[scale=0.15]
 \tikzstyle{every node}+=[inner sep=0pt]
@@ -30,7 +39,20 @@
 \label{fig:fsm}
 \end{figure}
 
-\begin{figure}[h]
+\server sends a message $m$ to \host. One can assume $m$ to be the HTML, JavaScript, and other data send from \server as a HTTP response. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$, which corresponds to a specific $[m]$. 
+%Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
+In this model, we simplify the user input by assuming that the \user only provides an input $I$ only after observing a message transformation $[m]$. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue until \user finishes her input. After every input \host hands over new message transformation to \user (either result of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
+
+We also define two mappings:
+\begin{align*}
+\texttt{Input()}&:[m]\rightarrow I \\
+\texttt{Transform()}&:m,I\rightarrow [m'],\ \exists i\in I:i=\phi
+\end{align*}
+Both of them are \emph{bijective}.
+
+One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
+
+\begin{figure}[t]
 \begin{center}
 \tikzset{
   every picture/.append style={
@@ -59,24 +81,6 @@
 \label{fig:protocol}
 \end{figure}
 
-\subsection{Interaction Protocol} 
-\label{appendix:security:protocol}
-
-In this section, we provide a formal proof or the property: without protecting both input and output integrity, none of them can be achieved. This proof provides formal outline that why systems like IntegriKey~\cite{IntegriKey} or transaction confirmation device~\cite{filyanov2011uni} fail to achieve input security as they do not ensure output integrity.
-
- 
-To simplify the proof, we model the interaction between the user, the host, and the remote server as a finite state automaton (FSA). The interactions between the server (\server), the user (\user) and host (\host) are depicted in the FSA in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JavaScript, and other data send from \server as a HTTP response. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$, which corresponds to a specific $[m]$. 
-%Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
-In this model, we simplify the user input by assuming that the \user only provides an input $I$ only after observing a message transformation $[m]$. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue until \user finishes her input. After every input \host hands over new message transformation to \user (either result of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
-
-We also define two mappings:
-\begin{align*}
-\texttt{Input()}&:[m]\rightarrow I \\
-\texttt{Transform()}&:m,I\rightarrow [m'],\ \exists i\in I:i=\phi
-\end{align*}
-Both of them are \emph{bijective}.
-
-One trace of the protocol transcript is depicted in Figure~\ref{fig:protocol}. As described in the FSM, \server receives traces of message transformation ($[m']_1,[m']_2,\ldots,[m']_n$) and corresponding inputs ($I_1,I_2,\ldots,I_n$). From these traces \server could determine of all the $[m']_i$ are in proper form by verifying if $[m]_i=[m']_i$.
 
 \begin{definition}{\textbf{Input integrity}}
 \label{def:inputIntegrity}
