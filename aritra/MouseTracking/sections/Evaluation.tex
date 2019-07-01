@@ -86,7 +86,7 @@ Keyboard latency & 170 $\mu$s\\\hline
 
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
-The delay in forwarding keystrokes is: $170\ \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second.
+The delay in forwarding keystrokes is $170\ \mu s$, mouse events is $250 \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second.
 
 Our prototype of \name does not require the user to install any additional software in her machine to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
 
@@ -98,7 +98,7 @@ Our prototype of \name does not require the user to install any additional softw
 
 \myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only one additional \texttt{xmlHttpRequest} to the server therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
 
-\myparagraph{Frame processing for mouse} \device processes every frame of the host. This takes $1.76 ms$, which hopefully is less than the frame rate.
+\myparagraph{Frame processing for mouse} \device processes every frame of the host for pointer detection. This takes $1.76 ms$, which does not impact the frame rate.
 
 \myparagraph{Keystroke latency} The \device intercepts all user's keystrokes and forwards them to the host or renders in the screen. When rendering on the screen, the latency is $170\ \mu s$.
 
