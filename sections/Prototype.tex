@@ -50,6 +50,16 @@
 %\myparagraph{Our realization of \name} \name in principle can work with generic host and application. In our prototype of \name, we implement a version of \name that works with web applications running on the browser. Our implementation of \name is realized by a low-TCB auxiliary device that acts as a hub for all IO devices. This also eliminates any need for additional software that acts as a communication channel between the \device and the host. The server and the \device communicate with QR codes (as the example screenshot shown in Figure~\ref{fig:screenshot_1}). We use QR code a a mean of a communication as it does not require any additional software to communicate and QR code is very efficient to decode as the \device receives image frame from the host. As the host renders the QR code on the screen, the \device decodes the QR code from the HDMI channel. One such example is illustrated in Figure~\ref{fig:screenshot_1} where the server sends a QR code that encodes a sensitive input form. The \device first intercepts the HDMI frames, then decodes the QR code in that frame and overlay the decoded form on the display that can be seen only by the user. 
 In the following, we provide the implementation details of various \name components that we discussed in the previous sections.
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 10cm 17cm 0}, clip, width=0.85\linewidth]{keyExchange_1.pdf}
+%\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server. This page only lasts for a few milliseconds. Hence the page is practically invisible to the user. The QR-code displayed on the web page serves as the downstream channel from the remote server to the \device, whereas the text field is the upstream channel.}
+\caption{\textbf{Establishing \tls.} A snapshot of the key exchange web page that is used to communicate the public certificates of the device and the remote server.}
+\spacesave
+\label{fig:keyExchange}
+\centering
+\end{figure} 
+
 
 \subsubsection{\bfseries QR code generation \& UI specification}
 \label{sec:prototype:impl:qr}
@@ -71,7 +81,24 @@ Initially, when the system boots up the \device performs the calibration phase (
 
  The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data (base64) to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
 
+\subsubsection{\bfseries Establishing \tls}
+\label{sec:prototype:impl:tls}
 
+For the IO confidentiality, the \device and server create a \tls channel. When the user opens up a secure webpage, key exchange is the first step that takes place. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange protocol of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
+\begin{mylist}
+  \item[\one] The remote web server delivers the web page that encodes the signed public key of the remote server in a QR code (server hello in TLS). 
+  %This page has a $5$ seconds timeout.
+  \item[\two] The device captures every frame and looks for a QR code. As soon as the \device finds one, it decodes the QR code and verifies it. 
+  %If the verification is successful, the device emulates itself as a keyboard device to the host system. 
+  \item[\three] The device then sends its signed public certificate to the host, which forwards it to the server.
+  %to hexadecimal and send it as a keystroke to the host (client hello in the TLS). For signature, the \device uses the root key of the device manufacturer.
+  %\item[\three] \name  JavaScript snippet looks for the keystrokes, and as soon as it gets a string of a specific length, it sends the keystrokes to the remote server.
+  \item[\four] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
+ 
+\end{mylist}
+
+After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculate the shared secret using the authenticated Diffie-Hellman protocol~\cite{blake1998authenticated}.
+The fallback mechanism, in case the user does not have the \device is outside the scope of this work because it is specific to the policy of service providers. E.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or just allow access only to nonsensitive functionalities. 
 
 
