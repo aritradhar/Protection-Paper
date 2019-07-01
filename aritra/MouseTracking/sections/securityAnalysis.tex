@@ -25,14 +25,14 @@ The attacker may try to defeat the \name pointer tracking and overlay mechanism 
 In any case, the host is not able to alter any user input or access encrypted data when \name with the confidential feature is required.
 %However, the \device cannot observe and decode the encoded UI. As the remote server only accepts signed inputs from the \device corresponding to the sensitive UI, the host can not submit arbitrary input values to the remote server.
 
+\myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection attack cannot break the integrity of the input because a legitimate remote server always requires the signed input from the user. Without a valid signed QR code, the \device never signs the input value. 
+
 \myparagraph{Malicious instruction on the screen} The attacker may put malicious instruction/labels on the untrusted part of the screen to influence user inputs. However, when the user enters inside the overlaid UI to send inputs, the focusing mechanism highlights only the secure UI and hides the rest of the screen. 
 %The user attention focusing mechanisms enable the user to distinguish the trusted part of the screen from the untrusted part.
 
 \subsection{Confidentiality}
 
-\myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection attack cannot break the integrity of the input because a legitimate remote server always requires the signed input from the user. Without a valid signed QR code, the \device never signs the input value. 
-
-The remote server also delivers confidential information only after creating a \tls channel with the user's device. Therefore, if the attacker redirects the user to a malicious page, the legit server does not deliver any information. On the other hand, redirection may compromise only the confidentiality of user inputs if the user does not trigger the SAS mechanism. 
+\myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection may compromise only the confidentiality of user inputs if the user does not trigger the SAS mechanism. Note that the \device can contain a whitelist of the remote server addresses and their corresponding certificates. The \device is only activated when it sees UI coming from the whitelist addresses.
 %as the confidentiality of inputs requires the user to manually trigger the SAS to detect any sensitive UI elements that are overlaid by the \device.
 
 \myparagraph{Side-channel leakages} Even though, the \device ensures that no mouse, keyboard events arrive at the untrusted host when the user executes some operation over the overlaid UI, one can not rule out all side-channel leakages. Depending on the application, the amount of time that the user spends or the entry/exit position of the mouse pointer may reveal some information to the attacker. 
