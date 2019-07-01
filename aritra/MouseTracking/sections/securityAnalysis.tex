@@ -19,7 +19,7 @@ The attacker may try to defeat the \name pointer tracking and overlay mechanism 
 
 
 
-\myparagraph{Replay attack} All the sensitive UI elements from the remote server contain freshness value (nonce) alongside the signature. Hence, the replay attack is not possible.
+\myparagraph{Replay attack} In reply attack, the host tries to replay an old user input data to the remote server. To prevent the replay attac, the remote server adds a random identifier (\texttt{id}) in the form specification alongside the signature. With this identifier, the server keeps track of the user input. When the server receives a form submission data, it first checks if the user submitted the same identifier before. In case of a collision, the server rejects the data. 
 
 \myparagraph{Not rendering QR code} The host may deny sending the QR code over the HDMI channel. This is considered as a denial of service, which is acceptable in our threat model as long as the user interacts with a compromised host. 
 In any case, the host is not able to alter any user input or access encrypted data when \name with the confidential feature is required.

@@ -48,7 +48,7 @@ The process of rendering the overlay on the screen has two phases: (i) convert t
 \myparagraph{(i) Secure form $\rightarrow$ Specification}
 Developers should manually mark the sensitive elements of a form, and then produce the respective specification.
 %uses a small code that transforms the HTML forms (only the forms with elements with attribute \texttt{protect=``true''}) to the JSON specification and signs it. 
-For every request, the server adds a nonce to the specification file, signs it, and then delivers it to the user's browser. The nonce serves as session identification to prevent the attacker from re-submitting an old form.
+For every request, the server adds a random identifier (\texttt{id}) to the specification file, signs it, and then delivers it to the user's browser. The \texttt{id} serves as session identification to prevent the attacker from re-submitting an old input data drom the user.
 An example of a specification is presented in~Specification~\ref{snippet:UISpecification}. 
 In the browser, the \name JS encodes the specification in the HDMI frame (as a QR code). 
 %The \device detects the encoded specification, reads it and then renders the overlay. Note that the \device renders only specifications that are signed by the trusted server. Therefore the attacker cannot alter it. 
@@ -57,11 +57,6 @@ Figure~\ref{fig:transformation} shows the transformation between the step \one a
 We further optimize the process of specification generation by reducing the efforts of the developers. The W3C UI security policy~\cite{w3c_spec} recommends developers to annotate the security-critical UI elements of a page to protect them against malicious JS running on the browser. We use a similar technique by asking developers to annotate the sensitive elements in the HTML code (as \texttt{protect=``true''}). Then a module of \name JS that runs on the server parses the form and generates the respective specification automatically.
 
 %We further optimize this process that does not require to add the UI specifications into the HTML sources. The developers include small JavaScript code: \name JS to their sources. \name JS has the same functionally as the server side code that parses the HTML code and outputs the specification. Note the specification generation process is deterministic, hence, given identical HTML sources, both server and the \name \js generate identical UI specifications. Note that \name JS runs on the browser and is not trusted in our system model. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. 
-
-
-%\name \js encodes this specification in a format that is understandable by \device and attaches it into the \texttt{dom} tree of the page. We use the QR code as the encoding method because it is efficient and can be represented as an image in the HDMI stream that the \device intercepts. 
-%Figure~\ref{fig:transformation} shows the transformation between the step \one and \two. The step \two is processed by \device in the next phase and is not visible to the user. 
-%The \name JS also includes the digital signature of the generated specification (\texttt{signature} attribute in the \texttt{form}) and the nonce. The signature and the id provides authenticity of the form and protects from replay attack, respectively.
 
 
 \myparagraph{(ii) Specification $\rightarrow$ Overlay} \device performs the next phase, which starts with the detection of the encoded specification (QR-code) in the HDMI frames. Then the \device validates the signature, renders the overlay according to the specifications and presents it to the user.  The \device overlay is depicted in \three in Figure~\ref{fig:transformation}, which is the final UI shown to the user. Note that the user does not see the QR code as it gets decoded and overlaid by the \device on the fly.
@@ -149,9 +144,7 @@ The data from the \device to the remote server is transmitted using the \name Ja
 %The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. 
 The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet, which then forwards them to the remote server.
 
-\myparagraph{Sending input data}\label{sec:systemDesign:commit:send}
-
-Figure~\ref{fig:sequence} depicts the user interactions in a sequence diagram.. The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
+\myparagraph{Sending input data} Figure~\ref{fig:sequence} depicts the user interactions in a sequence diagram.. The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
 
 \begin{mylist}
 \item \textbf{Record.} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different than a standard UI. The UI specification encodes the behavior of all generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on with her keyboard, the \device intercepts all keystrokes and renders the characters on the overlay.
