@@ -137,8 +137,8 @@ A malicious host can still show a fake pointer to trick the user into following 
 \subsubsection{\bfseries Pointer detection} The \device ensures pointer integrity by tracking the mouse movements using the raw data from the mouse and the HDMI frame.  Figure~\ref{fig:mouseAnalysis} illustrates the high-level idea: 
 
 \begin{mylist}
-\item[]\one shows raw mouse data that sends the displacements $(\Delta x, \Delta y)$ over $x$ and $y$ axis that are fired over time series $t_1,\ldots, t_n$. Note that the initial pointer position is known to the \device from calibration phase where $(x_0, y_0) = (0, 0)$.  
-\item[]\two shows the HDMI frames $f_1,\ldots f_n$ where the \device expects the mouse pointer to be found. For efficiency, the \device only scans a small portion of the HDMI frames ($50 \times 50$ square pixels) that is enough to cover a mouse pointer. Since the operating system can treat mouse movements slightly different according to their algorithm, this step serves to adjust the position difference.
+\item[]\one Shows raw mouse data that sends the displacements $(\Delta x, \Delta y)$ over $x$ and $y$ axis that are fired over time series $t_1,\ldots, t_n$. Note that the initial pointer position is known to the \device from calibration phase where $(x_0, y_0) = (0, 0)$.  
+\item[]\two Shows the HDMI frames $f_1,\ldots f_n$ where the \device expects the mouse pointer to be found. For efficiency, the \device only scans a small portion of the HDMI frames ($50 \times 50$ square pixels) that is enough to cover a mouse pointer. Since the operating system can treat mouse movements slightly different according to their algorithm, this step serves to adjust the position difference.
 %\device checks if there exists a mouse inside this square or not. \red{In case there exists a mouse cursor, the \device allows further user interactions; otherwise, it stops all the communications and shows an error on display.}
 \end{mylist}
 
