@@ -1,15 +1,3 @@
-\iffalse
-\begin{figure}[h]
-\centering
-\includegraphics[trim={0 11cm 16.5cm 0}, clip, width=\linewidth]{inputPrivacy.pdf}
-\caption{Input Confidentiality}
-\label{fig:inputPrivacy}
-\centering
-\end{figure}
-\fi
-
-
-
 \section{\name for IO Confidentiality}
 \label{sec:confidentiality}
 
@@ -69,7 +57,7 @@ On form submission, \device encrypts the recorded data with the \tls key and sen
 \subsection{SAS for confidentiality} 
 \label{sec:confidentiality:SAS}
 
-Secure Attention Sequence (SAS) is a sequence of actions (such as keystrokes \texttt{Ctrl+Alt+Del} in Windows that allows the user to provide her credentials) executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name adapts an off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location. SAS is crucial for IO confidentiality as the untrusted host can trick the user into inputting her sensitive information on a forged form. Hence, the user needs to remember the SAS to distinguish \device generated UIs from host generated UIs. Note that the automated activation is insufficient as at any given time, the host can maliciously emulate the automated activation to trick the user into providing sensitive information to an illegitimate UI.sv
+Secure Attention Sequence (SAS) is a sequence of trustworthy actions (such as keystrokes \texttt{Ctrl+Alt+Del} in Windows that allows the user to provide her credentials) executed by the user. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name adapts an off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location. SAS is crucial for IO confidentiality as the untrusted host can trick the user into inputting her sensitive information on a forged form. Hence, the user needs to remember the SAS to distinguish \device generated UIs from host generated UIs. Note that the automated activation is insufficient as at any given time, the host can maliciously emulate the automated activation to trick the user into providing sensitive information to an illegitimate UI.sv
 
 \myparagraph{SAS policy} The remote server can set configurable SAS policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute it. One example policy could be \texttt{Ctrl+d:5}, which denotes that the user needs to press key `\texttt{Ctrl+d}' to unlock the UI overlay. Pressing this key also triggers the \device to black out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). 
 
