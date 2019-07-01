@@ -11,7 +11,7 @@
 
 
 
-\lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that are tagged as protected from the developers. The example specification is generated from the \html source that is provided in corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
+\lstset{language=JSON, frame=tb, caption=\small{\textbf{Protected UI specification language.} The UI specification shows the JSON formatted UI specification that is encoded into a QR code. The specification is generated from the \html source that is tagged as protected from the developers. The example specification is generated from the \html source that is provided in the corresponding UI in Figure~\ref{fig:transformation}.}, label=snippet:UISpecification, firstnumber =1}
 
 \begin{figure}[t]
 \begin{lstlisting}[mathescape=true]
@@ -19,16 +19,16 @@
   "domain": "secure_site.io",
   "size": "400*400", "SAS": "ctrl+d:5",
   "ui": [{"id":"textbox_1", "type":"textbox", 
-  	"label":"Sensitive field 1",
-	"text":"secret data 1",},
-	{"id":"textbox_2", "type":"textbox",
-	"label":"Sensitive field2 ",
-	"text":"secret data 2"},
-	{"id":"b1", "type":"button",
-	"label":"OK",
-	"trigger":"true"},	
-	{"id":"b2", "type":"button",
-	"label":"Cancel", "trigger":"false"}],
+      "label":"Sensitive field 1",
+    "text":"secret data 1",},
+    {"id":"textbox_2", "type":"textbox",
+    "label":"Sensitive field2 ",
+    "text":"secret data 2"},
+    {"id":"b1", "type":"button",
+    "label":"OK",
+    "trigger":"true"},    
+    {"id":"b2", "type":"button",
+    "label":"Cancel", "trigger":"false"}],
   "signature": "0x45AB...", "id": "0x0ab.."}
 \end{lstlisting}
 \end{figure}
@@ -50,30 +50,28 @@ The process of rendering the overlay on the screen has two phases: (i) convert H
 \myparagraph{(i) Secure form $\rightarrow$ Specification}
 Developers should manually mark the sensitive elements of a form, and then produce the respective specification.
 %uses a small code that transforms the HTML forms (only the forms with elements with attribute \texttt{protect=``true''}) to the JSON specification and signs it. 
-For every request the server adds a nonce to the specification, signs it and then send to the user's browser. The nonce serves as session identification to prevent the attacker from re-submitting later a completed form.
+For every request, the server adds a nonce to the specification, signs it, and then send to the user's browser. The nonce serves as session identification to prevent the attacker from re-submitting later a completed form.
 An example of a specification is presented in~Specification~\ref{snippet:UISpecification}. 
-In the browser the \name JS encodes the specification in the HDMI frame (as a QR code). 
-%The \device detects the encoded specification, reads it and then renders the overlay. Note that the \device renders only specifications that are signed by the trusted server, therefore the attacker cannot alter it. 
+In the browser, the \name JS encodes the specification in the HDMI frame (as a QR code). 
+%The \device detects the encoded specification, reads it and then renders the overlay. Note that the \device renders only specifications that are signed by the trusted server. Therefore the attacker cannot alter it. 
 Figure~\ref{fig:transformation} shows the transformation between the step \one and \two. The step \two is processed by \device in the next phase and is not visible to the user.
 
-We further optimize this process by reducing the efforts of the developers to generate the specification. The W3C UI security policy~\cite{w3c_spec} recommends developers to annotate the security-critical UI elements of a page in order to protect them against malicious JS running on the browser. We use a similar technique by asking developers to annotate the sensitive elements in the HTML code (as \texttt{protect=``true''}). Then a module of \name JS that runs on the server parses the form and generates the respective specification.
+We further optimize this process by reducing the efforts of the developers to generate the specification. The W3C UI security policy~\cite{w3c_spec} recommends developers to annotate the security-critical UI elements of a page to protect them against malicious JS running on the browser. We use a similar technique by asking developers to annotate the sensitive elements in the HTML code (as \texttt{protect=``true''}). Then a module of \name JS that runs on the server parses the form and generates the respective specification.
 
 %We further optimize this process that does not require to add the UI specifications into the HTML sources. The developers include small JavaScript code: \name JS to their sources. \name JS has the same functionally as the server side code that parses the HTML code and outputs the specification. Note the specification generation process is deterministic, hence, given identical HTML sources, both server and the \name \js generate identical UI specifications. Note that \name JS runs on the browser and is not trusted in our system model. We illustrate the method of UI transformation in Figure~\ref{fig:transformation}. 
 
 
 %\name \js encodes this specification in a format that is understandable by \device and attaches it into the \texttt{dom} tree of the page. We use the QR code as the encoding method because it is efficient and can be represented as an image in the HDMI stream that the \device intercepts. 
 %Figure~\ref{fig:transformation} shows the transformation between the step \one and \two. The step \two is processed by \device in the next phase and is not visible to the user. 
-%The \name JS also includes the digital signature of the generated specification (\texttt{signature} attribute in the \texttt{form}) and the nonce. The signature and the id provides authenticity of the form and protects from replay attack respectively.
+%The \name JS also includes the digital signature of the generated specification (\texttt{signature} attribute in the \texttt{form}) and the nonce. The signature and the id provides authenticity of the form and protects from replay attack, respectively.
 
 
-\myparagraph{(ii) Specification $\rightarrow$ Overlay} \device performs the next phase which starts with the detection of the encoded specification (QR-code) in the HDMI frames. Then \device validates the signature, then it renders the overlay according to the specifications and presents it to the user.  The \device overlay is depicted in \three in Figure~\ref{fig:transformation}, which is the final UI shown to the user. Note that the user does not see the QR code as it gets decoded and overlaid by the \device on the fly.
-
-%\myparagraph{UI verification} The remote server also executes \name \js on the HTML page to generate the specification. This helps the server to generate a signature on the specification. Note that as the \name \js only parses the label names, types of the UI elements and the sequence of the UI elements, an HTML page always generates identical specification irrespective of the host. This way, when the \device decodes the QR code, it also verifies the signature of the specification.
-
-\device uses the specification to determine the particular UI element that the user interacts with. When the user clicks on a text field, \device allows the user to type input to it. UI elements in the overlay take inputs only from input devices (mouse and keyboard), therefore a malicious host cannot inject or modify any input of the user.
+\myparagraph{(ii) Specification $\rightarrow$ Overlay} \device performs the next phase, which starts with the detection of the encoded specification (QR-code) in the HDMI frames. Then \device validates the signature, then it renders the overlay according to the specifications and presents it to the user.  The \device overlay is depicted in \three in Figure~\ref{fig:transformation}, which is the final UI shown to the user. Note that the user does not see the QR code as it gets decoded and overlaid by the \device on the fly.
 
 
-%\subsubsection{Integrity of the user input} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different than a standard UI, making the user habituation seamless. The UI specification encodes the behavior of all the generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on her keyboard, the \device intercepts all the keyboard strokes and overlays the characters on the UI. When the user clicks on the \texttt{OK} button on the overlay, the device gathers all the intercepted keyboard and mouse events, signs them and send them to the remote server. One example of the proof-of-action is depicted in Figure~\ref{fig:transformation} that shows the payload that the \device sends to the server. Along with the keyboard data that is provided by the user, the \device also attaches the proof that the user indeed clicked on the \texttt{OK} button that leads to the action. A detailed description of how the input is recorded and committed is presented in Section~\ref{sec:systemDesign:commit}.
+\device uses the specification to determine the particular UI element that the user interacts with. When the user clicks on a text field, \device allows the user to type input to it. UI elements in the overlay take inputs only from input devices (mouse and keyboard). Therefore a malicious host cannot inject or modify any input of the user.
+
+
 
 
 \subsection{Focusing User Attention}
@@ -81,33 +79,17 @@ We further optimize this process by reducing the efforts of the developers to ge
 
 In the previous sections, we explain how \name provides output integrity for the overlay generated by \device. However, the attacker can show fake information to the user on the untrusted part of the display space that may potentially influence her inputs. An advanced adversary could even craft malicious directions and present to the user as part of the overlay.
 
-%Hence, it is necessary for \name to provide a visual clue to the user to distinguish the secure overlay of the screen from the insecure part of the screen. 
-%There are two aspects of UI manipulation by the attacker-controlled host. i) spacial: where the attacker uses the non-overlaid part of the screen to influence the user, and ii) temporal: where the attacker may influence the user previously (in different webpage or application before) that leads to change of user input.
 
-To mitigate these attacks we employ techniques that are proposed against similar threats in the context of browser-based security. The goal of these techniques is to focus user attention to the sensitive UI elements she is interacting with. Huang et al.~\cite{huang2012clickjacking} proposes two techniques that are are shown to be effective and can easily be adopted by \device.
-%Two of such well-known techniques are lightbox and
-The first technique is called Lightbox and it dims out non-overlaid part of the screen which is generated by the untrusted host. The second technique consists on freezing display frame from the host when the user enters into the overlaid UI. This way a malicious host cannot grab user's attention by showing an animation or exploiting other tricks.
+To mitigate these attacks, we employ techniques that are proposed against similar threats in the context of browser-based security. The goal of these techniques is to focus user attention to the sensitive UI elements she is interacting with. Huang et al.~\cite{huang2012clickjacking} proposes two techniques that are being shown to be effective and can easily be adopted by \device. The first technique is called Lightbox, and it dims out non-overlaid part of the screen, which is generated by the untrusted host. The second technique consists of freezing display frame from the host when the user enters into the overlaid UI. This way a malicious host cannot grab the user's attention by showing an animation or exploiting other tricks.
 Lightbox offers more security guarantees because it blocks the untrusted screen, but is more intrusive to the user. While freezing is less intrusive but does not remove potential malicious information from the screen.
-Lightbox~\cite{huang2012clickjacking} mitigates the attacks presented above, however, one could implement other techniques that are secure and less intrusive to the user.
+Lightbox~\cite{huang2012clickjacking} mitigates the attacks presented above. However, one could implement other techniques that are secure and less intrusive to the user.
 \device uses Lightbox as the default technique, but depending on the specific form, the developers can select the appropriate technique.
-%, but we omit them as those rely on other output channels such as sound etc.
 
-%The developers can mention which mechanism to the user in the HTML. By default, \name applies lightbox in case no focusing mechanism is mentioned. There are two ways to activate these mechanisms: automatic and secure attention sequence (SAS). Both have their pros and cons.
 
 
 \myparagraph{\bfseries Automated activation} The technique to focus user attention (dimming out or freezing the non-overlaid part of the screen) is triggered automatically in specific situations: The user moves the mouse pointer over the overlaid UI or starts typing into a sensitive UI element. 
 %e.g., when the user moves her mouse pointer over the overlaid UI, or start moving the mouse after a brief pause (like 5 seconds). 
-The advantage of the automated trigger is that the user does not need to remember to activate the mechanism. Hence the system is resilient from user habituation, and does not require the user to actively monitor security indicators or perform specific actions.
-
-%the situation where the user needs to trigger it. 
-%However, dimming out a large portion of the scene frequently can diminish user experience significantly.   
-
-%\subsubsection{\bfseries Secure Attention Sequence}
-%\label{sec:systemDesign:userAttention:sas}
-%
-%Secure Attention Sequence (SAS) is a sequence of actions\footnote{Such as keystrokes \texttt{Ctrl+Alt+Del} that allows the user to provide her credential.} executed by the user that is completely trustworthy. SAS prevents an untrusted system from triggering an event that is otherwise sensitive to the user. Note that SAS is a well-researched topic in the context of UI/UX design. \name uses off-the-shelf SAS mechanism that provides a visual aid for the user to distinguish overlaid UI and the mouse pointer location and adapts it into the system. 
-%
-%\myparagraph{SAS policy} The remote server can set configurable SAS policy per overlaid UI (i.e., QR code). The SAS policy is defined in the \texttt{SAS} attribute in the example specification provided in Specification~\ref{snippet:UISpecification}. By default, the overlaid UI is locked from the user and requires a key press from the user to unlock the sensitive UI. This information is overlaid on the UI to remind the user to execute it. One example policy could be \texttt{Ctrl+d:5}, which denotes that the user needs to press key `\texttt{Ctrl+d}' to unlock the UI overlay. Pressing this key also trigger the \device to back out the HDMI frames except for the UI overlay and the mouse pointer overlay for a specified time (here for $5$ seconds). 
+The advantage of the automated trigger is that the user does not need to remember to activate the mechanism. Hence the system is resilient from user habituation and does not require the user to actively monitor security indicators or perform specific actions.
 
 \subsection{Continuous Tracking of Mouse Pointer in the HDMI Frame}
 \label{sec:systemDesign:analysis}
@@ -122,13 +104,13 @@ The advantage of the automated trigger is that the user does not need to remembe
 \centering
 \end{figure}
 
-%In the previous section, we discuss how to focus user attention to the part of the screen overlaid by \device. The focusing mechanisms relies on the user's mouse movement which should trigger the focusing mechanism when entering the overlay area. 
-The triggering mechanisms poses a challenging task because the \device does not know the actual position of the mouse pointer. As the host could be attacker-controlled, we cannot rely on the host to communicate reliably the pointer position to \device. Furthermore, the host's pointer is not visible when the user interacts with the overlay rendered by the \device as the latter always draws on top of the HDMI frames of the host. 
+%In the previous section, we discuss how to focus user attention to the part of the screen overlaid by \device. The focusing mechanisms rely on the user's mouse movement, which should trigger the focusing mechanism when entering the overlay area. 
+The triggering mechanisms pose a challenging task because the \device does not know the actual position of the mouse pointer. As the host could be attacker-controlled, we cannot rely on the host to communicate reliably the pointer position to \device. Furthermore, the host's pointer is not visible when the user interacts with the overlay rendered by the \device as the latter always draws on top of the HDMI frames of the host. 
 %To address this issue, \name continuously tracks the host's mouse pointer from the HDMI frame (using shape detection) as it has access to both the HDMI channel and the raw mouse data.
 
-\device could employ image analysis over the frame received from the host and learn the pointer position. However, we avoid this method because image analysis is time consuming and vulnerable to adversarial images. In our approach the \device intercepts mouse events and HDMI frames, so it can track the pointer based on mouse data and correlate it with the actual position in the HDMI frame (using shape detection in a small rectangle). Then, the \device overlays a mouse pointer that is prominent and easy to follow by the user. 
+\device could employ image analysis over the frame received from the host and learn the pointer position. However, we avoid this method because image analysis is time-consuming and vulnerable to adversarial images. In our approach, the \device intercepts mouse events and HDMI frames, so it can track the pointer based on mouse data and correlate it with the actual position in the HDMI frame (using shape detection in a small rectangle). Then, the \device overlays a mouse pointer that is prominent and easy to follow by the user. 
 
-A malicious host can still show a fake pointer to trick the user into following it, but when the focusing mechanism is active (the user interacting with sensitive elements) only the pointer overlaid by \device is visible. This way, the pointer tracking and the pointer overlay address three major challenges: i) both the \device and the user have the same sense of the pointer position, ii) \device knows precisely when to trigger the focusing mechanisms, and iii) the user can interact with the overlaid UI seamlessly. 
+A malicious host can still show a fake pointer to trick the user into following it, but when the focusing mechanism is active (the user interacting with sensitive elements), only the pointer overlaid by \device is visible. This way, the pointer tracking and the pointer overlay address three major challenges: i) both the \device and the user have the same sense of the pointer position, ii) \device knows precisely when to trigger the focusing mechanisms, and iii) the user can interact with the overlaid UI seamlessly. 
 
 
 \subsubsection{\bfseries Calibration}\label{sec:systemDesign:analysis:calibration} When the user connects the \device for the first time after booting up, the \device performs an automated calibration to find the pointer. The \device simulates the mouse and pushes the pointer to the top-right corner of the screen. Then the \device tries to find the pointer there from the HDMI frames. If the \device is successful into finding the mouse pointer there, it continues tracking the pointer after that. Note, that at any point, if the \device loses track of the mouse pointer, the \emph{calibration} process is repeated the first moment the user visits a website that employs \name.
@@ -143,10 +125,10 @@ A malicious host can still show a fake pointer to trick the user into following 
 \end{mylist}
 
 
-%\subsubsection{\bfseries Overlay of the mouse pointer} The \device draws a mouse pointer that is visible by the user. The overlaid mouse pointer is on top of the host rendered mouse pointer. The overlay provides a telltale sign to the user about the location of the mouse pointer in the case the host renders other mouse pointers on the screen to confuse the user. To emphasize the location of the mouse pointer, the \device highlights the overlaid pointer by dimming out the rest of the screen when there is a threshold time break (i.e., no input coming from the user for around 3 seconds). \red{Note that as long as the \device is connected to the host, it always detect and overlay the mouse pointer irrespective of the application that is running on the host. In Section~\ref{sec:securityAnalysis:integrity} we provide the security analysis of the mouse pointer tracking and the overlay mechanism.}
+\subsubsection{\bfseries Overlay of the mouse pointer} The \device draws a mouse pointer overlay on top of the actual mouse pointer. The host mouse pointer is neither visible on top of the overlay not it can interact with the overlay. The overlaid mouse pointer is visible on top of the overlay, and it provides the user with a user experience similar to the host-rendered mouse pointer.
 
 
-\subsubsection{\bfseries Coping with the disappearing pointer} Many OS offer a feature where the mouse pointer disappears from the screen when the user types in a text editor/browser. When the user moves her mouse, the cursor appears again at the same position where it disappeared in the first place. From the \device's perspective, it is hard to distinguish between this case and the attacker deliberately removing the mouse pointer from the screen. To handle this case, the \device listens to all the keyboard input -- the keyboard is also connected to the \device. Therefore, when the \device gets a keystroke event, it expects the cursor to disappear from the screen. Then, \device continues tracking the pointer from the moment that the mouse sends events  - this way the \device ensures the consistency of the pointer position.  
+\subsubsection{\bfseries Coping with the disappearing pointer} Many OS offer a feature where the mouse pointer disappears from the screen when the user types in a text editor/browser. When the user moves her mouse, the cursor appears again at the same position where it disappeared in the first place. From the \device's perspective, it is hard to distinguish between this case and the attacker deliberately removing the mouse pointer from the screen. To handle this case, the \device listens to all the keyboard input -- the keyboard is also connected to the \device. Therefore, when the \device gets a keystroke event, it expects the cursor to disappear from the screen. Then, \device continues tracking the pointer from the moment that the mouse sends events  - this way, the \device ensures the consistency of the pointer position.  
 
 
 \subsubsection{\bfseries Handling different mouse cursors} The \device is preloaded with the template images of the mouse cursor for detection. For our \name prototype implementation, we use the default cursors provided by the Ubuntu OS. This allows the \device to identify the cursor when it changes on the screen, e.g., from pointer to a hand when the user hovers her mouse over a link on the browser. 
@@ -171,7 +153,7 @@ When user enters input data in the rendered overlay UI elements (such as textbox
 Record = & (tb\_1, Data\_1);(tb\_2,Data\_2)
 \end{align*}
 
-\item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}), e.g, a submit button on a web-form. A trigger element can change the state of the overlaid form, e.g., submit the data of the form to the remote server or reset it. More details are provided in the implementation of \name in Section~\ref{sec:prototype:impl:qr}. When user clicks the \texttt{OK} button, the device signs $Record$ with it embedded private key. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
+\item \textbf{Transmit.} In the transmit phase, the \device waits for the user to select UI element which has a \texttt{trigger} capability (see Section~\ref{sec:systemDesign:transformation}), e.g, a submit button on a web-form. A trigger element can change the state of the overlaid form, e.g., submit the data of the form to the remote server or reset it. More details are provided in the implementation of \name in Section~\ref{sec:prototype:impl:qr}. When the user clicks the \texttt{OK} button, the device signs $Record$ with its embedded private key. One such signed packet is also illustrated in Figure~\ref{fig:transformation}. Using the upstream channel (see Section~\ref{sec:systemDesign:commit:upload}), the \device sends the signed packet to the remote server.
 \end{mylist} 
 
 \subsubsection{\bfseries Server-side verification} \label{sec:systemDesign:commit:verification}Upon receiving the signed input data from \device, the remote accepts the input if the signature verification is successful. Note, if an input field is annotated as \texttt{protect=``true''}, the server does not accept any input without the \device signature. This prevents the attacker-controlled host to submit data. 
@@ -182,16 +164,6 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 
 %\myparagraph{Sequence of Events} In the previous Sections, we explain the basic components of \name. Here we summarize the overall flow of the system. The sequence diagram of \name is illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example sequences: mouse movement and filling up a web-form.
 
-\iffalse
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 6.5cm 12cm 0}, clip, width=\linewidth]{systemDesign.pdf}
-\caption{\textbf{Flow of the \name main protocol.} The figure shows the high-level protocol flow and the main messages that are exchanged between the remote server, host, \device, and the Io devices.}
-\spacesave
-\label{fig:systemDesign}
-\centering
-\end{figure}
-\fi
 
 \begin{figure}[t]
 \centering
@@ -204,21 +176,3 @@ web-form.}
 \centering
 \end{figure}
 
-
-
-%Now in this Section, we describe the flow of \name protocol by putting these
-% components together. The outline of \name is illustrated in Figure~\ref{fig:sequence}. In the flow, we assume that the user already clicked on a web link or typed the URL in the address bar of the browser. This also allows the \device and the remote server to establish a \tls channel using the method described in Section~\ref{sec:confidentiality:tls}. The rest of the steps are as the following:
-
-\iffalse
-\begin{mylist}
-  \item[\one] The browser renders the webpage that comes with \name JS. As described in Section~\ref{sec:systemDesign:transformation}, \name JS transforms the UI elements to a QR code that contains the equivalent UI specification.
-  \item[\two] The graphics driver sends the rendered frame to the \device over the HDMI channel.
-  \item[\three] The \device intercepts the HDMI signal and decode the QR code to retrieve the UI specification. After the decoding of the QR code, the \device renders the bitmap corresponding to the specification as described in Section~\ref{sec:systemDesign:transformation}.
-  \item[\four] The \device send the HDMI frame with the UI overlay to the display device.
-  \item[\five] After observing the HDMI frame and the overlaid UI, the user passes her input to the \device via the keyboard/mouse that is connected to the \device over the \usb interface.
-  \item[\six] The \device uses raw mouse data and the HDMI frames to interpolate the mouse pointer using the method described in Section~\ref{sec:systemDesign:analysis}. This ensures pointer integrity. \device also overlays a mouse pointer on the HDMI frames.
-  \item[\seven] When the user input her data to the host, the \device records her input data (Record phase in Section~\ref{sec:systemDesign:commit:send}).
-  \item[\eight] The \name JavaScript snippet also acts as a upstream channel from the \device to the remote server (refer to Section~\ref{sec:systemDesign:commit:upload}). Via this channel, the \device sends the signed user action to the remote server. This signed user action can be seen as the second factor for the integrity of the user input data. (Commit phase in Section~\ref{sec:systemDesign:commit:send})
-  \item [\nine] The server verifies the data from the two channels that are submitted by the host and the \device. (Section~\ref{sec:systemDesign:commit:verification})
-\end{mylist}
-\fi
