@@ -1,74 +1,5 @@
-% \begin{table*}[t]
-% %\scriptsize
-% \centering
-% %\bgroup
-% %\def\arraystretch{1.2}
-% \resizebox{\textwidth}{!}{
-%   \begin{tabular}{l | l | c  c  c  c | c  c  c  c | c c} 
-%   	
-%     \multicolumn{2}{c}{\multirow{4}{*}{Security Requirements} \ldelim\{{4}{-10mm}[]} & \multicolumn{4}{c}{} & \multicolumn{4}{c}{\cellcolor{Gray}\textbf{R1}} & \multicolumn{2}{c}{} \\
-%     \multicolumn{2}{c}{} & \multicolumn{4}{c}{} & \multicolumn{3}{c}{\cellcolor{Gray}\textbf{R2}} & \multicolumn{3}{c}{} \\
-%     \multicolumn{2}{c}{} & \multicolumn{8}{c}{} & \multicolumn{2}{c}{\cellcolor{Gray}\textbf{R3a/b}} \\
-%     \multicolumn{2}{c}{} & \multicolumn{4}{c}{\cellcolor{Gray}\textbf{R4}} & \multicolumn{6}{c}{} \\ \hline
-%    \multirow{4}{*}{Category}
-%    & \multicolumn{1}{c|}{\multirow{4}{*}{Solutions}} &\multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c| }{IO Security Features} & \multicolumn{2}{c} {Usability}\\  \cline{3-12}
-%    & &\multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c|}{Output} & \\  \cline{3-10}
-%    %\rowcolor{Gray}
-%     & & Requires & \multicolumn{1}{c|}{External} & Isolated & Hypervisor/ & \multirow{2}{*}{Keyboard} & \multirow{2}{*}{Pointer} & \multicolumn{1}{c|}{\multirow{2}{*}{Touch}} & \multirow{2}{*}{Display} & No & \multirow{2}{*}{PnP}\\
-%    \cellcolor{white} & & TEE & \multicolumn{1}{c|}{trusted HW} & API/Drivers & OS & & & \multicolumn{1}{c|}{} & & SI &\\
-%    \hline
-%     &Browser-based~\cite{ye2005trusted}			 &  		&   	& \yes 		& \yes 	&  	 		&   	&   		& \yesNope &   &\yes\\
-%     \rowcolor{Gray}
-%    	\cellcolor{white} & InContext~\cite{Overshadow} 				 &  		&  	&  	  	& \yes 	&   			& \yes 	&   		&   &    &\yes\\
-%     & Overshadow~\cite{Overshadow} 				 &  		&  	&  	  	& \yes 	&   			&   	&   		&   &  &  \\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 &  		&  	&  		& \yes 	&   			&   	&   		&   &  & \\
-%     &TrustVisor~\cite{mccune2010trustvisor} 		 &  		&  	&  		& \yes 	&  	 		&   	&   		&   &  & \\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&Inktag~\cite{hofmann2013inktag} 			 &  		&  	&  		& \yes 	&  			 &   	&   		&   &   & \\
-%     &Splitting interfaces~\cite{ta2006splitting}  &  		&  	&  		& \yes 	& \yes 			&   	&   		& \yes &  & \\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 &  		&  	&  		& \yes 	& \yes 			&   	&   		&   &  & \\
-%     &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	&  	& \yes 	& \yes	& \yes 			&   	&   		&   &  & \\
-%     \rowcolor{Gray}
-%     \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	&   &  	& \yes 	&   			&   	&   		& \yes &  &  \\
-%     &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	&   	&  		&  	& \yes 			&   	&   		&   &  &\yes\\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope &   	&  		&  	&   			&   	&   		&   &  & \\
-%     &TrustOTP~\cite{sun2015trustotp}			     & \yes 	&   	&  		&  	& \yes		 	&   	&   		& \yesNope &  &\yes\\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&VeriUI~\cite{liu2014veriui}				     & \yes 	&   & \yes 		&  	& \yesNope 		&   	&   		& \yesNope &  & \\
-% 	&AdAttester~\cite{li2015adattester}			 & \yes 	&   & \yes 		&  	&   			&   & \yesNope 	& \yesNope &  & \\
-% 	\rowcolor{Gray}
-% 	\cellcolor{white}&TruZ-Droid~\cite{ying2018truz}			     & \yes 	&   & \yes 		&  	& \yes 			&   	&   		& \yesNope &  &\yes\\
-% 	&TrustUI~\cite{li2014building}			     & \yes 	&   & \yesNope 	&  	&   			&   	& \yesNope 		& \yesNope &  &\yes\\
-% 	\rowcolor{Gray}
-% 	\cellcolor{white}&VButton~\cite{li2018vbutton}			     & \yes 	&   & \yes 	&  	& \yesNope 			&   	& \yes 		& \yes &  & \\
-%     &CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	&  		&  	&   			&   	&   		&   & \yes & \\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	&  	& \yes 			&   	&   		&   &\yes &\yes\\
-%      \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		&  	& \yes 			&   	&   		& \yesNope &   &  \\
-%     \rowcolor{Gray}
-%     \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}		 &  		& \yes  &  		&  	& \yes 			&   	&   		& \yes &   & \\
-%     &IntegriKey~\cite{IntegriKey}				 &  		& \yes  & \yesNope 	&  	& \yesNope 		&  	&  		&  & \yes &\yes\\ 
-%     \rowcolor{Gray}
-%     \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     &  		& \yes  & \yesNope 	&  	&  			&   	&   		&   &  & \\   
-%     
-% 	\rowcolor{white}
-% 	\cellcolor{white}&\textbf{\name}	    			&  		& \yes  &  		&  	& \yes 			& \yes 	& \yes 		& \yes & \yes & \yes\\
-%     \hline
-%     \multicolumn{12}{c}{\multirow{2}{*}{\yes~requires/supports \hspace{1cm} \yesNope ~partially requires/supports}} \\
-%   \end{tabular}
-%   }
-%   \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions, security features, and usability. Note that a lower trust assumption, a high number of security features and high usability are desired from a generic trusted path solution. SI stands for security indicator, while PnP stands for plug and play capability. The table also categorizes the trust assumptions, IO security features and usability in-terms of the security goals that we have (refer to section~\ref{sec:problemStatement:goals}).}
-%   \label{tab:relatedWorks}
-% \end{table*}
-
-
 \section*{Formal Proof for IO Integrity}
 \label{appendix:security}
-
-In this section we provide a formal proof for the security properties of \name. Namely,  without protecting both input and output integrity, none of them can be achieved. To simplify the proof, we model the interaction between the user, the host and the remote server as a finite state automate (FSA).
 
 \begin{figure}[h]
 \begin{center}
@@ -131,8 +62,8 @@ In this section we provide a formal proof for the security properties of \name. 
 \subsection{Interaction Protocol} 
 \label{appendix:security:protocol}
 
-
-The interaction between the server (\server), user (\user) and host (\host) is depicted in the finite state machine in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JS send from \server. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$ which corresponds to a specific $[m]$. 
+In this section, we provide a formal proof for the security properties of \name. Namely,  without protecting both input and output integrity, none of them can be achieved. To simplify the proof, we model the interaction between the user, the host, and the remote server as a finite state automaton (FSA).
+The interactions between the server (\server), the user (\user) and host (\host) are depicted in the FSA in Figure~\ref{fig:fsm}. \server sends a message $m$ to \host. One can assume $m$ to be the HTML, JavaScript, and other data send from \server as a HTTP response. We denote $[m]$ to be the render of $m$ by the \host. As \host is malicious, it can transform $m$ to $m'$. Note that the transformation is public knowledge and is deterministic. If $m\neq m'$ then given $[m]$ and $[m']$, \server can determine that $[m]\neq [m']$. We denote the user input to be $I$, which corresponds to a specific $[m]$. 
 %Note that the communication channel between \server to \user is neither authenticated, neither confidential. But the communication channel from \user and \server is authenticated. 
 In this model, we simplify the user input by assuming that the \user only provides an input $I$ only after observing a message transformation $[m]$. The user provides both her input $I$ and transformation $[m']$ observed by her to \host. The interaction loop between \host and \user can continue until \user finishes her input. After every input \host hands over new message transformation to \user (either result of the input or new message from \server or both). Once the user provides all her inputs, \host send the pairs $(I, [m'])$ to \server.
 
