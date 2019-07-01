@@ -1,7 +1,7 @@
 \section{Problem Statement}
 \label{sec:problemStatement}
 
-In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also analyze existing research works that tackle the relevant problem. We explain how these works lack a proper solution and the observations we derive from them. Lastly, we present the required security properties of \name that we derive from the drawbacks of existing literature.
+In this section, we motivate our work in the context of ensuring the integrity and confidentiality of IO data between the user and the remote servers. We also analyze existing research works that tackle the relevant problem. We explain how these works lack a proper solution and the observations we derive from them. Lastly, we present the required security properties of \name that we obtain from the observations.
 
 \subsection{Motivation: Secure IO with Remote Safety-critical System}
 
@@ -90,7 +90,7 @@ A small, trusted bar on display is also overlaid by the device that shows the re
 However, we observe a number of security and functional issues in Fidelius that we explain in the following.
 
 The overlay contains only the render of the user inputs into text fields, but the rest of the screen is rendered by the untrusted host.
-This allows an attacker to modify the instructions on the UI, such as changing the unit of the input (typically described in the label of a text field) that could result in an incorrect input. This problem will be mitigated if the trusted bar includes the legitimate labels of the text fields also, although it would significantly increase the cognitive load to users.
+This allows an attacker to modify the instructions on the UI, such as changing the unit of the input (typically described in the label of a text field) that could result in an incorrect input. This problem could be mitigated if the trusted bar includes the legitimate labels of the text fields also, although it would significantly increase the cognitive load to users.
 
 %Fidelius solely relies on the static overlay bar and the LEDs on the external device to ensure the integrity and confidentiality of the input. 
 Fidelius already introduces a high cognitive load to users as they need to monitor multiple security indicators simultaneously before filling up one text field. Previous research works~\cite{egelman2008you,sobey2008exploring, anderson2016warning} have shown that systems that require users to observe multiple security indicators %that require the users to observe multiple markers on the screen (and also on an external device) 
