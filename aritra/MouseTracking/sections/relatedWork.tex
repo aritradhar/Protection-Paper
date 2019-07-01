@@ -1,4 +1,4 @@
-\begin{table*}[!htpb]
+\begin{table*}[h]
 \scriptsize
 \centering
 \resizebox{\textwidth}{!}{
@@ -67,16 +67,14 @@
 \label{sec:relatedWorks}
 
 
-In this section, we provide outline of existing research works that targets the problem of securing IO. Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch} presents a summary of existing works and position of \name with respect to them.
+In this section, we provide outline of existing research works that targets the problem of securing IO. Table~\ref{tab:relatedWorks} presents a summary of existing works and position of \name with respect to them.
 
 
-%\myparagraph{Trusted hypervisor/OS-based solutions} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Examples of other hypervisor-based works can be found in systems such as
-Overshadow~\cite{Overshadow}, Virtual ghost~\cite{criswell2014virtual}, Inktag~\cite{hofmann2013inktag}, TrustVisor~\cite{mccune2010trustvisor}, Splitting interfaces~\cite{ta2006splitting}, $SP^3$~\cite{yang2008using}, etc.
+%\myparagraph{Trusted hypervisor/OS-based solutions} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Examples of other hypervisor-based works can be found in systems such as Overshadow~\cite{Overshadow}, Virtual ghost~\cite{criswell2014virtual}, Inktag~\cite{hofmann2013inktag}, TrustVisor~\cite{mccune2010trustvisor}, Splitting interfaces~\cite{ta2006splitting}, $SP^3$~\cite{yang2008using}, etc.
 
 
 
-%\myparagraph{Trusted Execution Environments} TEEs are other ways to implement a trusted path between the IO devices and the users. Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality. Previous research works such as Intel SGX and trusted hypervisor-based SGXIO~\cite{weiser2017sgxio}, Intel SGX based ProximiTEE~\cite{dhar2018proximitee}, TPM and TXT based trusted path~\cite{filyanov2011uni}, and ARM TrustZone based trusted
-path~\cite{filyanov2011uni,sun2015trustotp} are the example of trusted path construction based on TEEs. VButton~\cite{li2018vbutton} uses ARM TrustZone to overlay buttons on the mobile devices that conforms if the user taps on certain buttons.
+%\myparagraph{Trusted Execution Environments} TEEs are other ways to implement a trusted path between the IO devices and the users. Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality. Previous research works such as Intel SGX and trusted hypervisor-based SGXIO~\cite{weiser2017sgxio}, Intel SGX based ProximiTEE~\cite{dhar2018proximitee}, TPM and TXT based trusted path~\cite{filyanov2011uni}, and ARM TrustZone based trusted path~\cite{filyanov2011uni,sun2015trustotp} are the example of trusted path construction based on TEEs. VButton~\cite{li2018vbutton} uses ARM TrustZone to overlay buttons on the mobile devices that conforms if the user taps on certain buttons.
 
 %\myparagraph{Browser-based solutions} In their paper InContext, author Huang et al.~\cite{huang2012clickjacking} presents different clickjacking attacks variants and their solution by ensuring context (both temporal and visual) and pointer integrity. The pointer integrity is maintained by capturing the screenshot of the UI elements around the pointer and verify with a baseline render of the legitimate UI. The trust model is significantly different from our work as it assumes that the browser
 % and the OS are trusted. Such an attacker model makes the continuous tracking of the pointer unnecessary. Moreover, the clickjacking attack focuses on the cases where the JS served from an untrusted web server tricks the user into clicking on a browser rendered UI (such as the microphone/web camera permission widget that is out of control of the JS). In our case, as we assume the OS/browser to be untrusted, the host can execute arbitrary modification on display. This makes the InConext not directly compatible with the attacker model that \name targets. In summary, InContext looks into some of the properties that \name ensures, namely the context of the user and the pointer integrity but in a completely different problem statement (clickjacking vs. trusted path) and trust assumption.
