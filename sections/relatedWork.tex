@@ -1,15 +1,81 @@
 \section{Related Works}
 \label{sec:relatedWorks}
 
+\begin{table*}[t]
+%\scriptsize
+\centering
+%\bgroup
+%\def\arraystretch{1.2}
+\resizebox{\textwidth}{!}{
+  \begin{tabular}{l | l | c  c  c  c | c  c  c  c | c c} 
+  	
+    \multicolumn{2}{c}{\multirow{4}{*}{Security Requirements} \ldelim\{{4}{-10mm}[]} & \multicolumn{4}{c}{} & \multicolumn{4}{c}{\cellcolor{Gray}\textbf{R1}} & \multicolumn{2}{c}{} \\
+    \multicolumn{2}{c}{} & \multicolumn{4}{c}{} & \multicolumn{3}{c}{\cellcolor{Gray}\textbf{R2}} & \multicolumn{3}{c}{} \\
+    \multicolumn{2}{c}{} & \multicolumn{8}{c}{} & \multicolumn{2}{c}{\cellcolor{Gray}\textbf{R3a/b}} \\
+    \multicolumn{2}{c}{} & \multicolumn{4}{c}{\cellcolor{Gray}\textbf{R4}} & \multicolumn{6}{c}{} \\ \hline
+   \multirow{4}{*}{Category}
+   & \multicolumn{1}{c|}{\multirow{4}{*}{Solutions}} &\multicolumn{4}{c|}{Trust Assumption} & \multicolumn{4}{c| }{IO Security Features} & \multicolumn{2}{c} {Usability}\\  \cline{3-12}
+   & &\multicolumn{2}{c|}{Hardware} & \multicolumn{2}{c|}{Software} & \multicolumn{3}{c|}{Input} & \multicolumn{1}{c|}{Output} & \\  \cline{3-10}
+   %\rowcolor{Gray}
+    & & Requires & \multicolumn{1}{c|}{External} & Isolated & Hypervisor/ & \multirow{2}{*}{Keyboard} & \multirow{2}{*}{Pointer} & \multicolumn{1}{c|}{\multirow{2}{*}{Touch}} & \multirow{2}{*}{Display} & No & \multirow{2}{*}{PnP}\\
+   \cellcolor{white} & & TEE & \multicolumn{1}{c|}{trusted HW} & API/Drivers & OS & & & \multicolumn{1}{c|}{} & & SI &\\
+   \hline
+    &Browser-based~\cite{ye2005trusted}			 &  		&   	& \yes 		& \yes 	&  	 		&   	&   		& \yesNope &   &\yes\\
+    \rowcolor{Gray}
+   	\cellcolor{white} & InContext~\cite{Overshadow} 				 &  		&  	&  	  	& \yes 	&   			& \yes 	&   		&   &    &\yes\\
+    & Overshadow~\cite{Overshadow} 				 &  		&  	&  	  	& \yes 	&   			&   	&   		&   &  &  \\
+    \rowcolor{Gray}
+    \cellcolor{white}&Virtual ghost~\cite{criswell2014virtual} 	 &  		&  	&  		& \yes 	&   			&   	&   		&   &  & \\
+    &TrustVisor~\cite{mccune2010trustvisor} 		 &  		&  	&  		& \yes 	&  	 		&   	&   		&   &  & \\
+    \rowcolor{Gray}
+    \cellcolor{white}&Inktag~\cite{hofmann2013inktag} 			 &  		&  	&  		& \yes 	&  			 &   	&   		&   &   & \\
+    &Splitting interfaces~\cite{ta2006splitting}  &  		&  	&  		& \yes 	& \yes 			&   	&   		& \yes &  & \\
+    \rowcolor{Gray}
+    \cellcolor{white}&$SP^3$~\cite{yang2008using} 				 &  		&  	&  		& \yes 	& \yes 			&   	&   		&   &  & \\
+    &SGX IO~\cite{weiser2017sgxio}  				 & \yes 	&  	& \yes 	& \yes	& \yes 			&   	&   		&   &  & \\
+    \rowcolor{Gray}
+    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}	 & \yes 	&   &  	& \yes 	&   			&   	&   		& \yes &  &  \\
+    &BASTION-SGX~\cite{BASTION-SGX}			     & \yes 	&   	&  		&  	& \yes 			&   	&   		&   &  &\yes\\
+    \rowcolor{Gray}
+    \cellcolor{white}&Slice~\cite{azab2011sice}				     & \yesNope &   	&  		&  	&   			&   	&   		&   &  & \\
+    &TrustOTP~\cite{sun2015trustotp}			     & \yes 	&   	&  		&  	& \yes		 	&   	&   		& \yesNope &  &\yes\\
+    \rowcolor{Gray}
+    \cellcolor{white}&VeriUI~\cite{liu2014veriui}				     & \yes 	&   & \yes 		&  	& \yesNope 		&   	&   		& \yesNope &  & \\
+	&AdAttester~\cite{li2015adattester}			 & \yes 	&   & \yes 		&  	&   			&   & \yesNope 	& \yesNope &  & \\
+	\rowcolor{Gray}
+	\cellcolor{white}&TruZ-Droid~\cite{ying2018truz}			     & \yes 	&   & \yes 		&  	& \yes 			&   	&   		& \yesNope &  &\yes\\
+	&TrustUI~\cite{li2014building}			     & \yes 	&   & \yesNope 	&  	&   			&   	& \yesNope 		& \yesNope &  &\yes\\
+	\rowcolor{Gray}
+	\cellcolor{white}&VButton~\cite{li2018vbutton}			     & \yes 	&   & \yes 	&  	& \yesNope 			&   	& \yes 		& \yes &  & \\
+    &CARMA~\cite{vasudevan2012carma}			     & \yes 	& \yes 	&  		&  	&   			&   	&   		&   & \yes & \\
+    \rowcolor{Gray}
+    \cellcolor{white}&\textsc{ProximiTee}~\cite{dhar2018proximitee}&\yes 		& \yes  & \yesNope 	&  	& \yes 			&   	&   		&   &\yes &\yes\\
+     \cellcolor{white}\parbox[t]{3mm}{\multirow{-13}{*}{\rotatebox[origin=c]{90}{\textbf{TEE-based}}}}  \ldelim\{{-13}{0mm}[] & Fidelius~\cite{Fidelius}			   	     & \yes 	& \yes  & \yes 		&  	& \yes 			&   	&   		& \yesNope &   &  \\
+    \rowcolor{Gray}
+    \cellcolor{white}&FPGA-based~\cite{brandon2017trusted}		 &  		& \yes  &  		&  	& \yes 			&   	&   		& \yes &   & \\
+    &IntegriKey~\cite{IntegriKey}				 &  		& \yes  & \yesNope 	&  	& \yesNope 		&  	&  		&  & \yes &\yes\\ 
+    \rowcolor{Gray}
+    \cellcolor{white} \cellcolor{white}\parbox[t]{5mm}{\multirow{-6}{*}{\rotatebox[origin=c]{90}{\textbf{External HW}}}}  \ldelim\{{-6}{0mm}[] &Terra~\cite{garfinkel2003terra}			     &  		& \yes  & \yesNope 	&  	&  			&   	&   		&   &  & \\   
+    
+	\rowcolor{white}
+	\cellcolor{white}&\textbf{\name}	    			&  		& \yes  &  		&  	& \yes 			& \yes 	& \yes 		& \yes & \yes & \yes\\
+    \hline
+    \multicolumn{12}{c}{\multirow{2}{*}{\yes~requires/supports \hspace{1cm} \yesNope ~partially requires/supports}} \\
+  \end{tabular}
+  }
+  \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions, security features, and usability. Note that a lower trust assumption, a high number of security features and high usability are desired from a generic trusted path solution. SI stands for security indicator, while PnP stands for plug and play capability. The table also categorizes the trust assumptions, IO security features and usability in-terms of the security goals that we have (refer to section~\ref{sec:problemStatement:goals}).}
+  \label{tab:relatedWorks}
+\end{table*}
+
 In this section, we provide outline of existing research works that targets the problem of securing IO. Table~\ref{tab:relatedWorks} in Appendix~\ref{appendix:summaryResearch} presents a summary of existing works and position of \name with respect to them.
 
 
-\myparagraph{Trusted hypervisor/OS-based solutions} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Examples of other hypervisor-based works can be found in systems such as
+%\myparagraph{Trusted hypervisor/OS-based solutions} Trusted hypervisors and secure micro-kernels are also choices for contrasting Trusted path. Sel4~\cite{klein2009sel4} is a functional hypervisor that is formally verified and has a kernel size of only $8400$ lines of code. In work done by Zhou et al.~\cite{zhou2012building}, the authors proposed a generic trusted path on $x86$ systems in pure hypervisor-based design. Examples of other hypervisor-based works can be found in systems such as
 Overshadow~\cite{Overshadow}, Virtual ghost~\cite{criswell2014virtual}, Inktag~\cite{hofmann2013inktag}, TrustVisor~\cite{mccune2010trustvisor}, Splitting interfaces~\cite{ta2006splitting}, $SP^3$~\cite{yang2008using}, etc.
 
 
 
-\myparagraph{Trusted Execution Environments} TEEs are other ways to implement a trusted path between the IO devices and the users. Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality. Previous research works such as Intel SGX and trusted hypervisor-based SGXIO~\cite{weiser2017sgxio}, Intel SGX based ProximiTEE~\cite{dhar2018proximitee}, TPM and TXT based trusted path~\cite{filyanov2011uni}, and ARM TrustZone based trusted
+%\myparagraph{Trusted Execution Environments} TEEs are other ways to implement a trusted path between the IO devices and the users. Several TEEs such as Intel SGX, ARM TrustZone, TPM, Intel TXT, etc. can be used to achieve such functionality. Previous research works such as Intel SGX and trusted hypervisor-based SGXIO~\cite{weiser2017sgxio}, Intel SGX based ProximiTEE~\cite{dhar2018proximitee}, TPM and TXT based trusted path~\cite{filyanov2011uni}, and ARM TrustZone based trusted
 path~\cite{filyanov2011uni,sun2015trustotp} are the example of trusted path construction based on TEEs. VButton~\cite{li2018vbutton} uses ARM TrustZone to overlay buttons on the mobile devices that conforms if the user taps on certain buttons.
 
 %\myparagraph{Browser-based solutions} In their paper InContext, author Huang et al.~\cite{huang2012clickjacking} presents different clickjacking attacks variants and their solution by ensuring context (both temporal and visual) and pointer integrity. The pointer integrity is maintained by capturing the screenshot of the UI elements around the pointer and verify with a baseline render of the legitimate UI. The trust model is significantly different from our work as it assumes that the browser
