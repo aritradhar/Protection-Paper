@@ -129,10 +129,20 @@ and starts tracking the pointer afterward. Note, that at any point, if the \devi
  
 \subsubsection{\bfseries Handling mouse acceleration} The \device uses the default mouse acceleration parameters of \texttt{libinput} to cope with the pointer acceleration. As the \device emulate itself as a keyboard, at the time of initialization, the \device sends a command to the host to set the default acceleration. In case, the host changes the mouse acceleration; the \device will fail to detect the mouse in the HDMI stream. We consider this case as a denial of service.
 
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 9.5cm 15cm 0}, clip, width=0.85\linewidth]{SequencDiagram.pdf}
+\caption{\textbf{Flow of the \name main protocol.} The figure shows the sequence of events for two example scenarios: mouse movement and filling up a web-form.}
+\spacesave
+\label{fig:sequence}
+\centering
+\end{figure}
+
+
 \subsection{Protected User Interaction}
 \label{sec:systemDesign:commit}
 
-When the user finishes providing her input via input devices (mouse and keyboard), the \device sends these values (with signature to ensure integrity) to the remote server. Sending these signed input values to the server requires an upstream channel from the \device to the server.
+When the user finishes providing her input via input devices (mouse and keyboard), the \device sends these values (with signature to ensure integrity) to the remote server. Sending these signed input values to the server requires an upstream channel from the \device to the server. 
 
 \myparagraph{Upstream channel}\label{sec:systemDesign:commit:upload} 
 The data from the \device to the remote server is transmitted using the \name JavaScript snippet as a helper. 
@@ -140,7 +150,8 @@ The data from the \device to the remote server is transmitted using the \name Ja
 The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet, which then forwards them to the remote server.
 
 \myparagraph{Sending input data}\label{sec:systemDesign:commit:send}
-The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
+
+Figure~\ref{fig:sequence} depicts the user interactions in a sequence diagram.. The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
 
 \begin{mylist}
 \item \textbf{Record.} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different than a standard UI. The UI specification encodes the behavior of all generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on with her keyboard, the \device intercepts all keystrokes and renders the characters on the overlay.
@@ -162,14 +173,4 @@ The \device supports multiple browsing tabs across multiple browsers. The UI spe
 %\myparagraph{Sequence of Events} In the previous Sections, we explain the basic components of \name. Here we summarize the overall flow of the system. The sequence diagram of \name is illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example sequences: mouse movement and filling up a web-form.
 
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 9.5cm 15cm 0}, clip, width=0.85\linewidth]{SequencDiagram.pdf}
-\caption{\textbf{Flow of the \name main protocol.} The figure shows the
-sequence of events for two example scenarios: mouse movement and filling up a
-web-form.}
-\spacesave
-\label{fig:sequence}
-\centering
-\end{figure}
 
