@@ -14,7 +14,10 @@
    %\rowcolor{Gray}
     & & Requires & \multicolumn{1}{c|}{External} & Isolated & Hypervisor/ & \multirow{2}{*}{Keyboard} & \multirow{2}{*}{Pointer} & \multicolumn{1}{c|}{\multirow{2}{*}{Touch}} & \multirow{2}{*}{Display} & No & \multirow{2}{*}{PnP}\\
    \cellcolor{white} & & TEE & \multicolumn{1}{c|}{trusted HW} & API/Drivers & OS & & & \multicolumn{1}{c|}{} & & SI &\\
-   \hline
+   \hline    
+    \rowcolor{Gray}
+    \cellcolor{white} & Shadowcrypt~\cite{he2014shadowcrypt}                  &          &      &      \yes      &  \yes    &               & \yes     &           &   &    &\yes\\
+    
     &Browser-based~\cite{ye2005trusted}             &          &       & \yes         & \yes     &               &       &           & \yesNope &   &\yes\\
     \rowcolor{Gray}
        \cellcolor{white} & InContext~\cite{Overshadow}                  &          &      &            & \yes     &               & \yes     &           &   &    &\yes\\
@@ -29,7 +32,7 @@
     \cellcolor{white}&$SP^3$~\cite{yang2008using}                  &          &      &          & \yes     & \yes             &       &           &   &  & \\
     &SGX IO~\cite{weiser2017sgxio}                   & \yes     &      & \yes     & \yes    & \yes             &       &           &   &  & \\
     \rowcolor{Gray}
-    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-10}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}     & \yes     &   &      & \yes     &               &       &           & \yes &  &  \\
+    \cellcolor{white}\parbox[t]{1mm}{\multirow{-11}{*}{\rotatebox[origin=c]{90}{\textbf{Hypervisor/OS-based}}}}  \ldelim\{{-11}{0mm}[] & SchrodinText~\cite{sani2017schrodintext}     & \yes     &   &      & \yes     &               &       &           & \yes &  &  \\
     &BASTION-SGX~\cite{BASTION-SGX}                 & \yes     &       &          &      & \yes             &       &           &   &  &\yes\\
     \rowcolor{Gray}
     \cellcolor{white}&Slice~\cite{azab2011sice}                     & \yesNope &       &          &      &               &       &           &   &  & \\

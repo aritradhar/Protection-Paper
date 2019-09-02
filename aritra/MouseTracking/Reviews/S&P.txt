@@ -1,0 +1,120 @@
+===========================================================================
+                           S&P 2020 Review #322A
+---------------------------------------------------------------------------
+   Paper #322: ProtectIOn: Root-of-Trust for IO in Compromised Platforms
+---------------------------------------------------------------------------
+
+                      Overall merit: 3. Weak reject - The paper has flaws,
+                                        but I will not argue against it.
+
+              ===== Brief paper summary (2-3 sentences) =====
+
+This paper proposes ProtectIOn, a system which enables secure input into web sites even in a compromised host setting. In particular, the authors propose and implement a prototype of the system, through which web sites can communicate the forms to be secured via a QR code in the site. ProtectIOn then reads the QR code, renders a secure form on top of the regular HDMI stream and has the user fill that form.
+
+                           ===== Strengths =====
+
++ Extends prior work (which it represents in a detailed fashion) to address shortcomings (such as mouse support)
++ Significant engineering work and a real prototype implementation
++ Contrary to other similar papers, does not rely on host properties (such as SGX support)
+
+                          ===== Weaknesses =====
+
+- Practicality (especially of rolled out certificates) of approach is limited
+- Seems to mainly pick up on future work left in the Fidelius paper
+- Claims about SAS being better than Security Indicators lacks evidence
+- Sacrificies smaller (yet not specified) TCB for JavaScript support
+
+              ===== Detailed comments for the author(s) =====
+
+Apart from minor typos and grammar issues, I found this paper to be easy to follow and comprehend. I like the idea of removing reliance on SGX (such as Fidelius had) and extending prior work with support for mouse movement. Overall, though, the contribution seems mostly around the engineering of certain issues, at times even sacrificying features (such as JavaScript). Specifically for JavaScript, there might not be a need for support in the envisioned scenarios, yet the paper should make a case for that.
+
+Another issue I have with the paper is the claim tht SAS is superior to using a more heavy-weight UI and security indicators on the device. This claim is not substantiated in the paper, yet the authors critize Fidelius for that. This claim starts in the introduction and runs throughout the paper. This could be substantiated with a user study comparing mock-up versions of Fidelius and ProtectIOn.
+Furthermore, the paper (especially in the introduction) is very aggressive to criticize Fidelius. However, the early submit attack has limited impact, as the attacker has no idea *when* a user would type something. If he knew that a final 0 is missing (such as indicated in Figure 2), the attack might be powerful; however if no knowledge whatsoever is present about when the user typed something, this hardly is a feasible attack vector. I propose you try to be less aggressive here and instead try to identify weaknesses in a more objective fashion (there is really no need to bash work you build upon).
+
+Apart from this, what remains a bit unclear to me in the current version is how exactly a server would be changed to account for ProtectIOn. In particular, there is no discussion of how a server should handle lack of support for ProtectIOn. Could it handle different clients? Would it reject all things that are not supported? Please elaborate a bit on how you envision this. What's more, a second major component that is missing for a practical deployment is the management of keys. The paper now says that IOHub would come preloaded with certificates. However, this seems like a stretch, because I'd need two different devices for two different bank accounts (assuming they are with different banks). The paper should be more clear about how to address this challenge. Fidelius relies on PKI and has root certificates pre-installed, maybe that is a viable option.
+
+In V.B, the authors discuss automated activation, yet in VI.B argue that this is a bad idea, as the attacker could simply fake a secure dialogue when the user is used to auto-activation. This is aggrevated by the fact that IOHub does not have a security indicator. If it did, auto-activation would be less of an issue. I think this point should be made once in V.B as a reason why automated activation does not make sense. 
+
+Finally, some more specific remarks
+- The paper talks a lot about having a small TCB, yet fails to give numbers. Please provide those, especially in comparison with other approaches (if applicable)
+- The discussion of Clickjacking attacks is wrong. What is described as the "hidden element attack" is what web security people usually refer to as Clickjacking. The latter variant with a fake cursor (or also a moving element which is matching its position to where the cursor is) is just a more specific variant of Clickjacking. Furthermore, the W3C UI security spec referenced in the paper is seemingly outdated, but more importantly even the latest version (https://www.w3.org/TR/UISecurity/) seems to be only a draft with numerous open questions. I could also not find any browser support, so I don't really see the point of discussing this here.
+- In V.C and V.D (both on page 8), the paper once says that IOHub pretends to be a keyboard and than a composite HID. I am guessing the former is a subclass of the latter, yet you should be consistent here.
+
+===========================================================================
+                           S&P 2020 Review #322B
+---------------------------------------------------------------------------
+   Paper #322: ProtectIOn: Root-of-Trust for IO in Compromised Platforms
+---------------------------------------------------------------------------
+
+                      Overall merit: 3. Weak reject - The paper has flaws,
+                                        but I will not argue against it.
+
+              ===== Brief paper summary (2-3 sentences) =====
+
+The authors propose a system for securely displaying forms for sensitive input on Web UIs, and for ensuring integrity/confidentiality of input submitted from those forms. They implement their solution using a low TCB piece of trusted hardware that serves as a "bump in the wire" for input and display connections.
+
+                           ===== Strengths =====
+
+- The design and implementation appears to accomplish the goals of the paper.
+- The paper is well written and easy to follow.
+
+                          ===== Weaknesses =====
+
+- There is no user study to inform whether the system is as usable as claimed.
+- While this seems to be a well engineered system, it is not clear what generalizable lessons are learned here. The paper reads like a great technical description of a product, but lacks (as above) a scientific evaluation of design decisions.
+
+              ===== Detailed comments for the author(s) =====
+
+The authors mention cognitive overload as a problem but do not validate it is a problem specifically for Fidelius.
+
+It's not clear how this system prevents the attacker from replicating the lightbox to convince users to send input to the attacker (e.g., passwords). Combined with an attack to cause IOHub to lose track of the mouse, this seems like an effective way to trick users. [Covered in SAS section]
+
+"UI.sv" <-- typo
+
+It was surprising not to see a user study of this system given the emphasis on how prior work fails to be usable.
+
+===========================================================================
+                           S&P 2020 Review #322C
+---------------------------------------------------------------------------
+   Paper #322: ProtectIOn: Root-of-Trust for IO in Compromised Platforms
+---------------------------------------------------------------------------
+
+                      Overall merit: 2. Reject - This paper is well below
+                                        the bar for Oakland.  Will argue to
+                                        reject it.
+
+              ===== Brief paper summary (2-3 sentences) =====
+
+This paper proposes a hardware-based secure path for user I/O. The system is a USB/HDMI bump in the wire that allows for websites to directly communicate to the secure hardware using QR codes containing encrypted data. The system manipulates the HDMI frames sent by the (untrusted) host, making it impossible for the attacker to read or tamper with sensitive form contents.
+
+                           ===== Strengths =====
+
+- Novel approach to trusted path for IO
+- end-to-end design and implementation
+
+                          ===== Weaknesses =====
+
+- Time spent on related work doesn’t distill insight about the strengths and weaknesses of each category of trusted path solution (focuses instead on individual citations, many of which operate under different threat models).
+- Is replicating the entire USB, windowing. and browser stacks really a TCB-minimizing approach?
+- Mouse tracking approach is brittle and error prone
+- Evaluation is insufficient
+
+              ===== Detailed comments for the author(s) =====
+
+I enjoyed reading this paper and think that IOHub is a clever approach, but do not feel that this submission can be accepted in its current form. Significant experimentation is required to fix.
+
+The paper spends a significant amount of time discussing SGX-based solutions, which is poorly positioned to establish a secure path for I/O (i.e., only runs ring 3 code). It’s strange hat TrustZone isn’t discussed more seriously in the paper. TrustZone is the TEE that is ideally-positioned to establish a secure path; it could lock down the same interfaces the authors use. I think that Trustzone is an existential threat to this approach; yes, a TZ-based solution requires a TEE and TZ isn’t available  for x86, but the authors approach also proposes a brand new hardware-based solution which is significantly less generic than TrustZone. I would encourage the authors to discuss seriously the merits of this system as compared to all TEE-based approaches instead of focusing solely on SGX.
+
+I am not convinced that this approach actually provides a smaller TCB than other approaches. In practice, IOHub would need to support a variety of USB drivers (not just the standard HID) in order to operate. IOHub also performs graphical analysis of the raw HDMI frames in order to work, which seems inefficient and brittle as described below. Lastly, while the prototype implementation only supports a small percentage of HTML, it seems likely that demands for trusted path features would bloat significantly such that a significant portion of the web stack would need to be implemented in IOHub. This is to say, the paper could be improved by arguing for why IOHub covers a minimal *and sufficient* set of IO behavior.
+
+The system depends on IOHub’s ability to track the user’s mouse pointer, but I worry that the authors solution is completely broken. An attacker in full control of the host can register dozens of fake I/O devices (see, e.g., BadUSB) that directly manipulate the same pointer that is used by the trusted path. This capability could be used in subtle ways to sow distrust in IOHub. The attacker could also apply opposing mouse updates when IOHub moves the cursor to the top right corner. Instead of consider the full power of their adversary, the authors only consider a trivial mouse tracking attack where the adversary presents a dummy cursor to the user. This is an extreme case, but more broadly the mouse tracking approach seems brittle and vulnerable to attack. The paper could be improved by more accurately considering the ways in which a root attacker can manipulate peripheral behaviors.
+
+The description of the Implementation was missing key information that I was curious about. The authors configure a Raspberry Pi to run in USB Gadget mode so they they can forward packets from the peripherals to the host, but this mechanism is not described at all. HDMI mediation is also not described.
+
+This paper cannot be accepted in its current form because the evaluation is inadequate. The experiments are not described — equipment used and tests run is omitted, and overheads are unreported. The authors report on delay for USB/HDMI forwarding but do not describe the system that they were evaluating on, nor do they report the raw baseline results. For example, the display frame rate with IOHub enabled is 32.5 per second… as compared to what?? I assume these omissions were a deliberate choice because the baselines were so much faster, but it would have been better to justify and defend the latency than try to sweep it under the rug. The authors should also strike phrases like “relatively low” when describing delay and report raw results instead.
+
+Nits:
+ - space before “Based” in the abstract.
+
+Update following PC discussion: I disagree with Reviewer B that a user study is strictly necessary for this paper to be accepted at a major conference. We are allowed to build on existing research; if lightbox has been validated by prior research, then it's reasonable to say it's appropriate to use here. The justification for lightbox could be more substantive, however. For example, you could explain how lightbox performed under comparable UI's in past user studies. Better yet, since the core contribution of your system is the mechanism that enables secure UI, perhaps you could instead highlight the raw *capabilities* that IOHub enables, using lightbox as one of (possibly multiple) examples.
+
