@@ -1,28 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%
-%usenix
-%\documentclass[letterpaper,twocolumn,10pt]{article}
-%\usepackage{usenix2019,epsfig,endnotes}
-%%%%%%%%%%%%%%%%%%%%%%
-%CCS
-%\documentclass[sigconf, anonymous]{acmart}
-
-% remove reference format for submission
-%\settopmatter{printacmref=false}
-
-% remove copyright box for submission
-%\renewcommand\footnotetextcopyrightpermission[1]{}
-
-% control headers 
-%\fancyhf{} 
-%\fancyhead[C]{Anonymous submission \#9999 to ACM CCS 2019} % TODO: replace 9999 with your paper number
-%\fancyfoot[C]{\thepage}
-%\setcopyright{none} % No copyright notice required for submissions
-%\acmConference[Anonymous Submission to ACM CCS 2019]{ACM Conference on Computer and Communications Security}{Due 5 February 2019}{London, UK}
-%\acmYear{2019}
-
-%%%%%%%%%%%%%%%%%%%%%%
-
-%S&P
+% S&P + NDSS
 \documentclass[conference]{IEEEtran}
 
 \newif\ifdraft
@@ -54,7 +30,6 @@
 \usepackage[graphicx]{realboxes}
 \usepackage{caption}
 \usepackage{subcaption}
-
 
 
 
@@ -131,7 +106,7 @@ all=normal,floats=tight
     breaklines=true,
     frame=lines,
     backgroundcolor=\color{background},
-    morekeywords={formId, formName, signature, nonce, ui, dim, id, type, label, text, trigger, domain, sizeH, sizeW, size_x, size_y, enable, uiGap, size, SAS},
+    morekeywords={formId, formName, signature, nonce, ui, dim, id, type, label, text, trigger, domain, sizeH, sizeW, size_x, size_y, enable, uiGap, size, SAS, RE},
     literate=
      *{0}{{{\color{numb}0}}}{1}
       {1}{{{\color{numb}1}}}{1}
@@ -168,8 +143,9 @@ all=normal,floats=tight
 \newcommand{\nine}{\ding[1.2]{180}\xspace}
 \newcommand{\ten}{\ding[1.2]{181}\xspace}
 
+%spacesave is now disabled
 %\newcommand{\spacesave}{\vspace{-17pt}}
-\newcommand{\spacesave}{\vspace{-17pt}}
+\newcommand{\spacesave}{\vspace{-10pt}}
 
 \usepackage{color, colortbl}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
