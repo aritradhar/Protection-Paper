@@ -40,6 +40,10 @@ In any case, the host is not able to alter any user input or access encrypted da
 \myparagraph{BadUSB} BadUSB~\cite{badUSB} is out-of-scope of this paper as in the attacker model (Section~\ref{sec:approach:systemAttackerModel}), we assume that all the IO devices that are connected to the \device are trusted.
 }
 
+\red{
+\myparagraph{Mouse acceleration/updates} The attacker can change the mouse acceleration or provide erratic mouse updates the screen. These types of manipulation only cause the \device to lose track of the mouse pointer and stop relaying the mouse signal to the host altogether. The \device uses the acceleration parameters from the default \texttt{libUSB} driver to cope with the mouse acceleration. Hence, such manipulation does not affect security.
+}
+
 \subsection{Confidentiality}
 
 \myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection may compromise only the confidentiality of user inputs if the user does not trigger the SAS mechanism. Note that the \device contains a whitelist of the remote server addresses and their corresponding certificates. The \device is only activated when it detects specifications signed from the whitelisted servers.
