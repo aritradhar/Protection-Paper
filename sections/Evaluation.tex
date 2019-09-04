@@ -70,7 +70,7 @@
 \label{sec:eval}
 
 
-\begin{table}[t]
+\begin{table}[h]
 \scriptsize
 \centering
 \begin{tabular}{l | c}
@@ -87,6 +87,8 @@ Keyboard latency & 170 $\mu$s\\\hline
 \label{tab:performance}
 \end{table}
 
+\subsection{Performance}
+\label{sec:eval:performance}
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
 The delay in forwarding keystrokes is $170\ \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second. However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result.
@@ -109,3 +111,22 @@ Our prototype of \name does not require the user to install any additional softw
 
 
 %Key exchange takes around $200$ ms. Frame rate $20-24$ fps. Mouse/keyboard latency \textless$10\ ms$.
+
+\subsection{Security Evaluation}
+\label{sec:eval:sec}
+
+\myparagraph{TCB comparison} We now compare the TCB of \device with respect to some of the most popular open source browser projects.
+
+\begin{table}[h]
+\scriptsize
+\centering
+\begin{tabular}{l | c}
+\textbf{Project} & \textbf{LOC} \\\hline
+Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
+Mozilla Firefox~\cite{mozilla_2019} & $20,505,184$\\
+\textbf{\name} & \todo{}\\ \hline
+\end{tabular} 
+\caption{\textbf{Comparisons of LOC}. }
+\spacesave
+\label{tab:loc}
+\end{table}
