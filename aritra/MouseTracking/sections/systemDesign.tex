@@ -20,7 +20,8 @@
   "size": "400*400", "SAS": "ctrl+d:5",
   "ui": [{"id":"textbox_1", "type":"textbox", 
       "label":"Sensitive field 1",
-    "text":"secret data 1",},
+    "text":"secret data 1",
+    "RE":(A-Z)*.(A-Z)*},
     {"id":"textbox_2", "type":"textbox",
     "label":"Sensitive field2 ",
     "text":"secret data 2"},
@@ -162,7 +163,9 @@ Upon receiving the signed input data from the \device, the remote accepts the in
 \myparagraph{Changing browser tabs or browsers}
 The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieves the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs.
 
-
+\red{\myparagraph{Input validation}
+The major functionalities of the JavaScript in the context of input fields are i) input validation, and ii) user feedback animations. As \name targets to protect the integrity of safety-critical UIs, we decide to preserve only the functional aspect of the JS, i.e., input validation. The remote server sends the regular expression in the UI specification (\texttt{RE} in Specification~\ref{snippet:UISpecification}) that the \device uses to validate the user input.
+}
 %\myparagraph{Sequence of Events} In the previous Sections, we explain the basic components of \name. Here we summarize the overall flow of the system. The sequence diagram of \name is illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example sequences: mouse movement and filling up a web-form.
 
 
