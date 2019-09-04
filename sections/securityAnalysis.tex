@@ -30,6 +30,16 @@ In any case, the host is not able to alter any user input or access encrypted da
 \myparagraph{Malicious instruction on the screen} The attacker may put malicious instruction/labels on the untrusted part of the screen to influence user inputs. However, when the user enters inside the overlaid UI to send inputs, the default focusing mechanism (Lightbox) highlights only the secure UI and hides the rest of the screen. 
 %The user attention focusing mechanisms enable the user to distinguish the trusted part of the screen from the untrusted part.
 
+\red{
+\myparagraph{Replication of Lightbox} The attacker can replicate the lightbox on any part of the screen. But this does not compromise integrity of the input as the legitimate remote server only accepts signed input from the \device. }
+
+\red{
+\myparagraph{Multiple HIDs} The attacker can emulate multiple HIDs to trick the tracking of the mouse pointer. But this attack is ineffective as the \device only tracks the mouse pointer that is connected to it (over USB interface). }
+
+\red{
+\myparagraph{BadUSB} BadUSB~\cite{badUSB} is out-of-scope of this paper as in the attacker model (Section~\ref{sec:approach:systemAttackerModel}), we assume that all the IO devices that are connected to the \device are trusted.
+}
+
 \subsection{Confidentiality}
 
 \myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection may compromise only the confidentiality of user inputs if the user does not trigger the SAS mechanism. Note that the \device contains a whitelist of the remote server addresses and their corresponding certificates. The \device is only activated when it detects specifications signed from the whitelisted servers.
