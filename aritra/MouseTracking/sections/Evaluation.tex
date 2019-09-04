@@ -115,15 +115,17 @@ Our prototype of \name does not require the user to install any additional softw
 \subsection{Security Evaluation}
 \label{sec:eval:sec}
 
-\myparagraph{TCB comparison} We now compare the TCB of \device with respect to some of the most popular open source browser projects.
+\myparagraph{TCB comparison} We now compare the TCB of \device with respect to some of the most popular open source browser projects. All of the codes are measured with the \texttt{cloc} open source code line counting tool.
 
 \begin{table}[h]
 \scriptsize
 \centering
 \begin{tabular}{l | c}
-\textbf{Project} & \textbf{LOC} \\\hline
+\textbf{Projects} & \textbf{LOC} \\\hline
 Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
-Mozilla Firefox~\cite{mozilla_2019} & $20,505,184$\\
+Mozilla Firefox~\cite{mozilla_2019} & $20,928,358$\\
+Chrome V8 JS engine~\cite{V8} & $2,009,183$\\
+Firefox SpiderMonkey JS engine~\cite{spiderMonkey} & $2,908,550$\\
 \textbf{\name} & \todo{}\\ \hline
 \end{tabular} 
 \caption{\textbf{Comparisons of LOC}. }
