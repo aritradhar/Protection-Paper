@@ -124,3 +124,14 @@ This proof is also trivial. As we describe in the Definition~\ref{def:inputInteg
 
 \section*{Implementation Details}
 \label{appendix:implementation}
+
+\subsection{HID Drivers}
+
+
+\red{We use Arduino prototype development board as the HID drivers. Figure~\ref{fig:prototype} shows an Arduino Due, and a Zero board where the Due connects to the HIDs via the native USB port and the Zero relays the HID data to the Raspberry Pi (RPi). The Due and the Zero boards are connected over $I^2C$ interface. As both Due and Zero only have one native USB port on each of them, we were forced to use two boards as an HID interceptor and relay. The Zero relays the HID signals both to the connected host (over native USB) and to the RPi (over serial interface). The connection from the Zero to the host is one way and emulates a composite HID. While the connection between the Zero and the RPi is bidirectional. The HID drivers are implemented using the native Arduino \texttt{keyboard} and \texttt{mouse} library. On the RPi, no HID drivers were needed as the RPi receives processed HID data from the Zero (for the pointer: displacement over x and y-axis and for keyboard, ASCII characters).}
+
+\subsection{HDMI Interceptor and Relay}
+
+\red{The RPi along with the Auvidea B101 HDMI to CSI bridge, acts as the HDMI interceptor and relay. The B101 board converts HDMI signals from the host as a camera input (via the CSI interface) to the RPi. This allows the RPi to access the HDMI frames as a stream of JPEG frames. The HDMI out of the RPi acts as the relay that connects to the monitor. On the RPi, we use Picamera API~\cite{picamera} to access the HDMI frames. The B101 is capable of processing 25 frames at 1080p resolution. Hence, this is the hardware bottleneck of our implementation. However, the upcoming B112 board\footnote{still in development: \url{https://auvidea.eu/showcase/}.} could solve this performance issue.
+On the RPi, the overlay and HDMI out is implemented using Java SWT. Using SWT, we create a full-screen window that is shown on the monitor. The SWT class polls the HDMI frames and process them as individual JPEG images via the \texttt{BufferedImage} class.
+}
