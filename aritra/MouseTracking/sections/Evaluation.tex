@@ -119,17 +119,21 @@ Our prototype of \name does not require the user to install any additional softw
 \scriptsize
 \centering
 \begin{tabular}{l | c}
-\textbf{Projects} & \textbf{LOC} \\\hline
-\multicolumn{2}{c}{\textbf{Browser}}\\\hline
+\textbf{Projects} & \textbf{LOC/Binary size} \\\hline
+\multicolumn{2}{c}{\textbf{Browsers}}\\\hline
 Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
 Mozilla Firefox~\cite{mozilla_2019} & $20,928,358$\\\hline
-\multicolumn{2}{c}{\textbf{JavaScript engine}}\\\hline
+\multicolumn{2}{c}{\textbf{JavaScript engines}}\\\hline
 Chrome V8~\cite{V8} & $2,009,183$\\
 Firefox SpiderMonkey~\cite{spiderMonkey} & $2,908,550$\\\hline
-\multicolumn{2}{c}{\textbf{\name}}\\\hline
-\device HDMI interceptor + overlay & $1,911$\\ 
-\device USB stack & $893$\\
-\device Crypto stack & $27,200$\\ \hline
+\multicolumn{2}{c}{\textbf{Desktop operating systems}}\\\hline
+Ubuntu 18.10 (Debian) & $1.9$ GB\\
+Manjaro Linux 15.0.4 (Arch) & $2$ GB\\\hline
+\multicolumn{2}{c}{\textbf{\name \device}}\\\hline
+HDMI interceptor + overlay & $1,911$\\ 
+USB stack & $893$\\
+Crypto stack & $3,500$\\ 
+RPi tiny core Linux & $16$ MB \\\hline
 \end{tabular} 
 \caption{\red{\textbf{Comparisons of \name TCB}. }}
 \spacesave
