@@ -132,13 +132,13 @@ Existing web interfaces allow users to complete forms by using different modalit
 
 %If there exist multiple input sources (typically keyboard and mouse), all of them should be protected simultaneously as these input sources influence each other. For example, in a web application scenario, protecting the integrity of only the keyboard input does not provide input integrity as an attacker-controlled host can always execute an early form submission attack.
 
-\myparagraph{R3a. Minimal cognitive load for IO integrity} 
-A system that protects IO operations should introduce minimal cognitive load to its users for input integrity.
+\myparagraph{R3a. No cognitive load for IO integrity} 
+A system that protects IO operations should introduce minimal or no cognitive load to its users for input integrity.
 The system should guarantee the output integrity of the legitimate information necessary to complete a form and avoid asking the user to interact with an external device or monitor security indicators out-of-context.
 
 %Output integrity protection can eliminate the actions that lead to high cognitive loads to the user.  Such as using an external device to confirm every transaction, looking to a passive security indicator and confirming actions, etc. The systems that rely heavily on such security measures suffer from input errors that originate from user habituation. Moreover, such designs require user training that makes the system hard to deployment and costly.
 
-\myparagraph{R3b. Low cognitive load for IO confidentiality} 
+\myparagraph{R3b. \red{User attention} for IO confidentiality} 
 Preserving the confidentiality of user inputs against a compromised host is a challenging task because the host can simply fool the user to reveal her inputs when the system is not active. Therefore, requiring users to perform a small action, e.g., press a key, before entering confidential inputs is a valid trade-off between usability and security.
 
 %Confidentiality requires active triggering from the user to distinguish the secure part of the screen from ensuring part of the screen if the part of the output provides integrity/confidentiality protection.
