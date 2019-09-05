@@ -56,10 +56,10 @@ The drawbacks of the existing systems show that the problem of ensuring the inte
 
 
 \begin{mybullet}
-  \item \red{\textbf{Identification of IO security requirements:}} To our knowledge, we are the first to have a concrete understanding of the required security properties for a trusted path based on the drawbacks of the literature: i) unless both output and input integrity are secured simultaneously, it is impossible to achieve any one of the two, and ii) without protecting the integrity of all the modalities of inputs, none could be achieved (refer to Section~\ref{sec:problemStatement:existingSolution}).
+  \item \red{\textbf{System for Identification of IO security requirements:}} To our knowledge, we are the first to have a concrete understanding of the required security properties for a trusted path based on the drawbacks of the literature: i) unless both output and input integrity are secured simultaneously, it is impossible to achieve any one of the two, and ii) without protecting the integrity of all the modalities of inputs, none could be achieved (refer to Section~\ref{sec:problemStatement:existingSolution}).
   
    
-  \item \red{\textbf{IO integrity:}} We describe the design of \name, a system that provides a remote trusted path from the server to the user, in an attacker-controlled environment. The design of \name leverages a small, low-TCB auxiliary device that acts as a \emph{root-of-trust} for the IO. \name protects the integrity of the UI, specifically the integrity of mouse pointer and keyboard input. \name is further designed to avoid user habituation (refer to Section~\ref{sec:systemDesign}).
+  \item \red{\textbf{System for IO integrity:}} We describe the design of \name, a system that provides a remote trusted path from the server to the user, in an attacker-controlled environment. The design of \name leverages a small, low-TCB auxiliary device that acts as a \emph{root-of-trust} for the IO. \name protects the integrity of the UI, specifically the integrity of mouse pointer and keyboard input. \name is further designed to avoid user habituation (refer to Section~\ref{sec:systemDesign}).
   
   \item \red{\textbf{IO confidentiality:} We also describe an extension of \name that provides IO confidentiality in Section~\ref{sec:confidentiality} where user needs to execute SAS to identify the trusted overlay on the display.}
   
