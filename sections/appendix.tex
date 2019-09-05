@@ -133,5 +133,19 @@ This proof is also trivial. As we describe in the Definition~\ref{def:inputInteg
 \subsection{HDMI Interceptor and Relay}
 
 \red{The RPi along with the Auvidea B101 HDMI to CSI bridge, acts as the HDMI interceptor and relay. The B101 board converts HDMI signals from the host as a camera input (via the CSI interface) to the RPi. This allows the RPi to access the HDMI frames as a stream of JPEG frames. The HDMI out of the RPi acts as the relay that connects to the monitor. On the RPi, we use Picamera API~\cite{picamera} to access the HDMI frames. The B101 is capable of processing 25 frames at 1080p resolution. Hence, this is the hardware bottleneck of our implementation. However, the upcoming B112 board\footnote{still in development: \url{https://auvidea.eu/showcase/}.} could solve this performance issue.
-On the RPi, the overlay and HDMI out is implemented using Java SWT. Using SWT, we create a full-screen window that is shown on the monitor. The SWT class polls the HDMI frames and process them as individual JPEG images via the \texttt{BufferedImage} class.
+On the RPi, the overlay and HDMI out is implemented using Java SWT. Using SWT, we create a full-screen window that is shown on the monitor. The SWT class polls the HDMI frames and process them as individual JPEG images via the \texttt{BufferedImage} class. This allows the overlays to be drawn on the HDMI images efficiently. The Java program uses a QR code interpreter to extract the UI specification. Based on the UI specification, it creates the geometrical shapes (corresponding to the UI elements) and draw them on the freames.
+}
+
+\subsection{Mouse Pointer Tracking}
+
+\begin{figure}[h]
+\centering
+\includegraphics[trim={0 12cm 10cm 0}, clip, width=\linewidth]{cursorDetect.pdf}
+\caption{\textbf{Cursor detection on the HDMI frame.} .}
+\spacesave
+\label{fig:cursorDetect}
+\centering
+\end{figure} 
+
+\red{The pointer tracing is also executed in the aforementioned Java program.
 }
