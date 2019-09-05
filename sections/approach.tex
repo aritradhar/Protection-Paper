@@ -15,12 +15,14 @@ In this section, we present an overview of our solution: \name. On the high-leve
 We call this trusted intermediary \device for the rest of this paper.   
 
 
-\subsection{System Model}
+\subsection{System and Attacker Model}
 \label{sec:approach:systemAttackerModel}
 
 We consider a system model where the user wants to interact with a trusted remote end-system via an attacker-controlled host. The model is depicted in Figure~\ref{fig:approachOverview} that shows the untrusted host, the remote server, and the user IO devices. We only assume that the monitor, keyboard, mouse (in a word all the IO devices that we need to protect from the malicious host) and the \device are trusted. The \device works as a mediator between all the IO devices and the host. Note that the \device has no network capability to communicate with the server directly, rather it relies on the host and uses it as an untrusted transport. We also assume that the \device comes with preloaded certificates and keys that allow the \device to verify the signatures signed by the server and sign data such as the user input.
 
 There are many possible ways to deploy \name. One way is to assume that the \device manufacturer issues a certificate for each of the deployed \device{}s . The \device maintains a whitelist for the remote servers along with their public certificates. This allows the \device to verify messages signed by those remote servers. Another assumption could be that the \device is issued by a service provider who also runs the remote server. 
+
+\myparagraph{Attacker model and capabilities} Our attacker model assumes that the host (OS, installed applications, and hardware) and the network are attacker-controlled. The attacker can intercept, and arbitrarily manipulate (such as create, drop, or modify) the user IO data between the user and the remote server. 
 
 
 
