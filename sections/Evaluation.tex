@@ -118,22 +118,19 @@ Our prototype of \name does not require the user to install any additional softw
 \begin{table}[!htpb]
 \scriptsize
 \centering
-\begin{tabular}{l | c}
-\textbf{Projects} & \textbf{LOC/Binary size} \\\hline
-\multicolumn{2}{c}{\textbf{Browsers}}\\\hline
-Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
-Mozilla Firefox~\cite{mozilla_2019} & $20,928,358$\\\hline
-\multicolumn{2}{c}{\textbf{JavaScript engines}}\\\hline
-Chrome V8~\cite{V8} & $2,009,183$\\
-Firefox SpiderMonkey~\cite{spiderMonkey} & $2,908,550$\\\hline
-\multicolumn{2}{c}{\textbf{Desktop operating systems}}\\\hline
-Ubuntu 18.10 (Debian) & $1.9$ GB\\
-Manjaro Linux 15.0.4 (Arch) & $2$ GB\\\hline
-\multicolumn{2}{c}{\textbf{\name \device}}\\\hline
-HDMI interceptor + overlay & $1,911$\\ 
-USB stack & $893$\\
-Crypto stack & $3,500$\\ 
-RPi tiny core Linux & $16$ MB \\\hline
+\begin{tabular}{c |  l | c}
+\multicolumn{2}{c|}{\textbf{Projects}} & \textbf{LOC/Binary size} \\\hline
+%&\multicolumn{2}{c}{\textbf{Browsers}}\\\hline
+\rowcolor{Gray}&Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
+\rowcolor{Gray}\multirow{-2}{*}{Browser} &Mozilla Firefox~\cite{mozilla_2019} & $20,928,358$\\
+\multirow{2}{*}{JS}&Chrome V8~\cite{V8} & $2,009,183$\\
+&Firefox SpiderMonkey~\cite{spiderMonkey} & $2,908,550$\\
+\rowcolor{Gray}&Ubuntu 18.10 (Debian) & $1.9$ GB\\
+\rowcolor{Gray}\multirow{-2}{*}{OS}&Manjaro Linux 15.0.4 (Arch) & $2$ GB\\
+\multirow{4}{*}{\device}&HDMI interceptor + overlay & $1,911$\\ 
+&USB stack & $893$\\
+&Crypto stack & $3,500$\\ 
+&RPi tiny core Linux & $16$ MB \\\hline
 \end{tabular} 
 \caption{\red{\textbf{Comparisons of \name TCB}. }}
 \spacesave
