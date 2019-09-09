@@ -26,12 +26,12 @@
     "label":"Sensitive field2 ",
     "text":"secret data 2"},
     {"id":"b1", "type":"button",
-    "label":"OK",
-    "trigger":"true"},    
+    "label":"OK", "trigger":"true"},    
     {"id":"b2", "type":"button",
     "label":"Cancel", "trigger":"false"}],
   "signature": "0x45AB...", "id": "0x0ab.."}
 \end{lstlisting}
+\spacesave
 \end{figure}
 
 In this section, we provide the technical details of \name integrity protection for IO devices. 
@@ -49,7 +49,7 @@ The process of rendering the overlay on the screen has two phases: (i) convert t
 \myparagraph{(i) Secure form $\rightarrow$ Specification}
 Developers should manually mark the sensitive elements of a form, and then produce the respective specification.
 %uses a small code that transforms the HTML forms (only the forms with elements with attribute \texttt{protect=``true''}) to the JSON specification and signs it. 
-For every request, the server adds a random identifier (\texttt{id}) to the specification file, signs it, and then delivers it to the user's browser. The \texttt{id} serves as session identification to prevent the attacker from re-submitting an old input data drom the user.
+For every request, the server adds a random identifier (\texttt{id}) to the specification file, signs it, and then delivers it to the user's browser. The \texttt{id} serves as session identification to prevent the attacker from re-submitting an old input data from the user.
 An example of a specification is presented in~Specification~\ref{snippet:UISpecification}. 
 In the browser, the \name JS encodes the specification in the HDMI frame (as a QR code). 
 %The \device detects the encoded specification, reads it and then renders the overlay. Note that the \device renders only specifications that are signed by the trusted server. Therefore the attacker cannot alter it. 
@@ -167,5 +167,5 @@ One of the widely used JavaScript functionalities in the context of input from i
 }
 %\myparagraph{Sequence of Events} In the previous Sections, we explain the basic components of \name. Here we summarize the overall flow of the system. The sequence diagram of \name is illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example sequences: mouse movement and filling up a web-form.
 
-
+\red{\myparagraph{Downgrading for legacy clients} \name is backward-compatible with the clients who do not use the \device. This is achieved by the remote server by showing a QR code briefly on the screen when the user visits the webpage. The \device intercepted the QR code and sends a signal to the server about its presence. In the absence of the \device, the remote server does not send the \name JS to the host that acts as a communication channel between the \device and the remote server.}
 
