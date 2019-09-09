@@ -87,8 +87,8 @@ Keyboard latency & 170 $\mu$s\\\hline
 \label{tab:performance}
 \end{table}
 
-\subsection{Performance}
-\label{sec:eval:performance}
+%\subsection{Performance}
+%\label{sec:eval:performance}
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
 The delay in forwarding keystrokes is $170\ \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second. However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result.
@@ -112,8 +112,8 @@ Our prototype of \name does not require the user to install any additional softw
 
 %Key exchange takes around $200$ ms. Frame rate $20-24$ fps. Mouse/keyboard latency \textless$10\ ms$.
 
-\subsection{\red{Security Evaluation}}
-\label{sec:eval:sec}
+%\subsection{\red{Security Evaluation}}
+%\label{sec:eval:sec}
 
 \begin{table}[!htpb]
 \scriptsize
@@ -123,11 +123,11 @@ Our prototype of \name does not require the user to install any additional softw
 %&\multicolumn{2}{c}{\textbf{Browsers}}\\\hline
 \rowcolor{Gray}&Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
 \rowcolor{Gray}\multirow{-2}{*}{Browser} &Mozilla Firefox~\cite{mozilla_2019} & $20,928,358$\\
-\multirow{2}{*}{JS}&Chrome V8~\cite{V8} & $2,009,183$\\
+\multirow{2}{*}{JS Engine}&Chrome V8~\cite{V8} & $2,009,183$\\
 &Firefox SpiderMonkey~\cite{spiderMonkey} & $2,908,550$\\
 \rowcolor{Gray}&Ubuntu 18.10 (Debian) & $1.9$ GB\\
 \rowcolor{Gray}\multirow{-2}{*}{OS}&Manjaro Linux 15.0.4 (Arch) & $2$ GB\\
-\multirow{4}{*}{\device}&HDMI interceptor + overlay & $1,911$\\ 
+\multirow{4}{*}{\textbf{\device}}&HDMI interceptor + overlay & $1,911$\\ 
 &USB stack & $893$\\
 &Crypto stack & $3,500$\\ 
 &RPi tiny core Linux & $16$ MB \\\hline
