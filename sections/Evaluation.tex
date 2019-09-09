@@ -76,9 +76,9 @@
 \begin{tabular}{l | c}
 \textbf{Operation} & \textbf{Average time} \\\hline
 Detecting mouse pointer $(A)$ & 1.76 ms \\
-Detection QR code $(B)$ & 23 ms\\
+Detection QR code $(B)$ & 14 ms\\
 Decoding QR code + Overlay $(C)$ & 6 ms\\
-Effective display latency $(A+B+C)$ & 30.76 ms \\
+Effective display latency $(A+B+C)$ & 21.76 ms \\
 Mouse latency & 250 $\mu$s\\
 Keyboard latency & 170 $\mu$s\\\hline
 \end{tabular} 
@@ -91,19 +91,19 @@ Keyboard latency & 170 $\mu$s\\\hline
 %\label{sec:eval:performance}
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
-The delay in forwarding keystrokes is $170\ \mu s$ and frames is $30.76\ ms$. This allows the \device to achieve the maximum display frame rate of $32.5$ per second. However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result.
+The delay in forwarding keystrokes is $170\ \mu s$ and frames is $21.76\ ms$. This allows the \device to achieve the maximum display frame rate of $47.69$ per second. However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result. \red{Note that the B101 HDMI to CSI board that we use to intercept HDMI, has a hardware limit of 25 frames at 1080p resolution.}
 
 Our prototype of \name does not require the user to install any additional software in her machine to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
 
 \myparagraph{\device $\rightarrow$ host} The \device transmits data (encrypted) to the host by simulating keystrokes. In our system \device sends the keystrokes in a chunk of $256$ bytes of data to the host. The keystroke has an average latency of $5\ ms$.  
 
-\myparagraph{Host $\rightarrow$ \device} The host sends data to the device by encoding them into the HDMI frame. The QR-code is generated locally in the browser and displayed on the screen. For a specification of a form with two/four elements QR-code generation takes $23\ ms$. The \device detects the QR-code, decodes it, and creates the overlay. This process takes $6\ ms$ for the same form considered previously.
+\myparagraph{Host $\rightarrow$ \device} The host sends data to the device by encoding them into the HDMI frame. The QR-code is generated locally in the browser and displayed on the screen. For a specification of a form with two/four elements QR-code generation takes $14\ ms$. The \device detects the QR-code, decodes it, and creates the overlay. This process takes $6\ ms$ for the same form considered previously.
  
 \name introduces the following delays in web applications:
 
 \myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only one additional \texttt{xmlHttpRequest} to the server therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
 
-\myparagraph{Frame processing for mouse} \device processes every frame of the host for pointer detection. This takes $1.76 ms$, which does not impact the frame rate. \red{Note that the B101 HDMI to CSI board that we use to intercept HDMI, has a hardware limit of 25 frames at 1080p resolution.}
+\myparagraph{Frame processing for mouse} \device processes every frame of the host for pointer detection. This takes $1.76 ms$, which does not impact the frame rate. 
 
 \myparagraph{Keystroke latency} The \device intercepts all user's keystrokes and forwards them to the host or renders in the screen. When rendering on the screen, the latency is $170\ \mu s$.
 
