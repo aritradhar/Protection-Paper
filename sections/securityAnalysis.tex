@@ -10,16 +10,15 @@
 
 
 
-\myparagraph{Modifying IO operations} As only the \device can interact with the overlaid UI, the attacker can not manipulate the IO operations with the overlaid UI. Moreover, the attacker cannot generate arbitrary input data and submit them to the remote server because the server accepts only input data that are signed by the \device.
+\myparagraph{Modifying IO operations} As only the \device can interact with the overlaid UI, the attacker can not manipulate the IO operations with the overlaid UI. Moreover, the attacker cannot submit arbitrary data to the remote server because the latter accepts only inputs signed by the \device.
 
 \myparagraph{Early form submission} This attack is not possible as the input devices (both mouse and keyboard) are connected to the \device and only the \device can interact with the overlaid UI. This makes it impossible for the attacker to emulate a click on the overlaid part of the screen.  
 
 \myparagraph{Attack on the mouse pointer tracking and overlay} 
-The attacker may try to defeat the \name pointer tracking and overlay mechanism described in Section~\ref{sec:systemDesign:analysis} by introducing a malicious pointer that is visually more appealing to the user. Note that the \device overlaid mouse pointer is prominent and hard to miss. One can visualize it as an arms race between the attacker and the \device to grab the attention of the user. But, we argue that this is a suboptimal strategy for the attacker as both of the pointers will be visible on the screen that cause suspicion to the user. Also, when the real mouse pointer enters the overlaid area, the untrusted part, including the malicious mouse pointer, will be hidden by the focusing mechanism. Hence, we can conclude that executing clickjacking-like attacks is not possible in \name.
+The attacker may try to defeat the \name pointer tracking and overlay mechanism described in Section~\ref{sec:systemDesign:analysis} by introducing a malicious pointer that is visually more appealing to the user. Note that the \device overlaid mouse pointer is prominent and hard to miss. One can visualize it as an arms race between the attacker and the \device to grab the user attention. But, we argue that this is a suboptimal strategy for the attacker as both of the pointers will be visible on the screen that cause suspicion to the user. Also, when the real mouse pointer enters the overlaid area, the untrusted part, including the malicious mouse pointer, will be hidden by the focusing mechanism. Hence, we can conclude that executing clickjacking-like attacks is not possible in \name.
 
-
-
-\myparagraph{Replay attack} In reply attack, the host tries to replay an old user input data to the remote server. To prevent the replay attac, the remote server adds a random identifier (\texttt{id}) in the form specification alongside the signature. With this identifier, the server keeps track of the user input. When the server receives a form submission data, it first checks if the user submitted the same identifier before. In case of a collision, the server rejects the data. 
+\myparagraph{Replay attack} %In reply attack, the host tries to replay an old user input data to the remote server. 
+To prevent the replay attack, the remote server adds a random identifier (\texttt{id}) in the form specification alongside the signature. With this identifier, the server keeps track of the user input. When the server receives a form submission data, it first checks if the user submitted the same identifier before. In case of a collision, the server rejects the data. 
 
 \myparagraph{Not rendering QR code} The host may deny sending the QR code over the HDMI channel. This is considered as a denial of service, which is acceptable in our threat model as long as the user interacts with a compromised host. 
 In any case, the host is not able to alter any user input or access encrypted data when \name with the confidential feature is required.
@@ -27,21 +26,21 @@ In any case, the host is not able to alter any user input or access encrypted da
 
 \myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection attack cannot break the integrity of the input because a legitimate remote server always requires the signed input from the user. Without a valid signed specification, the \device never renders an overlay or sign any input. 
 
-\myparagraph{Malicious instruction on the screen} The attacker may put malicious instruction/labels on the untrusted part of the screen to influence user inputs. However, when the user enters inside the overlaid UI to send inputs, the default focusing mechanism (Lightbox) highlights only the secure UI and hides the rest of the screen. 
+\myparagraph{Malicious instruction on the screen} The attacker may put a malicious instruction/label on the untrusted part of the screen to influence user inputs. However, when the user starts interacting with the overlaid UI, the default focusing mechanism (Lightbox) highlights only the secure UI and hides the rest of the screen. 
 %The user attention focusing mechanisms enable the user to distinguish the trusted part of the screen from the untrusted part.
 
 \red{
 \myparagraph{Replication of Lightbox} The attacker can replicate the lightbox on any part of the screen. However, this does not compromise the integrity of the input as the legitimate remote server only accepts signed input from the \device. }
 
 \red{
-\myparagraph{Multiple HIDs} The attacker can emulate multiple HIDs to trick the tracking of the mouse pointer. However, this attack is ineffective as the \device only tracks the mouse pointer that is connected to it (over USB interface). }
+\myparagraph{Multiple HIDs} The attacker can emulate multiple HIDs to avoid the tracking of the mouse pointer. However, this attack is ineffective as the \device only tracks the mouse pointer that is connected to it (over USB interface). }
 
 \red{
 \myparagraph{BadUSB} BadUSB~\cite{badUSB} is out-of-scope of this paper as in the attacker model (Section~\ref{sec:approach:systemAttackerModel}), we assume that all the IO devices that are connected to the \device are trusted.
 }
 
 \red{
-\myparagraph{Mouse acceleration/updates} The attacker can change the mouse acceleration or provide erratic mouse updates the screen. These types of manipulation only cause the \device to lose track of the mouse pointer and stop relaying the mouse signal to the host altogether. The \device uses the acceleration parameters from the default \texttt{libUSB} driver to cope with the mouse acceleration. Hence, such manipulation does not affect security.
+\myparagraph{Mouse acceleration/updates} The attacker can change the mouse acceleration or provide erratic mouse updates on the screen. Such manipulations only cause the \device to lose track of the mouse pointer and stop relaying the mouse signal to the host altogether. The \device uses the acceleration parameters from the default \texttt{libUSB} driver to cope with the mouse acceleration. Hence, such manipulation does not affect security.
 }
 
 \subsection{Confidentiality}
@@ -63,4 +62,5 @@ As the code base of the \device is small, we assume that the code can be formall
 
 
 \red{\myparagraph{Downgrade attack} The host can block the initial QR code from the server to the \device. By doing so, the host forces the server to downgrade the security of the webpage, i.e., not serving the \name JS. For integrity, this is not a security threat as the server does not accept any input from the host that is not signed by the \device. Hence, the downgrade attack works as a denial of service which is out-of-scope of this paper.}
+%The fallback mechanism, i.e., the case where the user does not have the \device, is outside the scope of this work because it is specific to the policy of service providers. E.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or allow access only to nonsensitive functionalities. 
 
