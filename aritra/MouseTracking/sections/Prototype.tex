@@ -46,18 +46,23 @@
 \label{sec:prototype:impl}
 
 
-In the following, we provide the implementation details of various \name components that we discussed in the previous sections.
+In the following, we provide the implementation details of the \name components presented in the previous sections.
 \red{Detailed implementation is provided in Appendix~\ref{appendix:implementation}.}
 
 \subsubsection{\bfseries QR code generation \& UI specification}
 \label{sec:prototype:impl:qr}
 
-QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code (we use QRCode.js, a \js library to produce QR codes). Section~\ref{sec:systemDesign:transformation} provides the high-level concept of generating the QR code from the webpage UI elements. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' additional attribute \texttt{protect=``true''} (one concrete example is illustrated in Figure~\ref{fig:transformation}). The \name JS iterate through all the HTML elements that have \texttt{protect=``true''} attribute. The JS then parses the HTML code and extracts information such as the name of the label or type of UI element. \device uses preloaded size parameters to specify the size of a text field, button, etc. in case the size is not explicitly mentioned in the HTML source. One important attribute for a UI element in the specification is the \texttt{trigger}. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether. The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them, etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. Such allows negligible user habituation. 
+QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code (we use QRCode.js, a \js library to produce QR codes). Section~\ref{sec:systemDesign:transformation} provides the high-level concept of generating the QR code from the webpage UI elements. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' have the additional attribute \texttt{protect=``true''}. %(one concrete example is illustrated in Figure~\ref{fig:transformation}). 
+
+The \name JS iterates through the HTML elements that have the \texttt{protect} attribute enabled and extracts the information such as the name of the label or the type of the UI element. \device uses preloaded size parameters to specify the size of a text field, button, etc. in case the size is not explicitly mentioned in the HTML source. One important attribute for a UI element in the specification is the \texttt{trigger}. For example, in Specification~\ref{snippet:UISpecification}, the \texttt{OK} and the \texttt{cancel} buttons have an attribute \texttt{trigger}. This attribute is Boolean can be either \texttt{true} (corresponding to \texttt{OK}) or \texttt{false} (corresponding to \texttt{Cancel}) value. The value \texttt{true} denotes that the \texttt{OK} button can submit the values that are provided by the user. The \texttt{false} attribute denotes that hitting the \texttt{cancel} button abort the form altogether. 
+
+The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them, etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. 
+%Such allows negligible user habituation. 
 
 \subsubsection{\bfseries Bitmap generation}
 \label{sec:prototype:impl:bitmap}
 
-The \device reads the QR code from the HDMI frame and generate the UI overlay bitmap from it. We have used the \texttt{piCamera} library to intercept the HDMI frames and generate the UI on top of it. Our \name prototype implements frequently used HTML input elements~\cite{html_elements} that are the most commons in sensitive UIs. 
+The \device reads the QR code from the HDMI frame and generate the UI overlay bitmap from it. We have used the \texttt{piCamera} library to intercept the HDMI frames and generate the UI on top of it. Our \name prototype implements the most frequently used HTML input elements~\cite{html_elements} that are common in sensitive forms. 
 
 \subsubsection{\bfseries Detection of mouse pointer}
 \label{sec:prototype:impl:mouse}
@@ -84,14 +89,12 @@ Initially, when the system boots up the \device perform the calibration phase (s
 For the IO confidentiality, the \device and server create a \tls channel. When the user opens up a secure webpage, key exchange is the first step that takes place. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange protocol of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
 
 \begin{mylist}
-  \item[\one] The remote web server delivers the web page that encodes the signed public key of the remote server in a QR code (server hello in TLS). 
-  \item[\two] The device captures every frame and looks for a QR code. As soon as the \device finds one, it decodes the QR code and verifies it. 
+  \item[\one] The server delivers a web page with a QR code that encodes the signed public key of the server (server hello in TLS). 
+  \item[\two] The device captures every frame until it detects a QR code. Then, it decodes the QR code and verifies the public key. 
   \item[\three] The device then sends its signed public certificate to the host, which forwards it to the server.
   \item[\four] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
  
 \end{mylist}
 
 After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculate the shared secret using the authenticated Diffie-Hellman protocol~\cite{blake1998authenticated}.
-The fallback mechanism, i.e., the case where the user does not have the \device, is outside the scope of this work because it is specific to the policy of service providers. E.g., a bank could issue a new \device for the user, while an online shopping site could allow the user to enroll a new \device or allow access only to nonsensitive functionalities. 
-
 
