@@ -1,9 +1,8 @@
 \begin{table*}[h]
-\scriptsize
+\tiny
 \centering
 \resizebox{\textwidth}{!}{
   \begin{tabular}{l | l | c  c  c  c | c  c  c  c | c c} 
-      
     \multicolumn{2}{c}{\multirow{2}{*}{Security Requirements} \ldelim\{{2}{-10mm}[]} & \multicolumn{4}{c}{} & \multicolumn{4}{c}{\cellcolor{Gray}\textbf{R1}} & \multicolumn{2}{c}{} \\
     %\multicolumn{2}{c}{} & \multicolumn{4}{c}{} & \multicolumn{3}{c}{} & \multicolumn{3}{c}{} \\
     %\multicolumn{2}{c}{} & \multicolumn{8}{c}{} & \multicolumn{2}{c}{} \\
@@ -62,12 +61,9 @@
   \end{tabular}
   }
   \caption{\textbf{Summary of existing trusted path solutions} by their trust assumptions, security features, and usability. Note that a lower trust assumption, a high number of security features and high usability are desired from a generic trusted path solution. SI stands for security indicator, while PnP stands for plug and play capability. The table also categorizes the trust assumptions, IO security features and usability in-terms of the required security and functional properties that we list in Section~\ref{sec:problemStatement:goals}).}
+  \spacesave
   \label{tab:relatedWorks}
 \end{table*}
-
-
-\section{Prototype Evaluation}
-\label{sec:eval}
 
 
 \begin{table}[h]
@@ -86,6 +82,10 @@ Keyboard latency & 170 $\mu$s\\\hline
 \spacesave
 \label{tab:performance}
 \end{table}
+
+\section{Prototype Evaluation}
+\label{sec:eval}
+
 
 %\subsection{Performance}
 %\label{sec:eval:performance}
@@ -115,7 +115,7 @@ Our prototype of \name does not require the user to install any additional softw
 %\subsection{\red{Security Evaluation}}
 %\label{sec:eval:sec}
 
-\begin{table}[!htpb]
+\begin{table}[t]
 \scriptsize
 \centering
 \begin{tabular}{c |  l | c}
@@ -132,7 +132,7 @@ Our prototype of \name does not require the user to install any additional softw
 &Crypto stack & $3,500$\\ 
 &RPi tiny core Linux & $16$ MB \\\hline
 \end{tabular} 
-\caption{\red{\textbf{Comparisons of \name TCB}. }}
+\caption{\red{\textbf{\name code-base comparison}. The table shows a comparison of \name code-base compared to some of the open-source browsers, JS engines and OSs.}}
 \spacesave
 \label{tab:loc}
 \end{table}
