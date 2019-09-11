@@ -86,14 +86,10 @@ Initially, when the system boots up the \device perform the calibration phase (s
 \label{sec:prototype:impl:tls}
 
 For the IO confidentiality, the \device and server create a \tls channel. When the user opens up a secure webpage, key exchange is the first step that takes place. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange protocol of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
-
+\vspace{-10pt}
 \begin{mylist}
   \item[\one] The server delivers a web page with a QR code that encodes the signed public key of the server (server hello in TLS). 
-  \item[\two] The device captures every frame until it detects a QR code. Then, it decodes the QR code and verifies the public key. 
+  \item[\two] The device captures every frame until it detects a QR code. Then, it decodes the QR code and verifies the public key and derives the shared secret using Diffie-Hellman protocol~\cite{blake1998authenticated}. 
   \item[\three] The device then sends its signed public certificate to the host, which forwards it to the server.
   \item[\four] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
- 
 \end{mylist}
-
-After this, both the device and the remote server have each other's public certificates. Using these certificates, both the \device and remote server calculate the shared secret using the authenticated Diffie-Hellman protocol~\cite{blake1998authenticated}.
-
