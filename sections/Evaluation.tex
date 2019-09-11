@@ -91,7 +91,7 @@ Keyboard latency & 170 $\mu$s\\\hline
 %\label{sec:eval:performance}
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
-The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$. This allows the \device to achieve the maximum display frame rate of $47.69$ per second. \todo{Compare to movies ~24-30 fps.} However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result. \red{Note that the B101 HDMI to CSI board that we use to intercept HDMI, has a hardware limit of 25 frames at 1080p resolution.}
+The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$. This allows the \device to achieve the maximum display frame rate of $47.69$ per second\footnote{note that most of the movies are shot ands shown in  ~24-30 fps.} However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result. Note that the B101 HDMI to CSI board that we use to intercept HDMI, has a hardware limit of 25 frames at 1080p resolution.
 
 Our prototype of \name does not require the user to install any additional software in her machine to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
 
@@ -132,13 +132,13 @@ Our prototype of \name does not require the user to install any additional softw
 &Crypto stack & $3,500$\\ 
 &RPi tiny core Linux & $16$ MB \\\hline
 \end{tabular} 
-\caption{\red{\textbf{\name code-base comparison}. The table shows a comparison of \name code-base compared to some of the open-source browsers, JS engines and OSs.}}
+\caption{\textbf{\name code-base comparison}. The table shows a comparison of \name code-base compared to some of the open-source browsers, JS engines and OSs.}
 \spacesave
 \label{tab:loc}
 \end{table}
 
 
-\red{\myparagraph{TCB comparison} In Table~\ref{tab:loc}, we provide the TCB of \device with respect to some of the most popular open-source browsers and JavaScript interpreter engines. All of the codes are measured with the \texttt{cloc} open-source code line counting tool. The table shows that \name has significantly lower TCB compared to the browsers and JS engines. Hence \name has a smaller attack surface.}
+\myparagraph{TCB comparison} In Table~\ref{tab:loc}, we provide the TCB of \device with respect to some of the most popular open-source browsers and JavaScript interpreter engines. All of the codes are measured with the \texttt{cloc} open-source code line counting tool. The table shows that \name has significantly lower TCB compared to the browsers and JS engines. Hence \name has a smaller attack surface.
 
 %\red{\myparagraph{Effectiveness of lightbox} Lightbox is an existing technique that is evaluated in the literature. Huang et al.~\cite{huang2012clickjacking} provides a comprehensive user study of several user attention focusing mechanisms. The lightbox is effective $98\%$ of the time while the freezing is effective in $97\%$ time. For more details of the user study, refer to Table 2 in~\cite{huang2012clickjacking}. We assume that similar result should be expected in \name due to the similarity of the application space (web applications).}
 
