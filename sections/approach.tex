@@ -36,7 +36,7 @@ There are many possible ways to deploy \name. One way is to assume that the \dev
 \label{fig:screenshot_1}
 \end{figure}
 
-\name is build upon the required security and functional properties that are described in Section~\ref{sec:problemStatement:goals}. \name achieves IO integrity and confidentiality by leveraging an external trusted component that we call \device (refer to Figure~\ref{fig:approachOverview}). 
+\name is build upon the required security and functional properties that are described in Section~\ref{sec:problemStatement:goals}. \name achieves IO integrity \red{and confidentiality} by leveraging an external trusted component that we call \device (refer to Figure~\ref{fig:approachOverview}). 
 %In our implementation, \device is realized as an external, low-TCB hardware that uses off-the-shelf components and \device is easy to integrate with legacy systems - providing \emph{easy deployment}. Figure~\ref{fig:approachOverview} illustrates the system configuration. \device sits between IO peripherals and the host system. It intercepts all keyboard and mouse events. Also, it can intercept \& overlay on the display signal. 
 
 \device is active only when the user visits sensitive web applications that require \name security.
