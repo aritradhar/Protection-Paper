@@ -20,9 +20,8 @@ The attacker may try to defeat the \name pointer tracking and overlay mechanism 
 \myparagraph{Replay attack} %In reply attack, the host tries to replay an old user input data to the remote server. 
 To prevent the replay attack, the remote server adds a random identifier (\texttt{id}) in the form specification alongside the signature. With this identifier, the server keeps track of the user input. When the server receives a form submission data, it first checks if the user submitted the same identifier before. In case of a collision, the server rejects the data. 
 
-\myparagraph{Not rendering QR code} The host may deny sending the QR code over the HDMI channel. This is considered as a denial of service, which is acceptable in our threat model as long as the user interacts with a compromised host. 
-In any case, the host is not able to alter any user input or access encrypted data when \name with the confidential feature is required.
-%However, the \device cannot observe and decode the encoded UI. As the remote server only accepts signed inputs from the \device corresponding to the sensitive UI, the host can not submit arbitrary input values to the remote server.
+\myparagraph{Not rendering QR code} The host may deny sending the QR code over the HDMI channel. We consider this to be a denial of service and does not compromise integrity of the IO data. 
+%In any case, the host is not able to alter any user input or access encrypted data when \name with the confidential feature is required.
 
 \myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection attack cannot break the integrity of the input because a legitimate remote server always requires the signed input from the user. Without a valid signed specification, the \device never renders an overlay or sign any input. 
 
@@ -40,8 +39,10 @@ In any case, the host is not able to alter any user input or access encrypted da
 
 
 \subsection{Confidentiality}
+\label{sec:securityAnalysis:confidentiality}
 
-\myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection may compromise only the confidentiality of user inputs if the user does not trigger the SAS mechanism. Note that the \device contains a whitelist of the remote server addresses and their corresponding certificates. The \device is only activated when it detects specifications signed from the whitelisted servers.
+\myparagraph{Redirection} The attacker could redirect the user to a phishing website that renders visually identical UI to that of the legitimate website. Redirection compromises the confidentiality of user inputs only when the user does not trigger the SAS mechanism. The \device is only activated when it detects specifications signed from the whitelisted (maintained in the memory) servers.
+%Note that the \device contains a whitelist of the remote server addresses and their corresponding certificates. The \device is only activated when it detects specifications signed from the whitelisted servers.
 %as the confidentiality of inputs requires the user to manually trigger the SAS to detect any sensitive UI elements that are overlaid by the \device.
 
 \myparagraph{Side-channel leakages} Even though, the \device ensures that no mouse or keyboard event arrives at the untrusted host when the user executes some operation over the overlaid UI, one can not rule out all side-channel leakages. Depending on the application, the amount of time that the user spends or the entry/exit position of the mouse pointer may reveal some information to the attacker. 
@@ -51,10 +52,12 @@ In any case, the host is not able to alter any user input or access encrypted da
 \myparagraph{Mode Switching} The host could remove the QR code when the user is typing confidential data in the sensitive form. Absence of the QR code makes the \device to assume that the secure session has ended and the \device forwards the plaintext keystrokes and mouse movement to the host. To prevent the leakage of the input data, the \device continues to overlay and operate on the overlay till the user clicks submit or cancel (or any UI element that has a \texttt{trigger}  capability). This way, the \device locks the UI from the attacker until the user finishes her session.
 
 \subsection{Attacks toward \device} 
+\label{sec:securityAnalysis:device}
 
-In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. In our case, the \device has only two interfaces with the host. The HDMI controller on the \device does not support any bidirectional data channel which restricts the attack surface to HDMI frames only.
-%However, the attacker could forge a QR code send it to the \device over the HDMI channel that may exploit the \device. 
-As the code base of the \device is small, we assume that the code can be formally verified to be protected against such attacks. The \usb interface on the \device is only unidirectional (\device $\rightarrow$ host) as the \device emulates itself as an HID. Hence the attacker cannot exploit the \usb interface.  
+In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. 
+%In our case, the \device has only two interfaces with the host. The HDMI controller on the \device does not support any bidirectional data channel which restricts the attack surface to HDMI frames only.
+As the code base of the \device is small, we assume that the code can be formally verified to be protected against such attacks. However, we consider making a security-hardened \device is engineering intensive and out-of-scope of this paper. 
+%The \usb interface on the \device is only unidirectional (\device $\rightarrow$ host) as the \device emulates itself as an HID. Hence the attacker cannot exploit the \usb interface.  
 
 
 \myparagraph{Downgrade attack} The host can block the initial QR code from the server to the \device. By doing so, the host forces the server to downgrade the security of the webpage, i.e., not serving the \name JS. For integrity, this is not a security threat as the server does not accept any input from the host that is not signed by the \device. Hence, the downgrade attack works as a denial of service which is out-of-scope of this paper.
