@@ -1,0 +1,343 @@
+NDSS'20 Fall Review Cycle Paper #112 Reviews and Comments
+===========================================================================
+Paper #112 ProtectIOn: Root-of-Trust for IO in Compromised Platforms
+
+
+Review #112A
+===========================================================================
+
+Overall Recommendation
+----------------------
+3. Major revision
+
+Writing Quality
+---------------
+4. Well-written
+
+Reviewer Confidence
+-------------------
+4. High confidence
+
+Paper Summary
+-------------
+This paper addresses the problem of users trying to interact securely with remote servers even if their local client device is compromised. It is focused on the PC (vs phone) setting, and proposes to use a new piece of hardware to address the problem: an interposer that goes between both the user's inputs devices (keyboard and mouse) and display output (HDMI). The paper reviews many years of literature on the problem and presents a prototype implementation.
+
+Strengths
+---------
+* Important problem; users' client devices are frequently poorly secured.
+* Thorough presentation and consideration of prior work.
+
+Weaknesses
+----------
+* Inconsistent feasibility model. The paper considers it a priority to support today's existing x86 PC-style platforms, but then assumes that manufacturing a dedicated piece of hardware with enough oomph to interpose on modern HDMI signals is practical. 
+  * The paper also seems to argue that mobile devices such as smartphones don't have the same problem due to their support for ARM TrustZone and its secure I/O support. However, I'm not aware of such features being used to improve the security of user interaction with services of their choosing (vs, e.g., DRM, or using their own dedicated hardware for payments in the form of an NFC chip).
+  * Additionally, the paper proposes to parse into a JSON Specification pre-existing HTML form elements from existing web service implementations (presumably to save the service owners from the need to modify their service), while also assuming that the task of securely registering IoHub devices with web service operators is somehow straightforward.
+
+Detailed Comments for Authors
+-----------------------------
+* I suggest not picking on SGX for microarchitectural side-channel vulnerabilities specifically. It has experienced other kinds of vulnerabilities. Likewise, ARM TrustZone has experienced its share of vulnerabilities. 
+* I never saw a convincing argument about the small TCB of the IoHub device. The paper discusses only supporting a limited subset of HTML5, but that seems to assume a full-features OS like Linux, support for high-level languages, complex parsers, etc. Are we really doing better than a Chromebook?
+  * What about just having the IoHub have support for bitmap images, mouse click x,y, and keyboard events? And not worry about the semantics of forms, etc? Is it a network performance problem? Seems like it could lead to a less complex IoHub?
+* IoHub basically has all of the hardware support necessary to be a thin client on its own. Why not just let it behave as one? Maybe our machines need support to enter a single-function mode where users participate in particular security-sensitive activities?
+* The motivating use cases like controlling medical devices or power plants seem sufficiently compelling that it is perhaps a poor choice to even consider using a general-purpose PC to configure them?
+* The paper seems complementary of some mobile device architectures like TrustZone. Should x86 systems be modified to support similar modes of operation?
+  * PCs are slow to change, not impossible to change, since the design cycle for a modern x86 CPU is so long (5+ years). As a research effort, I would be happier with a paper that was less constrained by the devices of today.
+* "We also assume the IoHub comes with preloaded certificates and keys that allow the IoHub to verify the signatures signed by the server and sign data such as the user input." This seems like a large imposition: it suggests a secure manufacturing facility to provision and maintain IoHub device identities. Does it really need these keys? Why not trust-on-first use? The IoHub must still be somehow registered with the websites that support it. This process can only verify that the user is registering *an* IoHub - not *their* IoHub. 
+* I don't fully understand the motivation for QR codes, since the paper assumes the key management is in place between the IoHub and the server. The key management is pretty much always the hardest part.
+* The paper introduced the concept of a Lightbox at least 3 times. Opportunity to save space and simplify. 
+* The paper seemed inconsistent to me with regard to what happened to the background, non-secure websites or applications. Can the user interact with them while they are dimmed? One part of the paper suggested no, another part suggested UI/UX research liked Lightbox and also fully freezing background activity but that IoHub chose LightBox, and yet another part suggested that users can switch browser tabs even while IoHubis Lightbox'ing a particular secure form.
+* I'm curious about how the IoHub looks to the PC's early boot firmware. Does it look like a simple UI device or is interacting with system firmware configuration / boot menu likely to be problematic?
+* Is it possible to enter and leave IoHub's secure mode without using a mouse? Realstically it sounds like a power user's tool and such folks don't always like the mouse.
+* I disagree with the paper's suggestion that there could be multiple secure attention sequences. If that is the main task the human needs to remember to do to remain secure, then there had better be only one. I think Microsoft already settled it: it's Ctrl+Alt+Del.
+* SAS policy talks about an overlay that lasts for 5 seconds. I'm not quite sure I understand. What happens after 5 seconds elapses?
+* The replay attack defense sounds like it requires the server to keep per-client state, and possibly also historical state about previous sessions. This might be a genuine technical challenge for large web services.
+* I think the paper should spend more time on Phishing, since with this extra hardware everything necessary to integrate with FIDO is likely present?
+* The paper assumes IO devices attached to IoHub are trusted. Plenty of keyboards and mice employ updatable firmware with poor security practices. Perhaps the IoHub should also take responsibility for ensuring that malicious firmware update attempts cannot reach these devices?
+* I'd like to see a cost estimate of a real IoHub device. Also, if it's targeted at PCs, then it needs to scale to high-end graphics.
+* Mode Switching discusses forcing the user to select an item with trigger capability. Can a buggy web page get the user stuck? Is the browser's back button available?
+* "We assume the remote server already has the IoHub's certificate, or some offline registration takes place." I don't like this language because it doesn't acknowledge the difficulty of that problem. I think it's okay to declare it out of scope, but I think it's necessary to be up-front that another very challenging real-world security problem also has to be solved.
+* Table III uses binary size and lines of code interchangeably. Please just use lines of code. I think everything there is available in source form.
+
+
+# Minor
+* Figure 5 caption: s/AThe/The/
+* Figure 5 caption: "instantaneously" - imperceptible to the human, perhaps. but not instantaneous.
+
+
+
+Review #112B
+===========================================================================
+
+Overall Recommendation
+----------------------
+2. Leaning towards reject
+
+Writing Quality
+---------------
+2. Needs improvement
+
+Reviewer Confidence
+-------------------
+4. High confidence
+
+Paper Summary
+-------------
+The paper presents an external hardware module that interposes between a computer on the one side and keyboard, mouse and screen on the other. The goal is to allow the user to communicate with a remote server even if his local computer is compromised.
+
+Strengths
+---------
+- The problem is well motivated and interesting.
+- ProtectIOn looks like a good solution to the integrity problem.
+
+Weaknesses
+----------
+- Limited novelty in light of many existing trusted path proposals, in particular Fidelius.
+- Several important aspects of ProtectIOn are not described clearly.
+
+Detailed Comments for Authors
+-----------------------------
+The problem of accessing critical remote resources while not trusting a local computer is legitimate and interesting. ProtectIOn looks like a good solution to the integrity problem. Based on the description in the paper, it is less clear if the confidentiality extension is as strong (see below).
+
+Trusted paths have been studied for a long time, and there is a considerable collection of existing work which overlaps with ProtectIOn in various ways. In particular, Fidelius looks similar to ProtectIOn. The paper makes a serious effort at contrasting ProtectIOn from the competition. However, the question remains if there is something fundamentally new here or if we are simply exploring yet another point in the design space. For example, Fidelius secured the keyboard. ProtectIOn secures the keyboard and the mouse. Does securing the mouse pose any fundamental problems that do not arise in securing the keyboard, or this just something Fidelius did not happen to do? 
+
+Similarly, does interacting with a remote server pose problems that do not arise when interacting with an SGX enclave? 
+
+The separation of integrity (provided by ProtectIOn) and confidentiality (an “extension”) is confusing. Confidentiality appears important enough to be part of the core system. How will e-voting and online banking (line 2 of the abstract) work without confidentiality? However, except for the two sections that explicitly discuss the confidentiality extension, the paper describes ProtectIOn in its integrity-only form. Is the evaluation based on integrity-only ProtectIOn? Lack of confidentiality is of course a serious drawback in any comparison between ProtectIOn and the competition (e.g., Fidelius) that should be listed in Table I. 
+
+Confidentiality: The paper correctly points out the danger of the adversary displaying fake UI to trick the user into typing his secrets into fields controlled by the adversary. However, I find the discussion of how SAS will prevent this attack very nebulous. What prevents the adversary from writing “type ctrl-d” on the screen, receiving the crtl-d keys and proceeding with the attack? The paper should clarify this. Fidelius solved this problem using an LED. ProtectIOn avoids the cognitive load that comes with the LED, but does it still solve the security problem?
+
+The claim that "the code can be formally verified to be protected against such attacks" is not credible without further explanation. How will you verify Linux under full concurrency, with interrupts, device drivers and no formal specification of the hardware?
+
+It would also be good to have some explanations about the IOHub code size numbers in Table III to make them more credible.
+
+Table I: The presentation appears questionable. The “requires TEE” column is presented as an undesirable requirement. However, the systems with a checkmark in this column (at least those that I recognize) simply provide a trusted path for a TEE, just like ProtectIOn provides a trusted path to a remote server. Should we list “secure remote server” as a trust assumption for ProtectIOn?
+
+Table I: Some of the entries appear questionable. For example, why does Fidelius support display output only partially?
+
+
+
+Review #112C
+===========================================================================
+
+Overall Recommendation
+----------------------
+4. Minor revision
+
+Writing Quality
+---------------
+3. Adequate
+
+Reviewer Confidence
+-------------------
+3. Sufficient confidence
+
+Paper Summary
+-------------
+This paper proposes a system called ProtectIOn, which is designed to provide a trusted path between an attacker-controlled host and IO devices through the use of a trusted IO hub device. Different from other proposed systems, output integrity (e.g., on-screen output) is assured as well as input integrity. A number of requirements for the design are laid out, including the role of the user, and the system is designed without the use of trusted hardware and with a minimal TCB, implemented with an Arduino Due, Zero microcontroller, and Raspberry Pi.Unlike many other systems, all IO devices including pointer devices and touchscreens are supported.
+
+Strengths
+---------
+- Ability to support mouse input is a large benefit compared to past proposals
+
+- Appears to solve many of the issues with establishing a trusted channel that have come in previous work
+
+- Considers the issue of cross-tab privacy in web apps
+
+Weaknesses
+----------
+- QR codes now in the trusted path so care must be taken to handle them
+
+Detailed Comments for Authors
+-----------------------------
+This is a very nice paper that attacks what seems like a simple problem - provide trusted input through a trusted intermediary I/O device - and shows the considerable number of issues involved with getting this right, especially when the I/O devices move beyond keyboards to pointing devices as well. There are a lot of moving parts here, from hacking the HDMI stream to intercepting all manner of input data, which belies the seeming simplicity of the scheme. There is a lot of defensive text but I see that here as a plus since it shows that the authors have thought through virtually every potential objection to the scheme. 
+
+Performance appears to be quite good, with display latency of less than 22 ms and minimal mouse and keyboard latency. It was quite interesting to do this without the use of trusted hardware. The devices used are fairly simple and the TCB is minimal, though not verified here.
+
+The QR code is transparent to users, who will never see that it exists on screen and is handled by the trusted IOHub. I would have liked to see some discussion of defenses against potentially malicious QR codes that could be embedded in the site.
+
+How often does mouse calibration need to occur? The authors write that "Note, that any point, if the IOHub loses track of the mouse pointer, the calibration process is repeated the first moment the user visits a website that employs ProtectIOn". Is this a common occurrence such that much of the time I'll fine my mouse pushed to the top right of the screen?
+
+There are a few typos and grammatical errors that should be cleaned up, e.g., "AThe QR code decoded" in the caption of Figure 5 and some subject-verb agreement errors and missing definite articles.
+
+Overall I think this is a well crafted paper solving a real problem that is a solid design and engineering effort.
+
+
+
+Review #112D
+===========================================================================
+
+Overall Recommendation
+----------------------
+4. Minor revision
+
+Writing Quality
+---------------
+3. Adequate
+
+Reviewer Confidence
+-------------------
+4. High confidence
+
+Paper Summary
+-------------
+This paper describes a system called ProtectIOn, which aims to provide a
+trusted user interface for communicating with a remote server even when the
+local host is fully compromised.  The approach hinges on a dedicated,
+trusted hardware accessory, which the authors call an IOHub, that
+interposes on USB-based user inputs and HDMI based graphical output.  
+The IOHub receives an integrity-protected template from the remote machine.
+It displays it to the user by overlaying it on the HDMI frames produced by
+the host, so that the host cannot see the overlay.  Similarly, it
+intercepts input events and processes them internally, rather than
+revealing them to the host.  To mitigate clickjacking-style attacks, the
+IOHub dims and freezes the non-sensitive portions of the screen.  To ensure
+confidentiality, the user must employ a secure attention sequence (SAS).
+
+Strengths
+---------
+- The system design is nice in that it is minimally invasive; it does not
+  require custom IO devices, nor does it require any special software on
+  the host.  Instead it works with standard IO interfaces/protocols, and it
+  uses server-provided JavaScript plus HID emulation for communication.
+
+- The authors implement their system using a hodgepodge of relatively cheap
+  embedded prototyping devices (including Arduinos and a Raspberry Pi).
+  The system includes all of the necessary IO components, the software
+  necessary to process data from the server, provide appropriate overlays,
+  and send data back to the server securely.  The evaluation indicates that
+  the prototype can already provide decent performance (e.g., supporting a
+  frame rate of 47 fps) and adding relatively low latencies to the various
+  IO operations.  Before claiming the system is fully usable, however, it
+  would be good to perform at least a small user study to test whether
+  users notice any of the new latency.
+
+- While this problem domain is relatively mature, ProtectIOn does seem to
+  offer improvements over previous work (once you accept the use of a
+  dedicated piece of hardware that interposes on IO).  
+
+- While many of the individual techniques used are not new and also appear
+  in previous work, the authors of this paper have done a nice job of
+  bringing them all together in a well thought out, carefully engineered
+  system.  They systematically handle threats to both secrecy and
+  integrity, and they include mechanisms for both the communications from
+  the server to the user and back again.
+
+Weaknesses
+----------
+- I would have liked to have seen more evaluation of the mouse tracking
+  process.  The authors mention that if IOHub loses track of the mouse, it
+  repeats the initial calibration process, which seems like it would be
+  quite disruptive to the user if it occurred with any frequency.  More
+  generally, it was unclear why image recognition is needed to track the
+  mouse pointer, rather than having the IOHub arrive at its own
+  determination of the pointer's location based on the input events it has
+  observed.
+
+- The presented design allows each site to dictate its own Secure Attention
+  Sequence (SAS).  This seems like a mistake.  The whole point of an SAS is
+  that the user knows and expects to use a particular SAS to enter a
+  secure/trusted mode.  If each site can choose its own SAS, then the user
+  will (a) have to remember which SAS to use for which site, and (b) will
+  become accustomed to websites displaying instructions as to which SAS to
+  use, and hence will be more readily fooled by a phishing site that lies
+  about the correct SAS.  Choosing one definitive SAS for the IOHub seems
+  like a much more secure option.
+
+- In Table 1, the row for ProtectIOn appears to claim it can handle Touch,
+  but that doesn't seem compatible with the setup described earlier in the
+  paper where the IOHub relies on USB connections for input, while most
+  touch screens are wired directly to the motherboard (i.e., are integrated
+  into a laptop or tablet).
+
+Detailed Comments for Authors
+-----------------------------
+Overall, this is a nicely designed, thorough system that addresses a
+challenging problem.  Most of the weaknesses seem like they could be
+addressed via writing changes/improvements.
+
+
+Minor comments:
+
+- In B1 on page three, you say that solutions based on hypervisors require
+  a large TCB.  That does not appear to be true.  Earlier you cite Zhou et
+  al. [3], which reports on a total TCB of ~15,500 lines of code, which is
+  fairly modest, and indeed compares rather favorably to your prototype's
+  TCB which includes 16 MB of Linux code.  The other text in that paragraph
+  seems to suggest a confusion between a VMM and a hypervisor; the latter
+  can be quite small if it's only designed to host one legacy OS plus some
+  additional security feature(s).  These claims should be removed from the
+  paper.
+
+- If the user prefers non-default mouse acceleration settings, is there a
+  way to make an adjustment to the IOHub's settings?
+
+- In IV.D, Sending input data, the first sentence ends in two periods
+
+- I was surprised at the decision to support regular expressions in the UI
+  specification.  How much complexity does that add to the IOHub software
+  implementation?
+
+- It would be good to include a bit more discussion of how the remote
+  server learns the IOHub's certificate.  Waving it off as an offline
+  registration seems to limit the scope of what applications ProtectIOn can
+  support.
+
+- The citation for [10] should point at the IEEE S&P 2018 conference
+  publication, not the arXiv preprint.
+
+- [12] is missing publication information
+
+- Reference [14] should not have curly braces
+
+- In general, the titles in the bibliography are incorrectly capitalized.
+  It would help to make a full pass to clean them up.
+
+
+
+Review #112E
+===========================================================================
+
+Overall Recommendation
+----------------------
+4. Minor revision
+
+Writing Quality
+---------------
+4. Well-written
+
+Reviewer Confidence
+-------------------
+3. Sufficient confidence
+
+Paper Summary
+-------------
+This paper describes a system called ProtectIOn that implements trusted IO. The authors describe how existing secure IO technique lack in important ways including: not protecting both input and output, being error prone for the user, and not protecting all input modalities. They then design, implement, and evaluation ProtectIOn, a system and hardware module (IOHub) that securely connects the user with a secured app despite the presence of malicious/compromised OS. ProtectIOn relies on HDMI overlays to decode and highlight UI elements for users and ensure the integrity (and confidentiality) of their inputs. ProtectIOn does not require additional software installation and its security and performance are evaluated.
+
+Strengths
+---------
++ Well-written
++ Highlights important weaknesses of existing techniques
++ Proposes a rather novel approach with many benefits
++ Its design decisions are described in detail
++ Has hardware implementation
+
+Weaknesses
+----------
+- The performance evaluation is too small
+- CLOC comparison is too simplistic
+
+Detailed Comments for Authors
+-----------------------------
+This paper is overall well-written. The motivation, design decisions, and arguments are easy-to-follow.
+
+Another strong aspect of the paper is its very well motivated problem. The authors pay great attention to high-light some of the main shortcomings of the existing secure IO techniques that all seem to make sense. The three observations in Sec II.B properly justify the problem being solved.
+
+In addition, the paper also proposes a novel and rather interesting approach to solve the secure IO problem. Using HDMI overlays seems to have multiple benefits as described in the paper, and overall sounds like a more clever design than extra hardware gadgets. This particularly applies to the problem of missing context that have existed in such solutions in the previous work.
+
+Another positive aspect of the paper is its back and forth arguments detailing design decisions and highlighting the limitations of strawman ideas. These arguments go a long way in showing the reader that the design is not trivial and has many caveats in mind.
+
+Having and actual hardware implementation is also an important strength point for this work.
+
+The two weaknesses that come to mind are both related to the evaluation of ProtectIOn. First, the performance evaluation seems to be too small. The latencies are often reported as a single number. For a system like this, it is more informative to have many samples and plot numbers with error bars. Second, the CLOC comparison, while giving some very rough estimate of sizes, in and of itself is not a very informative comparison. This is further complicated by different types of languages that are used to implement, e.g., linux kernel vs. Chrome vs. IOHub.
+
+On the subject of languages, given that ProtectIOn is at the very core of the TCB, could it be implemented in a safer language with stronger guarantees (say, Rust or Go or Swift)?
