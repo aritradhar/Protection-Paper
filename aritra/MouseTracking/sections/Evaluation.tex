@@ -119,18 +119,19 @@ Our prototype of \name does not require the user to install any additional softw
 \scriptsize
 \centering
 \begin{tabular}{c |  l | c}
-\multicolumn{2}{c|}{\textbf{Projects}} & \textbf{LOC/Binary size} \\\hline
+\multicolumn{2}{c|}{\textbf{Projects}} & \textbf{LOC} \\\hline
 %&\multicolumn{2}{c}{\textbf{Browsers}}\\\hline
 \rowcolor{Gray}&Chromium (Google Chrome)~\cite{chromium_2019} &  $25,163,547$\\
 \rowcolor{Gray}\multirow{-2}{*}{Browser} &Mozilla Firefox~\cite{mozilla_2019} & $20,928,358$\\
 \multirow{2}{*}{JS Engine}&Chrome V8~\cite{V8} & $2,009,183$\\
 &Firefox SpiderMonkey~\cite{spiderMonkey} & $2,908,550$\\
-\rowcolor{Gray}&Ubuntu 18.10 (Debian) & $1.9$ GB\\
-\rowcolor{Gray}\multirow{-2}{*}{OS}&Manjaro Linux 15.0.4 (Arch) & $2$ GB\\
+\rowcolor{Gray}&Ubuntu 19.10 w/o kernel & $600,712$\\
+\rowcolor{Gray}& Arch Linux w/o kernel& $71,188$\\
+\rowcolor{Gray}\multirow{-3}{*}{OS}&Linux Kernel & $36,680,915$\\
 \multirow{4}{*}{\textbf{\device}}&HDMI interceptor + overlay & $1,911$\\ 
 &USB stack & $893$\\
 &Crypto stack & $3,500$\\ 
-&RPi tiny core Linux & $16$ MB \\\hline
+&RPi tiny core Linux & $121,899$ \\\hline
 \end{tabular} 
 \caption{\textbf{\name code-base comparison} with respect to some of the open-source browsers, JS engines and OSs.}
 \spacesave
