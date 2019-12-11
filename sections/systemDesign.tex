@@ -18,7 +18,7 @@
 \begin{lstlisting}[mathescape=true]
 { "formId": "form1", "formName": "form1",
   "domain": "secure_site.io",
-  "size": "400*400", "SAS": "ctrl+d:5",
+  "size": "400*400", "SAS": "5:LB",
   "ui": [{"id":"textbox_1", "type":"textbox", 
       "label":"Sensitive field 1",
     "text":"secret data 1",
@@ -138,7 +138,7 @@ The data from the \device to the remote server is transmitted using the \name Ja
 %The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. 
 The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet, which then forwards them to the remote server.
 
-\myparagraph{Sending input data} Figure~\ref{fig:sequence} depicts the user interactions in a sequence diagram.. The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
+\myparagraph{Sending input data} Figure~\ref{fig:sequence} depicts the user interactions in a sequence diagram. The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
 
 \begin{mylist}
 \item \textbf{Record.} After the UI elements are correctly overlaid on the screen, the users can interact with these UI elements. The user interaction with the overlaid UI element is no different than a standard UI. The UI specification encodes the behavior of all generated UI elements, making the \device aware of the semantics of the UI objects. E.g., when a user selects a text box and types on with her keyboard, the \device intercepts all keystrokes and renders the characters on the overlay.
