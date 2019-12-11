@@ -37,6 +37,7 @@ To prevent the replay attack, the remote server adds a random identifier (\textt
 
 \myparagraph{Mouse acceleration/updates} The attacker can change the mouse acceleration or provide erratic mouse updates on the screen. Such manipulations only cause the \device to lose track of the mouse pointer and stop relaying the mouse signal to the host altogether. The \device uses the acceleration parameters from the default \texttt{libUSB} driver to cope with the mouse acceleration. Hence, such manipulation does not affect security.
 
+\red{\myparagraph{Malicious QR codes} The attacker may put fake QR codes on the webpage. But note that the \device verifies the signature from the HTML forms to check the integrity. This way, the \device does not render any overlays from malicious QR codes.} 
 
 \subsection{Confidentiality}
 \label{sec:securityAnalysis:confidentiality}
