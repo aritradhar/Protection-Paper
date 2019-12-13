@@ -22,7 +22,8 @@ In the previous sections, we describe how the \name \js and the \device together
   <script> [JS outputs QR code that encodes 
   encrypted specification] </script>
 </form> 
-\end{lstlisting} 
+\end{lstlisting}
+\spacesave 
 \end{figure}
 
 
@@ -31,6 +32,7 @@ In the previous sections, we describe how the \name \js and the \device together
 
 \myparagraph{Establishing TLS} The \device and the server create TLS using the public certificates. The TLS uses the emulated keystroke streams and HDMI as the upstream and downstream channels respectively as described in Section~\ref{sec:systemDesign}. Implementation details are provided in Section~\ref{sec:prototype:impl:tls}. 
 
+\parasave
 \myparagraph{Output confidentiality} Output confidentiality ensures that information sent from the remote server and the visual render of the user's input is hidden from the host. To enable output confidentiality, the UI overlay mechanism that is described in Section~\ref{sec:systemDesign:transformation} is modified slightly. The difference is that the specification is not generated in the client side, but rather in the server.
 %Here we \name does not require \name JS to transform all the UI elements to QR code specification. 
 A small server-side module that is very similar to \name JS transforms the UI elements to the UI specification (one example is provided in Specification~\ref{snippet:UISpecification}) and encrypts it with the \tls session key. 
@@ -38,6 +40,7 @@ The encrypted specification is delivered to the client browser inside the \textt
 %The \texttt{<encrypted>} tag contains the encrypted UI specification from the server. The \name JS (inside \texttt{<script>} tag) encodes this encrypted UI specification to a QR code.
 This feature of \name allows the remote server to send securely private information to the user in the presence of a compromised host, e.g., bank account statements, or any other confidential message. 
 
+\parasave
 \myparagraph{Input Confidentiality} When the user enters her mouse pointer into the overlaid UI area, the \device stops transmitting any mouse or keyboard event to the host, making it completely oblivious of any mouse movement or keystroke during that time. 
 However, the user can still see her inputs on the screen as the \device renders the plaintext character on the overlaid UI elements, therefore making them visible only to the user.
 Likewise, when the user selects a UI element, for example, a radio button that is shown in Figure~\ref{fig:activityPrivacy}, the \device stores the selected value in the recorded data.

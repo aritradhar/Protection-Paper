@@ -69,6 +69,7 @@ Lightbox mitigates the attacks presented above. The paper shows that the lightbo
 
 \red{Note that during the time the focusing mechanism (such as the LightBox) is active, the user can still interact with the UI elements outside the secure UI elements as the \device does not control those. Browser back button is also accessible by the user but it does not influence the state of the overlaid UI as long as the back button does not remove/change the QR code on the web page.}
 
+\parasave
 \myparagraph{\bfseries Automated activation} The technique to focus user attention (dimming out or freezing the non-overlaid part of the screen) is triggered automatically in specific situations: The user moves the mouse pointer over the overlaid UI, or the user starts typing into a sensitive UI element. 
 %e.g., when the user moves her mouse pointer over the overlaid UI, or start moving the mouse after a brief pause (like 5 seconds). 
 The advantage of the automated trigger is that the user does not need to remember to activate the mechanism. Hence the system is resilient from user habituation and does not require the user to actively monitor security indicators or perform specific actions. Note that the automated activation provides security to user IO data \emph{only} when integrity of the data is considered.
@@ -137,11 +138,13 @@ and starts tracking the pointer afterward. Note, that at any point, if the \devi
 
 When the user finishes providing her input via input devices (mouse and keyboard), the \device sends these values (with signature to ensure integrity) to the remote server. Sending these signed input values to the server requires an upstream channel from the \device to the server. 
 
+\parasave
 \myparagraph{Upstream channel}\label{sec:systemDesign:commit:upload} 
 The data from the \device to the remote server is transmitted using the \name JavaScript snippet as a helper. 
 %The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. 
 The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data to the \name JavaScript snippet, which then forwards them to the remote server.
 
+\parasave
 \myparagraph{Sending input data} Figure~\ref{fig:sequence} depicts the user interactions in a sequence diagram. The user input transmission procedure is illustrated in Figure~\ref{fig:transformation}. This has two phases: \emph{record} and \emph{transmit} as described in the following:
 
 \begin{mylist}
@@ -157,11 +160,14 @@ Record = & (tb\_1, Data\_1);(tb\_2,Data\_2)
 %\subsubsection{\bfseries Server-side verification} \label{sec:systemDesign:commit:verification}
 Upon receiving the signed input data from the \device, the remote accepts the input if the signature verification is successful. Note, if an input field is annotated as \texttt{protect=``true''}, the server does not accept any input without the \device signature. This prevents the attacker-controlled host to submit data. 
 
+\parasave
 \myparagraph{Changing browser tabs or browsers}
 The \device supports multiple browsing tabs across multiple browsers. The UI specification contains \texttt{formId} and \texttt{domain} that works as the unique identifier for a specific form served from a specific web server. The \device can maintain multiple parallel TLS connection to web servers. Depending on the observed \texttt{formId} and \texttt{domain} (refer to Specification~\ref{snippet:UISpecification}), the device retrieves the data that is entered by the user. This way even if the user switches tabs, the \device can still allow editing the forms across tabs.
 
+\parasave
 \myparagraph{Input validation} Input validation, i.e., checking the input against a recommended input policy (e.g., regular expression) is one of the most widely used JavaScript functionalities and it is a critical part of input integrity. The remote server sends the regular expression in the UI specification (\texttt{RE} in Specification~\ref{snippet:UISpecification}) that the \device uses to validate the user input.
 
 %\myparagraph{Sequence of Events} In the previous Sections, we explain the basic components of \name. Here we summarize the overall flow of the system. The sequence diagram of \name is illustrated in Figure~\ref{fig:sequence} that shows snapshots of two example sequences: mouse movement and filling up a web-form.
 
+\parasave
 \myparagraph{Fallback for legacy clients} \name is backward-compatible with the clients who do not use the \device. This is achieved by the remote server by showing a QR code briefly on the screen when the user visits the \name-enabled webpage. The \device intercepted the QR code and sends a signal to the server about its presence. In the absence of the \device, the remote server does not send the \name JS to the host that acts as a communication channel between the \device and the remote server. Note, that the fallback mechanism is application-specific and the service provider could decide if the fallback is detrimental to security.
