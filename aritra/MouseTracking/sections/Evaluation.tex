@@ -96,18 +96,24 @@ The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$
 
 Our prototype of \name does not require the user to install any additional software in her machine to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
 
+\parasave
 \myparagraph{\device $\rightarrow$ host} The \device transmits data (encrypted) to the host by simulating keystrokes. In our system \device sends the keystrokes in a chunk of $256$ bytes of data to the host. The keystroke has an average latency of $5\ ms$ which is undetectable by humans.  
 
+\parasave
 \myparagraph{Host $\rightarrow$ \device} The host sends data to the device by encoding them into the HDMI frame. The QR-code is generated locally in the browser and displayed on the screen. For a specification of a form with two/four elements QR-code generation takes $14\ ms$. The \device detects the QR-code, decodes it, and creates the overlay. This process takes $6\ ms$ for the same form considered previously.
  
 %\name introduces the following delays in web applications:
 
+\parasave
 \myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only one additional \texttt{xmlHttpRequest} to the server therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
 
+\parasave
 \myparagraph{Frame processing for mouse} \device processes every frame of the host for pointer detection. This takes $1.76 ms$, which does not impact the frame rate. 
 
+\parasave
 \myparagraph{Keystroke latency} The \device intercepts all user's keystrokes and forwards them to the host or renders in the screen. When rendering on the screen, the latency is $170\ \mu s$.
 
+\parasave
 \myparagraph{Cursor latency} Similarly to keystrokes, the \device intercepts mouse events also. However, the latency of event forwarding is $250\ \mu s$.
 
 
