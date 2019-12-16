@@ -71,10 +71,7 @@ To prevent the replay attack, the remote server adds a random identifier (\textt
 \subsection{Attacks toward \device} 
 \label{sec:securityAnalysis:device}
 
-In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. 
-%In our case, the \device has only two interfaces with the host. The HDMI controller on the \device does not support any bidirectional data channel which restricts the attack surface to HDMI frames only.
-As the code base of the \device is small, we assume that the code can be formally verified to be protected against such attacks. However, we consider making a security-hardened \device is engineering intensive and out-of-scope of this paper. 
-%The \usb interface on the \device is only unidirectional (\device $\rightarrow$ host) as the \device emulates itself as an HID. Hence the attacker cannot exploit the \usb interface.  
+In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. \red{It is also possible to develop the \device using formally verified languages such as embedded rust}. However, we consider making a security-hardened \device is engineering intensive and out-of-scope of this paper. 
 
 \parasave
 \myparagraph{Downgrade attack} The host can block the initial QR code from the server to the \device. By doing so, the host forces the server to downgrade the security of the webpage, i.e., not serving the \name JS. For integrity, this is not a security threat as the server does not accept any input from the host that is not signed by the \device. Hence, the downgrade attack works as a denial of service which is out-of-scope of this paper.
