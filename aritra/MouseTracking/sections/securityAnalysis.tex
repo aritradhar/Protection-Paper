@@ -47,7 +47,7 @@ To prevent the replay attack, the remote server adds a random identifier (\textt
 \myparagraph{Mouse acceleration/updates} The attacker can change the mouse acceleration or provide erratic mouse updates on the screen. Such manipulations only cause the \device to lose track of the mouse pointer and stop relaying the mouse signal to the host altogether. The \device uses the acceleration parameters from the default \texttt{libUSB} driver to cope with the mouse acceleration. Hence, such manipulation does not affect security.
 
 \parasave
-\red{(\#11)\myparagraph{Malicious QR codes} The attacker may put fake QR codes on the webpage. But note that the \device verifies the signature from the HTML forms to check the integrity. This way, the \device does not render any overlays from malicious QR codes.} 
+\red{(\#11)\myparagraph{Malicious QR codes} The attacker may put fake QR codes on the webpage. Note that the \device verifies the signature from the HTML forms to check the integrity. This way, the \device does not render any overlays from a malicious QR codes.} 
 
 \parasave
 \subsection{Confidentiality}
@@ -58,7 +58,7 @@ To prevent the replay attack, the remote server adds a random identifier (\textt
 %as the confidentiality of inputs requires the user to manually trigger the SAS to detect any sensitive UI elements that are overlaid by the \device.
 
 \parasave
-\red{(\#10)\myparagraph{Fake SAS} The attacker may put a fake SAS message on the screen tricking the user into reveling her sensitive information to the attacker. This attack is not possible as \name follows a standard, system-wide SAS sequence that is consistent across different web servers (such as \texttt{Ctr+Alt+Del}). Recall that the SAS key stroke is first intercepted by the \device. SAS is expected to be used when there exists a QR code on the screen that is signed by the remote server. In case there is no QR code or a malformed QR code on the screen, the \device warns the user.}
+\red{(\#10)\myparagraph{Fake SAS} The attacker may put a fake SAS message on the screen, tricking the user into revealing her sensitive information to the attacker. This attack is not possible as \name follows a standard, system-wide SAS sequence that is consistent across different web servers (such as \texttt{Ctr+Alt+Del}). Recall that the SAS keystroke is first intercepted by the \device. SAS is expected to be used when there exists a QR code on the screen that is signed by the remote server. In case there is no QR code or a malformed QR code on the screen, the \device warns the user.}
 
 \parasave
 \myparagraph{Side-channel leakages} Even though, the \device ensures that no mouse or keyboard event arrives at the untrusted host when the user executes some operation over the overlaid UI, one can not rule out all side-channel leakages. Depending on the application, the amount of time that the user spends or the entry/exit position of the mouse pointer may reveal some information to the attacker. 
