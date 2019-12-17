@@ -22,20 +22,16 @@
   organization={ACM}
 }
 
-@article{dhar2018proximitee,
-  title={ProximiTEE: Hardened SGX Attestation and Trusted Path through Proximity Verification},
-  author={Dhar, Aritra and Puddu, Ivan and Kostianen, Kari and {\v{C}}apkun, Srdjan},
-  year={2018},
-  publisher={ETH Zurich}
-}
 
 @inproceedings{filyanov2011uni,
   title={Uni-directional trusted path: Transaction confirmation on just one device},
   author={Filyanov, Atanas and McCuney, Jonathan M and Sadeghiz, Ahmad-Reza and Winandy, Marcel},
-  booktitle={Dependable Systems \& Networks (DSN), 2011 IEEE/IFIP 41st International Conference on},
+  booktitle={2011 IEEE/IFIP 41st International Conference on Dependable Systems \& Networks (DSN)},
+  pages={1--12},
   year={2011},
   organization={IEEE}
 }
+
 
 @inproceedings{sun2015trustotp,
   title={Trustotp: Transforming smartphones into secure one-time password tokens},
@@ -72,11 +68,17 @@
 } 
 
 @article{Overshadow,
- author = {Chen, Xiaoxin and Garfinkel, Tal and Lewis, E. Christopher and Subrahmanyam, Pratap and Waldspurger, Carl A. and Boneh, Dan and Dwoskin, Jeffrey and Ports, Dan R.K.},
- title = {Overshadow: A Virtualization-based Approach to Retrofitting Protection in Commodity Operating Systems},
- journal = {SIGPLAN Not.},
- issue_date = {March 2008}
-} 
+  title={Overshadow: a virtualization-based approach to retrofitting protection in commodity operating systems},
+  author={Chen, Xiaoxin and Garfinkel, Tal and Lewis, E Christopher and Subrahmanyam, Pratap and Waldspurger, Carl A and Boneh, Dan and Dwoskin, Jeffrey and Ports, Dan RK},
+  journal={ACM SIGOPS Operating Systems Review},
+  volume={42},
+  number={2},
+  pages={2--13},
+  year={2008},
+  publisher={ACM}
+}
+
+
 
 @article{criswell2014virtual,
   title={Virtual ghost: Protecting applications from hostile operating systems},
@@ -142,20 +144,31 @@
   organization={ACM}
 }
 
-@inproceedings{lukaSpoof,
- author = {Malisa, Luka and Kostiainen, Kari and Capkun, Srdjan},
- title = {Detecting Mobile Application Spoofing Attacks by Leveraging User Visual Similarity Perception},
- booktitle = {Proceedings of the Seventh ACM on Conference on Data and Application Security and Privacy},
- series = {CODASPY '17},
- publisher = {ACM}
-} 
 
-@article{Chen:2010:DVS:1754393.1754394,
- author = {Chen, Teh-Chung and Dick, Scott and Miller, James},
- title = {Detecting Visually Similar Web Pages: Application to Phishing Detection},
- journal = {ACM Trans. Internet Technol.},
- issue_date = {May 2010}
- } 
+@inproceedings{lukaSpoof,
+  title={Detecting mobile application spoofing attacks by leveraging user visual similarity perception},
+  author={Malisa, Luka and Kostiainen, Kari and Capkun, Srdjan},
+  booktitle={Proceedings of the Seventh ACM on Conference on Data and Application Security and Privacy},
+  pages={289--300},
+  year={2017},
+  organization={ACM}
+}
+
+
+ 
+ 
+ @article{Chen:2010:DVS:1754393.1754394,
+  title={Detecting visually similar web pages: Application to phishing detection},
+  author={Chen, Teh-Chung and Dick, Scott and Miller, James},
+  journal={ACM Transactions on Internet Technology (TOIT)},
+  volume={10},
+  number={2},
+  pages={5},
+  year={2010},
+  publisher={ACM}
+}
+ 
+ 
 
 @misc{opencv, title={OpenCV library}, url={https://opencv.org/}, journal={About - OpenCV library}}
 
@@ -181,11 +194,12 @@
   publisher={ACM}
 }
 
-@article{dhar2018proximitee,
-  title={Proximitee: Hardened sgx attestation and trusted path through proximity verification},
+@inproceedings{dhar2018proximitee,
+  title={Proximitee: Hardened SGX Attestation by Proximity Verification},
   author={Dhar, Aritra and Puddu, Ivan and Kostianen, Kari and {\v{C}}apkun, Srdjan},
-  year={2018},
-  publisher={ETH Zurich}
+  booktitle={Proceedings of the Tenth ACM Conference on Data and Application Security and
+Privacy (CODASPY '20)},
+  year={2020}
 }
 
 @inproceedings{wiseman1988trusted,
@@ -223,11 +237,15 @@
 }
 
 
-@article{ying2018truz,
-  title={TruZ-Droid: Integrating TrustZone with Mobile Operating System},
+@inproceedings{ying2018truz,
+  title={TruZ-Droid: Integrating TrustZone with mobile operating system},
   author={Ying, Kailiang and Ahlawat, Amit and Alsharifi, Bilal and Jiang, Yuexin and Thavai, Priyank and Du, Wenliang},
-  year={2018}
+  booktitle={Proceedings of the 16th Annual International Conference on Mobile Systems, Applications, and Services},
+  pages={14--27},
+  year={2018},
+  organization={ACM}
 }
+
 
 @inproceedings{li2014building,
   title={Building trusted path on untrusted device drivers for mobile devices},
@@ -319,13 +337,6 @@ month={May},}
 
 @misc{badUSB, title={BadUSB - On accessories that turn evil}, url={https://srlabs.de/wp-content/uploads/2014/07/SRLabs-BadUSB-BlackHat-v1.pdf},year={2014}}
 
-@inproceedings{weigold2011secure,
-  title={Secure confirmation of sensitive transaction data in modern Internet banking services},
-  author={Weigold, Thomas and Hiltgen, Alain},
-  booktitle={2011 World Congress on Internet Security (WorldCIS-2011)},
-  year={2011},
-  organization={IEEE}
-}
 
 @inproceedings{van2018foreshadow,
   title={Foreshadow: Extracting the keys to the intel $\{$SGX$\}$ kingdom with transient out-of-order execution},
@@ -353,7 +364,9 @@ month={May},}
   organization={Springer}
 }
 
-@misc{w3c_spec, url={https://www.w3.org/TR/UISecurity/}, journal={User Interface Security and the Visibility API}}
+@misc{w3c_spec, 
+title = {User Interface Security and the Visibility API},
+url={https://www.w3.org/TR/UISecurity/}, journal={User Interface Security and the Visibility API}}
 
 @inproceedings{akhawe2014clickjacking,
   title={Clickjacking Revisited: A Perceptual View of $\{$UI$\}$ Security},
