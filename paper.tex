@@ -1,45 +1,25 @@
-\newif\ifccs
-\ccsfalse
-
-\ifccs
-\input{preamble_ccs.tex}
-\else
 \input{preamble.tex}
-\fi
-
-
-
-\newif\ifdesperatetime
-%\desperatetimetrue
 
 \graphicspath{{images/}}
 
 \begin{document}
 
-
-% \author{
-%     \IEEEauthorblockN{Aritra Dhar}
-%     \IEEEauthorblockA{ETH Zurich}
-%     \and
-%     \IEEEauthorblockN{Enis Ulqinaku}
-%     \IEEEauthorblockA{ETH Zurich}
-%     \and
-%     \IEEEauthorblockN{Kari Kostiainen}
-%     \IEEEauthorblockA{ETH Zurich}
-%     \and
-%     \IEEEauthorblockN{Srdjan Capkun}
-%     \IEEEauthorblockA{ETH Zurich}
-% }
-
 \title{\name: Root-of-Trust for IO \\ in Compromised Platforms}
 
-\ifccs
-\else
-\maketitle
-\fi
+\author{
+    \IEEEauthorblockN{Aritra Dhar}
+    \IEEEauthorblockA{ETH Zurich}
+    \and
+    \IEEEauthorblockN{Enis Ulqinaku}
+    \IEEEauthorblockA{ETH Zurich}
+    \and
+    \IEEEauthorblockN{Kari Kostiainen}
+    \IEEEauthorblockA{ETH Zurich}
+    \and
+    \IEEEauthorblockN{Srdjan Capkun}
+    \IEEEauthorblockA{ETH Zurich}
+}
 
-\thispagestyle{plain}
-\pagestyle{plain}
 
 \IEEEoverridecommandlockouts
 \makeatletter\def\@IEEEpubidpullup{6.5\baselineskip}\makeatother
@@ -52,6 +32,8 @@
 }
 \hspace{\columnsep}\makebox[\columnwidth]{}}
 
+\maketitle
+
 \begin{abstract}
  
 
@@ -63,10 +45,6 @@ As a solution, we propose \name, a system that ensures IO integrity using a trus
 \end{abstract}
 
 
-\ifccs
-\maketitle
-\else
-\fi
 
 \input{sections/intro}
 %\input{sections/background}
@@ -83,11 +61,8 @@ As a solution, we propose \name, a system that ensures IO integrity using a trus
 \input{sections/conclusion}
 
 
-\ifccs
-\bibliographystyle{ACM-Reference-Format}
-\else
 \bibliographystyle{IEEEtran}
-\fi
+
 
 \bibliography{references}
 

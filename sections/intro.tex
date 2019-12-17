@@ -7,28 +7,28 @@ Web-based interfaces are very prevalent to remotely configure safety-critical sy
 
 The recent introduction of trusted computing architectures like Intel's SGX has enabled secure computations and secure data storage on otherwise untrusted computing platforms. However, such architectures do not directly enable secure user interaction because IO operations are handled by the operating system. Additionally, the recent microarchitectural attacks have shown that execution environments inside enclaves, like the one provided by SGX, can be compromised as well.
 
-\iffalse
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
-\caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
-\spacesave
-\label{fig:motivation}
-\centering
-\end{figure}
-\fi
-
-\iffalse
-\begin{figure}[t]
-\centering
-%\includegraphics[trim={0 14cm 17cm 0}, clip, widt1h=0.9\linewidth]{systemModel.pdf}
-\includegraphics[trim={0 15cm 18cm 0}, clip, width=0.85\linewidth]{systemModel_all.pdf}
-\caption{\textbf{Trusted path.} The figures shows the system and the attacker model of the trusted path. We generally consider two trusted path scenarios, \one trusted path to a remote server, and \two trusted path to a trusted execution environment (TEE) such as the Intel SGX.}
-\spacesave
-\label{fig:trustedPath}
-\centering 
-\end{figure}
-\fi
+% \iffalse
+% \begin{figure}[t]
+% \centering
+% \includegraphics[trim={0 1cm 10cm 0}, clip, width=\linewidth]{motivation.pdf}
+% \caption{\textbf{Motivating examples.} 1) Pointer based UI elements that sets parameters to remote safety-critical device, 2) E-voting where the voting privacy and integrity is critical, 3) Financial transactions such as bitcoin wallet that shows sensitive information such as the user's private key and 4) web applications that provide an option for the user to reveal credentials.}
+% \spacesave
+% \label{fig:motivation}
+% \centering
+% \end{figure}
+% \fi
+% 
+% \iffalse
+% \begin{figure}[t]
+% \centering
+% %\includegraphics[trim={0 14cm 17cm 0}, clip, widt1h=0.9\linewidth]{systemModel.pdf}
+% \includegraphics[trim={0 15cm 18cm 0}, clip, width=0.85\linewidth]{systemModel_all.pdf}
+% \caption{\textbf{Trusted path.} The figures shows the system and the attacker model of the trusted path. We generally consider two trusted path scenarios, \one trusted path to a remote server, and \two trusted path to a trusted execution environment (TEE) such as the Intel SGX.}
+% \spacesave
+% \label{fig:trustedPath}
+% \centering 
+% \end{figure}
+% \fi
 
 
 %IO operation between the user and a remote server in the presence of an untrusted host is a long-standing problem. 
