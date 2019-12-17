@@ -58,7 +58,7 @@ To prevent the replay attack, the remote server adds a random identifier (\textt
 %as the confidentiality of inputs requires the user to manually trigger the SAS to detect any sensitive UI elements that are overlaid by the \device.
 
 \parasave
-\red{(\#10)\myparagraph{Fake SAS} The attacker may put a fake SAS message on the screen tricking the user into reveling her sensitive information to the attacker. This attack is not possible as \name follows a standard SAS that is consistent across different web servers. The SAS key stroke is first intercepted by the \device. If there exists a QR code on the screen. In case there is no QR code on the screen, the \device warns the user.}
+\red{(\#10)\myparagraph{Fake SAS} The attacker may put a fake SAS message on the screen tricking the user into reveling her sensitive information to the attacker. This attack is not possible as \name follows a standard, system-wide SAS sequence that is consistent across different web servers (such as \texttt{Ctr+Alt+Del}). Recall that the SAS key stroke is first intercepted by the \device. SAS is expected to be used when there exists a QR code on the screen. In case there is no QR code on the screen, the \device warns the user.}
 
 \parasave
 \myparagraph{Side-channel leakages} Even though, the \device ensures that no mouse or keyboard event arrives at the untrusted host when the user executes some operation over the overlaid UI, one can not rule out all side-channel leakages. Depending on the application, the amount of time that the user spends or the entry/exit position of the mouse pointer may reveal some information to the attacker. 
@@ -71,7 +71,7 @@ To prevent the replay attack, the remote server adds a random identifier (\textt
 \subsection{Attacks toward \device} 
 \label{sec:securityAnalysis:device}
 
-In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. \red{(\#1)It is also possible to develop the \device using formally verified languages such as embedded rust}. However, we consider making a security-hardened \device is engineering intensive and out-of-scope of this paper. 
+In \name trust model, we assume that the \device is trusted. However, in real-world, embedded systems are often vulnerable to attacks as the attacker can use the connection interfaces to reprogram the \device. \red{(\#1)It is also possible to develop the \device using formally verified languages such as embedded Rust}. However, we consider making a security-hardened \device is engineering intensive and out-of-scope of this paper. 
 
 \parasave
 \myparagraph{Downgrade attack} The host can block the initial QR code from the server to the \device. By doing so, the host forces the server to downgrade the security of the webpage, i.e., not serving the \name JS. For integrity, this is not a security threat as the server does not accept any input from the host that is not signed by the \device. Hence, the downgrade attack works as a denial of service which is out-of-scope of this paper.
