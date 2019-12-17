@@ -77,9 +77,7 @@ Decoding QR code + Overlay $(C)$ & 6 ms\\
 Effective display latency $(A+B+C)$ & 21.76 ms \\
 Mouse latency & 250 $\mu$s\\
 Keyboard latency & 170 $\mu$s\\\hline
-\red{Image analysis accuracy of mouse pointer} & \red{0.99} \\
-\red{Accuracy of pointer alignment} & \red{0.98} \\
-\red{Accuracy of detecting mouse pointer} & \red{0.99} \\\hline
+\red{Image analysis accuracy of mouse pointer} & \red{0.997} \\\hline
 \end{tabular} 
 \caption{\textbf{\device performance}. The table shows the latency and accuracy corresponding to a number of \name prototype operations.}
 \spacesave
@@ -94,8 +92,8 @@ Keyboard latency & 170 $\mu$s\\\hline
 %\label{sec:eval:performance}
 
 We evaluate the performance of our prototype by measuring the overheads introduced by \name to the system and whether they influence the user's interaction. \red{We estimate that out \name prototype costs around 140 USD (Rpi4 = \$35 + HDMI-CSI =\$30 + Due = \$35 + Zero = \$40).}
-Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies.
-The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$. This allows the \device to achieve the maximum display frame rate of $47.69$ per second (e.g., most of the movies are shot and shown in  ~24-30 fps). However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result. Note that the B101 HDMI to CSI board that we use to intercept HDMI, has a hardware limit of 25 frames at 1080p resolution.
+Initially, we measure the default latency introduced by \device when the user interacts with applications that do not require protection. Table~\ref{tab:performance} provides the relevant latencies \red{and the accuracy of the pointer detection}.
+The delay in forwarding keystrokes is $170\ \mu s$ and for frames is $21.76\ ms$. This allows the \device to achieve the maximum display frame rate of $47.69$ per second (e.g., most of the movies are shot and shown in  ~24-30 fps). However, an optimized implementation of the technique to encode information in the HDMI frame would reduce significantly the processing time of a frame and increase further the frame rate as a result. Note that the B101 HDMI to CSI board that we use to intercept HDMI, has a hardware limit of 25 frames at 1080p resolution. \red{We observe 0.997 accuracy of the pointer detection mechanism that involdes image analysis and pointer motion tracking.} 
 
 Our prototype of \name does not require the user to install any additional software in her machine to facilitate the communication between the remote server and the \device. Instead, the \device communicates with the remote server by using the host as an untrusted transporter. Therefore, we start by measuring the delay of sending data from the device to the host and vice versa:
 
@@ -111,7 +109,7 @@ Our prototype of \name does not require the user to install any additional softw
 \myparagraph{Initial Page Load} First time the user visits a web page that employs \name, the remote server and the \device should exchange a cryptographic key to protect the communication. This step requires only one additional \texttt{xmlHttpRequest} to the server therefore the delay is relatively low. Initially, the browser encodes server's public key into a QR-code that is decoded by the \device, which sends the response to the server by simulating the keystrokes.
 
 \parasave
-\myparagraph{Frame processing for mouse} \device processes every frame of the host for pointer detection. This takes $1.76 ms$, which does not impact the frame rate. 
+\myparagraph{Frame processing for mouse} \device processes every frame of the host for pointer detection. This takes $1.76 ms$, which does not impact the frame rate. The image analysis routine achieves accuracy of $0.997$. 
 
 \parasave
 \myparagraph{Keystroke latency} The \device intercepts all user's keystrokes and forwards them to the host or renders in the screen. When rendering on the screen, the latency is $170\ \mu s$.
