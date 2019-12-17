@@ -131,7 +131,7 @@ This proof is also trivial. As we describe in the Definition~\ref{def:inputInteg
 
 In the following, we provide the implementation details of the \name components presented in the previous sections. Detailed implementation is provided in Appendix~\ref{appendix:implementation}.
 
-\subsubsection{\bfseries QR code generation \& UI specification}
+\subsection{\bfseries QR code generation \& UI specification}
 \label{sec:prototype:impl:qr}
 
 QR code generation phase is executed by \name JS that transforms the UI elements of a sensitive web form to a UI specification encoded in a QR code (we use QRCode.js, a \js library to produce QR codes). Section~\ref{sec:systemDesign:transformation} provides the high-level concept of generating the QR code from the webpage UI elements. UI elements that require IO integrity protection can be marked by the developers in the \html source. As illustrated in Figure~\ref{fig:transformation}, the \html UI elements: `\texttt{Sensitive field 1}' and `\texttt{Sensitive field 2}' have the additional attribute \texttt{protect=``true''}. %(one concrete example is illustrated in Figure~\ref{fig:transformation}). 
@@ -141,17 +141,17 @@ The \name JS iterates through the HTML elements that have the \texttt{protect} a
 The QR code generation phase is between \one and \two in Figure~\ref{fig:transformation} where the \name JavaScript snippet transforms the UI elements to a UI specification language in a QR code that can be interpreted by the \device. The UI specification corresponding to the \html source (in Figure~\ref{fig:transformation}) is provided in Specification~\ref{snippet:UISpecification}. Note that the specification is highly flexible, allowing adjustable size for the form, individual UI elements, gaps between them, etc. This allows the \device to faithfully recreate the UI that is very close to the actual form UI that the served by the web severer. 
 %Such allows negligible user habituation. 
 
-\subsubsection{\bfseries Bitmap generation}
+\subsection{\bfseries Bitmap generation}
 \label{sec:prototype:impl:bitmap}
 
 The \device reads the QR code from the HDMI frame and generate the UI overlay bitmap from it. We have used the \texttt{piCamera} library to intercept the HDMI frames and generate the UI on top of it. Our \name prototype implements the most frequently used HTML input elements~\cite{html_elements} that are common in sensitive forms. 
 
-\subsubsection{\bfseries Detection of mouse pointer}
+\subsection{\bfseries Detection of mouse pointer}
 \label{sec:prototype:impl:mouse}
 
 Initially, when the system boots up the \device perform the calibration phase (see Section \ref{sec:systemDesign:analysis:calibration}) to synchronize its coordinates of the pointer with the host. The detection of the mouse pointer is implanted partially on the raspberry pi 4 (\six in Figure~\ref{fig:prototypeAll}), while the mouse intercepting is done in the Arduino Due (\three in Figure~\ref{fig:prototypeAll}). The Due gathers the raw mouse data (in terms of displacement measurements $(\Delta x_i, \Delta y_i)$) and sends them to the Pi over \texttt{Serial} interface.  To guarantee that the \device and the host interpret displacement events likewise, the Pi performs an adjustment operation. This operation consists of the \device detecting the exact position of the host pointer in the HDMI frame by analyzing a small square of the frame (200 x 200 px) around its pointer coordinates. Considering that the \device gets raw HDMI frames and pointer images are static, we use the lightweight \texttt{template matching} algorithm of the OpenCV library for the detection.
 
-\subsubsection{\bfseries Implementation of the upstream channel}
+\subsection{\bfseries Implementation of the upstream channel}
 \label{sec:prototype:impl:upstream}
 
  The \emph{upstream} channel, i.e., the data from the \device to the remote server is transmitted using the \name JavaScript snippet that is served by the remote web server. The \name JavaScript snippet uses a hidden text field to accept data coming from the \device. The \device emulates itself as a composite human interface device (HID) when it is connected to the host. The \device emulates keystrokes that transmit encoded data (base64) to the \name JavaScript snippet that is sent to the remote server via \texttt{XMLHttpRequest} call.
@@ -165,7 +165,7 @@ Initially, when the system boots up the \device perform the calibration phase (s
 \centering
 \end{figure} 
 
-\subsubsection{\bfseries Establishing \tls}
+\subsection{\bfseries Establishing \tls}
 \label{sec:prototype:impl:tls}
 
 For the IO confidentiality, the \device and server create a \tls channel. When the user opens up a secure webpage, key exchange is the first step that takes place. We assume that the remote server already has the \device's certificate, or some offline registration takes place. An instance of the key exchange protocol of \name is illustrated in Figure~\ref{fig:keyExchange}. The flow of the key exchange mechanism is as the following:
@@ -176,6 +176,15 @@ For the IO confidentiality, the \device and server create a \tls channel. When t
   \item[\three] The device then sends its signed public certificate to the host, which forwards it to the server.
   \item[\four] The remote server gets the signed certificate from the \device, verifies it, and finally derives the shared secret.
 \end{mylist}
+
+\begin{figure}[t]
+\centering
+\includegraphics[trim={0 12cm 10cm 0}, clip, width=\linewidth]{cursorDetect.pdf}
+\caption{\textbf{Cursor detection on the HDMI frame.} The figure shows \name mouse pointer tracking. \one shows the captured HDMI frame captured by B101 HDMI to CSI bridge. \two shows the cropped HDMI frame based on the mouse position received by the \device. \three shows the detected mouse pointer. For testing, we program the \device to put a rectangle around the pointer. \four shows one of the pointer templates that we used in our OpenCV routine.}
+\spacesave
+\label{fig:cursorDetect}
+\centering
+\end{figure} 
 
 \subsection{HID Drivers}
 
@@ -189,14 +198,7 @@ On the RPi, the overlay and HDMI out is implemented using Java SWT. Using SWT, w
 
 \subsection{Mouse Pointer Tracking}
 
-\begin{figure}[t]
-\centering
-\includegraphics[trim={0 12cm 10cm 0}, clip, width=\linewidth]{cursorDetect.pdf}
-\caption{\textbf{Cursor detection on the HDMI frame.} The figure shows \name mouse pointer tracking. \one shows the captured HDMI frame captured by B101 HDMI to CSI bridge. \two shows the cropped HDMI frame based on the mouse position received by the \device. \three shows the detected mouse pointer. For testing, we program the \device to put a rectangle around the pointer. \four shows one of the pointer templates that we used in our OpenCV routine.}
-\spacesave
-\label{fig:cursorDetect}
-\centering
-\end{figure} 
+
 
 The pointer tracing is also executed in the aforementioned Java program using simple object detection technique suppled by the OpenCV API. Figure~\ref{fig:cursorDetect} shows one screenshot of the pointer detection. The Figure shows the entire HDMI frame, the cropped frame of resolution $200 \times 200$ px (based on the mouse input data), the detected pointer in the cropped frame and the cursor template that is used by the object detection algorithm.
 
